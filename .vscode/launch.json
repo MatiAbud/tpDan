@@ -1,0 +1,45 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MsPedidosApplication<ms-pedidos>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "isi.dan.ms.pedidos.MsPedidosApplication",
+            "projectName": "ms-pedidos",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=59907 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=ms-pedidos"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-DanGatewayApplication<dan-gateway>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "dan.ms.tp.dangateway.DanGatewayApplication",
+            "projectName": "dan-gateway",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-EurekaSrvApplication<eureka-srv>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "dan.ms.eurekasrv.EurekaSrvApplication",
+            "projectName": "eureka-srv",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsClientesApplication<ms-clientes>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "isi.dan.msclientes.MsClientesApplication",
+            "projectName": "ms-clientes",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

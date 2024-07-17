@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: isi.dan.msclientes.controller.ClienteControllerTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.91 s -- in isi.dan.msclientes.controller.ClienteControllerTest

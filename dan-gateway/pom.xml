@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.7</version>
+		<version>3.3.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>dan.ms.tp</groupId>
@@ -14,8 +14,10 @@
 	<name>dan-gateway</name>
 	<description>Gateway DAN</description>
 	<properties>
-		<java.version>17</java.version>
-		<spring-cloud.version>2023.0.0</spring-cloud.version>
+		<java.version>21.0.3</java.version>
+		<spring-cloud.version>2023.0.3</spring-cloud.version>
+		<maven.compiler.source>21</maven.compiler.source>
+    	<maven.compiler.target>21</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>

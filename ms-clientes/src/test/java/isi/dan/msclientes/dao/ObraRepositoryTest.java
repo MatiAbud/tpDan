@@ -31,6 +31,7 @@ public class ObraRepositoryTest {
 
     Logger log = LoggerFactory.getLogger(ObraRepositoryTest.class);
 
+    @SuppressWarnings("resource")
     @Container
     public static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0")
             .withDatabaseName("testdb")

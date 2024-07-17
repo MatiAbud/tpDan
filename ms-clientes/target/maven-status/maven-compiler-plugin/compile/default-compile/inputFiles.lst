@@ -1,0 +1,15 @@
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\exception\ErrorInfo.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\MsClientesApplication.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\model\Cliente.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\model\EstadoObra.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\servicios\ObraService.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\aop\LogExecutionTime.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\dao\ClienteRepository.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\controller\ClienteController.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\servicios\ClienteService.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\aop\LoggingAspect.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\exception\RestControllerException.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\controller\ObraController.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\model\Obra.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\dao\ObraRepository.java
+C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes\src\main\java\isi\dan\msclientes\exception\ClienteNotFoundException.java
