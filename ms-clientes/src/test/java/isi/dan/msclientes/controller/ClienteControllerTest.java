@@ -1,9 +1,10 @@
 package isi.dan.msclientes.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import isi.dan.msclientes.model.Cliente;
-import isi.dan.msclientes.servicios.ClienteService;
+import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +15,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
-import java.util.Optional;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import isi.dan.msclientes.model.Cliente;
+import isi.dan.msclientes.servicios.ClienteService;
 
 @WebMvcTest(ClienteController.class)
 public class ClienteControllerTest {
@@ -60,6 +60,7 @@ public class ClienteControllerTest {
                 .andExpect(jsonPath("$.nombre").value("Test Cliente"))
                 .andExpect(jsonPath("$.cuit").value("12998887776"));
     }
+
     @Test
     void testGetById_NotFound() throws Exception {
         Mockito.when(clienteService.findById(2)).thenReturn(Optional.empty());
@@ -108,4 +109,3 @@ public class ClienteControllerTest {
         }
     }
 }
-

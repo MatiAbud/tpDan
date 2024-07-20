@@ -1,7 +1,5 @@
 package isi.dan.msclientes.model;
 
-import java.math.BigDecimal;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,29 +15,52 @@ import lombok.Data;
 @Table(name = "MS_CLI_CLIENTE")
 @Data
 public class Cliente {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     @NotBlank(message = "El nombre es obligatorio")
+    @Column(name = "nombre")
     private String nombre;
 
-    @Column(name="CORREO_ELECTRONICO")
+    @Column(name = "CORREO_ELECTRONICO")
     @Email(message = "Email debe ser valido")
     @NotBlank(message = "Email es obligatorio")
     private String correoElectronico;
-    
+
     private String cuit;
 
-    @Column(name="MAXIMO_DESCUBIERTO")
+    @Column(name = "MAXIMO_DESCUBIERTO")
     @Min(value = 10000, message = "El descubierto maximo debe ser al menos 10000")
-    private BigDecimal maximoDescubierto;
+    private Integer maximoDescubierto;
 
     private Integer maxObrasEnEjecucion;
 
     public Integer getMaxObrasEnEjecucion() {
         return maxObrasEnEjecucion;
     }
-    
+
+    /*
+     * public Cliente(Integer id, @NotBlank(message = "El nombre es obligatorio")
+     * String nombre,
+     * 
+     * @Email(message = "Email debe ser valido") @NotBlank(message =
+     * "Email es obligatorio") String correoElectronico,
+     * String cuit,
+     * 
+     * @Min(value = 10000, message =
+     * "El descubierto maximo debe ser al menos 10000") Integer maximoDescubierto,
+     * Integer maxObrasEnEjecucion) {
+     * this.id = id;
+     * this.nombre = nombre;
+     * this.correoElectronico = correoElectronico;
+     * this.cuit = cuit;
+     * this.maximoDescubierto = maximoDescubierto;
+     * this.maxObrasEnEjecucion = maxObrasEnEjecucion;
+     * }
+     */
+
+    // getters y setters
+
 }
