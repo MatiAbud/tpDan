@@ -1,5 +1,8 @@
 package isi.dan.ms_productos.servicio;
 
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -13,8 +16,6 @@ import isi.dan.ms_productos.dto.StockUpdateDTO;
 import isi.dan.ms_productos.exception.ProductoNotFoundException;
 import isi.dan.ms_productos.modelo.Producto;
 
-import java.util.List;
-
 @Service
 public class ProductoService {
     @Autowired
@@ -24,9 +25,31 @@ public class ProductoService {
     @RabbitListener(queues = RabbitMQConfig.STOCK_UPDATE_QUEUE)
     public void handleStockUpdate(Message msg) {
         log.info("Recibido {}", msg);
-        // buscar el producto
-        // actualizar el stock
-        // verificar el punto de pedido y generar un pedido
+        try {
+            // Extrae los datos del mensaje en formato JSON
+            Map<String, Object> messageData = extractMessageData(msg);
+
+            // Obtiene el ID del producto y la cantidad desde el mapa de datos
+            Long productId = (Long) messageData.get("idProducto");
+            Integer cantidad = (Integer) messageData.get("cantidad");
+
+            // Crea un objeto StockUpdateDTO con los datos extraídos
+            StockUpdateDTO stockUpdate = new StockUpdateDTO(productId, cantidad);
+
+            // buscar el producto
+            Producto producto = productoRepository.findById(stockUpdate.getIdProducto())
+                    .orElseThrow(() -> new ProductoNotFoundException(stockUpdate.getIdProducto()));
+
+            // actualizar el stock
+            producto.setStockActual(stockUpdate.getCantidad());
+            productoRepository.save(producto);
+            log.info("Stock actualizado para el producto ID: {} a {}", producto.getId(), producto.getStockActual());
+
+            // verificar el punto de pedido y generar un pedido
+
+        } catch (Exception e) {
+            log.error("Error al procesar la actualización de stock", e);
+        }
     }
 
     public Producto saveProducto(Producto producto) {

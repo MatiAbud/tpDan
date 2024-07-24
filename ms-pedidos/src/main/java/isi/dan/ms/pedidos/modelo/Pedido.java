@@ -1,13 +1,14 @@
 package isi.dan.ms.pedidos.modelo;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import lombok.Data;
-
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.List;
 
 @Document(collection = "pedidos")
 @Data
@@ -26,4 +27,3 @@ public class Pedido {
     private List<DetallePedido> detalle;
 
 }
-
