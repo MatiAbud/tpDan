@@ -1,7 +1,7 @@
 package isi.dan.ms_productos.servicio;
 
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +9,8 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import isi.dan.ms_productos.conf.RabbitMQConfig;
 import isi.dan.ms_productos.dao.ProductoRepository;
@@ -26,21 +28,22 @@ public class ProductoService {
     public void handleStockUpdate(Message msg) {
         log.info("Recibido {}", msg);
         try {
-            // Extrae los datos del mensaje en formato JSON
-            Map<String, Object> messageData = extractMessageData(msg);
+            // Deserializar el mensaje JSON a un LinkedHashMap
+            ObjectMapper mapper = new ObjectMapper();
+            LinkedHashMap<String, Object> messageData = mapper.readValue(msg.getBody(), LinkedHashMap.class);
 
-            // Obtiene el ID del producto y la cantidad desde el mapa de datos
+            // Obtener ID de producto y cantidad
             Long productId = (Long) messageData.get("idProducto");
             Integer cantidad = (Integer) messageData.get("cantidad");
 
-            // Crea un objeto StockUpdateDTO con los datos extraídos
+            // Crear objeto DTO
             StockUpdateDTO stockUpdate = new StockUpdateDTO(productId, cantidad);
 
-            // buscar el producto
+            // Buscar el producto
             Producto producto = productoRepository.findById(stockUpdate.getIdProducto())
                     .orElseThrow(() -> new ProductoNotFoundException(stockUpdate.getIdProducto()));
 
-            // actualizar el stock
+            // Actualizar el stock
             producto.setStockActual(stockUpdate.getCantidad());
             productoRepository.save(producto);
             log.info("Stock actualizado para el producto ID: {} a {}", producto.getId(), producto.getStockActual());
