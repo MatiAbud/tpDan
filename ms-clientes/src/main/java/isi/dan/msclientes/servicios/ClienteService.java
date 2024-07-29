@@ -1,17 +1,17 @@
 package isi.dan.msclientes.servicios;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import isi.dan.msclientes.dao.ClienteRepository;
 import isi.dan.msclientes.model.Cliente;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class ClienteService {
-    
+
     @Autowired
     private ClienteRepository clienteRepository;
 

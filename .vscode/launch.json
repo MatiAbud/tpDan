@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MsProductosApplication",
+            "request": "launch",
+            "mainClass": "isi.dan.ms_productos.MsProductosApplication",
+            "projectName": "ms-productos"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-MsPedidosApplication<ms-pedidos>",
             "request": "launch",
             "cwd": "${workspaceFolder}",

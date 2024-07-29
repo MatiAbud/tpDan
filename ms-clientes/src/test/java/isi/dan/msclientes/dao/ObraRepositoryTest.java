@@ -1,5 +1,11 @@
 package isi.dan.msclientes.dao;
 
+import static org.assertj.core.api.Assertions.*;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,12 +22,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import isi.dan.msclientes.model.Obra;
-
-import java.math.BigDecimal;
-import java.util.Optional;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Testcontainers

@@ -45,4 +45,16 @@ public class Obra {
     @Enumerated(EnumType.STRING)
     private EstadoObra estado;
 
+    public Obra(Integer id, String direccion, Boolean esRemodelacion, float lat, float lng, Cliente cliente,
+            @NotNull(message = "El presupuesto es obligatorio") @Min(value = 100, message = "El presupuesto debe ser al menos de 100") BigDecimal presupuesto,
+            EstadoObra estado) {
+        this.id = id;
+        this.direccion = direccion;
+        this.esRemodelacion = esRemodelacion;
+        this.lat = lat;
+        this.lng = lng;
+        this.cliente = cliente;
+        this.presupuesto = presupuesto;
+        this.estado = estado;
+    }
 }

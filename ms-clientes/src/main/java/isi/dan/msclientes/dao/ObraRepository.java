@@ -20,4 +20,3 @@ public interface ObraRepository extends JpaRepository<Obra, Integer> {
 
     int countByClienteAndEstado(Integer id, EstadoObra habilitada);
 }
-

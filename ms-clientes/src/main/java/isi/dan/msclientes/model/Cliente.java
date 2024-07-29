@@ -18,13 +18,14 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 2)
     private Integer id;
 
     @NotBlank(message = "El nombre es obligatorio")
-    @Column(name = "nombre")
+    @Column(name = "nombre", length = 20)
     private String nombre;
 
-    @Column(name = "CORREO_ELECTRONICO")
+    @Column(name = "CORREO_ELECTRONICO", length = 30)
     @Email(message = "Email debe ser valido")
     @NotBlank(message = "Email es obligatorio")
     private String correoElectronico;
@@ -41,25 +42,18 @@ public class Cliente {
         return maxObrasEnEjecucion;
     }
 
-    /*
-     * public Cliente(Integer id, @NotBlank(message = "El nombre es obligatorio")
-     * String nombre,
-     * 
-     * @Email(message = "Email debe ser valido") @NotBlank(message =
-     * "Email es obligatorio") String correoElectronico,
-     * String cuit,
-     * 
-     * @Min(value = 10000, message =
-     * "El descubierto maximo debe ser al menos 10000") Integer maximoDescubierto,
-     * Integer maxObrasEnEjecucion) {
-     * this.id = id;
-     * this.nombre = nombre;
-     * this.correoElectronico = correoElectronico;
-     * this.cuit = cuit;
-     * this.maximoDescubierto = maximoDescubierto;
-     * this.maxObrasEnEjecucion = maxObrasEnEjecucion;
-     * }
-     */
+    public Cliente(Integer id, @NotBlank(message = "El nombre es obligatorio") String nombre,
+            @Email(message = "Email debe ser valido") @NotBlank(message = "Email es obligatorio") String correoElectronico,
+            String cuit,
+            @Min(value = 10000, message = "El descubierto maximo debe ser al menos 10000") Integer maximoDescubierto,
+            Integer maxObrasEnEjecucion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.correoElectronico = correoElectronico;
+        this.cuit = cuit;
+        this.maximoDescubierto = maximoDescubierto;
+        this.maxObrasEnEjecucion = maxObrasEnEjecucion;
+    }
 
     // getters y setters
 
