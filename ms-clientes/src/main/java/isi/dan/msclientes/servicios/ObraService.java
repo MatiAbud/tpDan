@@ -1,5 +1,8 @@
 package isi.dan.msclientes.servicios;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,9 +12,6 @@ import isi.dan.msclientes.dao.ObraRepository;
 import isi.dan.msclientes.model.Cliente;
 import isi.dan.msclientes.model.EstadoObra;
 import isi.dan.msclientes.model.Obra;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ObraService {
@@ -80,7 +80,6 @@ public class ObraService {
             try {
                 throw new Exception("Estado no válido: " + nuevoEstado);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -90,7 +89,6 @@ public class ObraService {
             try {
                 throw new Exception("No se puede cambiar el estado de una obra FINALIZADA");
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -106,7 +104,7 @@ public class ObraService {
         // No debe supera el maximo
         if (nuevoEstado.equals(EstadoObra.HABILITADA)) {
             Cliente cliente = obra.getCliente();
-            int obrasHabilitadasCliente = obraRepository.countByClienteAndEstado(cliente.getId(),
+            int obrasHabilitadasCliente = obraRepository.countByClienteAndEstado(cliente.getIdCliente(),
                     EstadoObra.HABILITADA);
             if (obrasHabilitadasCliente >= cliente.getMaxObrasEnEjecucion()) {
                 try {
@@ -114,7 +112,6 @@ public class ObraService {
                             "No se pueden habilitar más obras para el cliente: " + cliente.getNombre()
                                     + ". Se alcanzó el máximo permitido de: " + cliente.getMaxObrasEnEjecucion());
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }

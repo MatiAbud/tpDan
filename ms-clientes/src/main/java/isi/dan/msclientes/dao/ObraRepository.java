@@ -18,5 +18,5 @@ public interface ObraRepository extends JpaRepository<Obra, Integer> {
 
     Obra findFirstByEstado(EstadoObra pendiente);
 
-    int countByClienteAndEstado(Integer id, EstadoObra habilitada);
+    int countByClienteAndEstado(Integer clienteId, EstadoObra habilitada);
 }

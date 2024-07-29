@@ -70,7 +70,7 @@ public class ClienteController {
         if (!clienteService.findById(id).isPresent()) {
             throw new ClienteNotFoundException("Cliente " + id + " no encontrado");
         }
-        cliente.setId(id);
+        cliente.setidCliente(id);
         return ResponseEntity.ok(clienteService.update(cliente));
     }
 

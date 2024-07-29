@@ -1,10 +1,15 @@
 package isi.dan.msclientes.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
@@ -19,7 +24,7 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 2)
-    private Integer id;
+    private Integer idCliente;
 
     @NotBlank(message = "El nombre es obligatorio")
     @Column(name = "nombre", length = 20)
@@ -42,17 +47,12 @@ public class Cliente {
         return maxObrasEnEjecucion;
     }
 
-    public Cliente(Integer id, @NotBlank(message = "El nombre es obligatorio") String nombre,
-            @Email(message = "Email debe ser valido") @NotBlank(message = "Email es obligatorio") String correoElectronico,
-            String cuit,
-            @Min(value = 10000, message = "El descubierto maximo debe ser al menos 10000") Integer maximoDescubierto,
-            Integer maxObrasEnEjecucion) {
-        this.id = id;
-        this.nombre = nombre;
-        this.correoElectronico = correoElectronico;
-        this.cuit = cuit;
-        this.maximoDescubierto = maximoDescubierto;
-        this.maxObrasEnEjecucion = maxObrasEnEjecucion;
+    @JsonIgnore
+    @OneToMany(mappedBy = "MS_CLI_CLIENTE")
+    private List<Obra> obrasClientes;
+
+    public void setidCliente(Integer id) {
+        throw new UnsupportedOperationException("Unimplemented method 'setidCliente'");
     }
 
     // getters y setters

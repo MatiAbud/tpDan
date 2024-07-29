@@ -34,7 +34,7 @@ public class ClienteControllerTest {
     @BeforeEach
     void setUp() {
         cliente = new Cliente();
-        cliente.setId(1);
+        cliente.setidCliente(1);
         cliente.setNombre("Test Cliente");
         cliente.setCorreoElectronico("test@cliente.com");
         cliente.setCuit("12998887776");
