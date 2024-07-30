@@ -24,7 +24,7 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 2)
-    private Integer idCliente;
+    private Integer id;
 
     @NotBlank(message = "El nombre es obligatorio")
     @Column(name = "nombre", length = 20)
@@ -48,7 +48,7 @@ public class Cliente {
     }
 
     @JsonIgnore
-    @OneToMany(mappedBy = "MS_CLI_CLIENTE")
+    @OneToMany(mappedBy = "cliente")
     private List<Obra> obrasClientes;
 
     public void setidCliente(Integer id) {

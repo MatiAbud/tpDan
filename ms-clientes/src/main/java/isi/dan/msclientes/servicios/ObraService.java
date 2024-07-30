@@ -104,7 +104,7 @@ public class ObraService {
         // No debe supera el maximo
         if (nuevoEstado.equals(EstadoObra.HABILITADA)) {
             Cliente cliente = obra.getCliente();
-            int obrasHabilitadasCliente = obraRepository.countByClienteAndEstado(cliente.getIdCliente(),
+            int obrasHabilitadasCliente = obraRepository.countByClienteAndEstado(cliente,
                     EstadoObra.HABILITADA);
             if (obrasHabilitadasCliente >= cliente.getMaxObrasEnEjecucion()) {
                 try {
