@@ -1,20 +1,21 @@
 version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-db
-    environment:
-      MYSQL_ROOT_PASSWORD: danrootpassword
-      MYSQL_DATABASE: dandb
-      MYSQL_USER: danuser
-      MYSQL_PASSWORD: danpassword
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-    networks:
-      - clientes-net
+ mysql:
+  image: mysql:8.0
+  container_name: mysql-db
+  environment:
+    MYSQL_ROOT_PASSWORD: tpdied2023
+    MYSQL_DATABASE: dandb
+    MYSQL_USER: danuser
+    MYSQL_PASSWORD: danpassword
+  ports:
+    - "3306:3306"
+  volumes:
+    - mysql-data:/var/lib/mysql
+  networks:
+    - clientes-net
+
 
   phpmyadmin-dan:
     image: phpmyadmin/phpmyadmin

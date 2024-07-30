@@ -14,10 +14,10 @@
 	<name>dan-gateway</name>
 	<description>Gateway DAN</description>
 	<properties>
-		<java.version>21.0.3</java.version>
-		<spring-cloud.version>2023.0.3</spring-cloud.version>
+		<!-- <java.version>21.0.3</java.version> -->
 		<maven.compiler.source>21</maven.compiler.source>
     	<maven.compiler.target>21</maven.compiler.target>
+		<spring-cloud.version>2023.0.3</spring-cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
