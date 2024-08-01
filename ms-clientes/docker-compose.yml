@@ -44,10 +44,10 @@ services:
       SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL8Dialect
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: 5672
-      SPRING_EUREKA_DEFAULT_ZONE: http://localhost:8761/eureka/
+      SPRING_EUREKA_DEFAULT_ZONE: http://ms-eureka-svc:8761/eureka/
       SPRING_INSTANCIA: ms-clientes-svc-1
     ports:
-      - "6080:8080"
+      - "6080:8082"
     depends_on:
       - mysql
     networks:
@@ -68,10 +68,10 @@ services:
       SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL8Dialect
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: 5672
-      SPRING_EUREKA_DEFAULT_ZONE: http://localhost:8761/eureka/
+      SPRING_EUREKA_DEFAULT_ZONE: http://ms-eureka-svc:8761/eureka/
       SPRING_INSTANCIA: ms-clientes-svc-2
     ports:
-      - "6081:8080"
+      - "6081:8082"
     depends_on:
       - mysql
     networks:
@@ -92,10 +92,10 @@ services:
       SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL8Dialect
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: 5672
-      SPRING_EUREKA_DEFAULT_ZONE: http://localhost:8761/eureka/
+      SPRING_EUREKA_DEFAULT_ZONE: http://ms-eureka-svc:8761/eureka/
       SPRING_INSTANCIA: ms-clientes-svc-3
     ports:
-      - "6082:8080"
+      - "6082:8082"
     depends_on:
       - mysql
     networks:
