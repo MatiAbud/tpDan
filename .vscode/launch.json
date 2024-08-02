@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "EurekaSrvApplicationTests",
+            "request": "launch",
+            "mainClass": "dan.ms.eurekasrv.EurekaSrvApplicationTests",
+            "projectName": "eureka-srv"
+        },
+        {
+            "type": "java",
             "name": "MsProductosApplication",
             "request": "launch",
             "mainClass": "isi.dan.ms_productos.MsProductosApplication",
