@@ -8,12 +8,16 @@ import org.springframework.stereotype.Service;
 
 import isi.dan.msclientes.dao.ClienteRepository;
 import isi.dan.msclientes.model.Cliente;
+import isi.dan.msclientes.config.ClienteConfig;
 
 @Service
 public class ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ClienteConfig clienteConfig;
 
     public List<Cliente> findAll() {
         return clienteRepository.findAll();
@@ -24,6 +28,8 @@ public class ClienteService {
     }
 
     public Cliente save(Cliente cliente) {
+        System.out.println(clienteConfig.getMaximoDescubierto());
+        cliente.setMaximoDescubierto(clienteConfig.getMaximoDescubierto());
         return clienteRepository.save(cliente);
     }
 
