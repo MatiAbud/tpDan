@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ObraService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ms-clientes</a> &gt; <a href="index.source.html" class="el_package">isi.dan.msclientes.servicios</a> &gt; <span class="el_source">ObraService.java</span></div><h1>ObraService.java</h1><pre class="source lang-java linenums">package isi.dan.msclientes.servicios;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import isi.dan.msclientes.dao.ClienteRepository;
+import isi.dan.msclientes.dao.ObraRepository;
+import isi.dan.msclientes.exception.ObraFinalizadaException;
+import isi.dan.msclientes.model.Cliente;
+import isi.dan.msclientes.model.EstadoObra;
+import isi.dan.msclientes.model.Obra;
+
+@Service
+<span class="nc" id="L19">public class ObraService {</span>
+
+    @Autowired
+    private ObraRepository obraRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    public List&lt;Obra&gt; findAll() {
+<span class="nc" id="L28">        return obraRepository.findAll();</span>
+    }
+
+    public Optional&lt;Obra&gt; findById(Integer id) {
+<span class="nc" id="L32">        return obraRepository.findById(id);</span>
+    }
+
+    public Obra save(Obra obra) {
+<span class="nc" id="L36">        obra.setEstado(EstadoObra.PENDIENTE);</span>
+<span class="nc" id="L37">        return obraRepository.save(obra);</span>
+    }
+
+    public Obra update(Obra obra) {
+<span class="nc" id="L41">        return obraRepository.save(obra);</span>
+    }
+
+    public void deleteById(Integer id) {
+<span class="nc" id="L45">        obraRepository.deleteById(id);</span>
+<span class="nc" id="L46">    }</span>
+
+    public Obra marcarObraComoHabilitada(Integer id) throws Exception {
+<span class="nc" id="L49">        Obra obra = obraRepository.findById(id).orElseThrow();</span>
+
+<span class="nc" id="L51">        obra.setEstado(EstadoObra.HABILITADA);</span>
+<span class="nc" id="L52">        obraRepository.save(obra);</span>
+
+<span class="nc" id="L54">        return obra;</span>
+    }
+
+    public Obra marcarObraComoFinalizada(Integer id) throws Exception {
+<span class="nc" id="L58">        Obra obra = obraRepository.findById(id).orElseThrow();</span>
+
+<span class="nc" id="L60">        obra.setEstado(EstadoObra.FINALIZADA);</span>
+<span class="nc" id="L61">        obraRepository.save(obra);</span>
+
+<span class="nc" id="L63">        return obra;</span>
+    }
+
+    public Obra marcarObraComoPendiente(Integer idObra) throws Exception {
+<span class="nc" id="L67">        Obra obra = obraRepository.findById(idObra).orElseThrow();</span>
+
+<span class="nc" id="L69">        obra.setEstado(EstadoObra.PENDIENTE);</span>
+<span class="nc" id="L70">        return obraRepository.save(obra);</span>
+    }
+
+    public List&lt;Obra&gt; obtenerObrasDeCliente(Integer idCliente) throws Exception {
+<span class="nc" id="L74">        List&lt;Obra&gt; obras = obraRepository.findByClienteId(idCliente);</span>
+
+        /*if (obras.isEmpty()) {
+            throw new Exception(&quot;No se encontraron obras para el cliente con ID: &quot; + idCliente);
+        }*/
+
+<span class="nc" id="L80">        return obras;</span>
+    }
+
+    // Otros métodos según necesidades
+    public Obra cambiarEstadoObra(Integer idObra, EstadoObra nuevoEstado)
+            throws Exception {
+
+<span class="nc" id="L87">        Obra obra = obraRepository.findById(idObra)</span>
+<span class="nc" id="L88">                .orElseThrow();</span>
+
+        // Validamos nuevo estado
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (!EstadoObra.getValidEstados().contains(nuevoEstado)) {</span>
+            try {
+<span class="nc" id="L93">                throw new Exception(&quot;Estado no válido: &quot; + nuevoEstado);</span>
+<span class="nc" id="L94">            } catch (Exception e) {</span>
+<span class="nc" id="L95">                e.printStackTrace();</span>
+            }
+        }
+
+        // Chequeamos si el estado finalizado cambia a otro estado
+        /*if (obra.getEstado().equals(EstadoObra.FINALIZADA) &amp;&amp; !nuevoEstado.equals(EstadoObra.FINALIZADA)) {
+            try {
+                throw new Exception(&quot;No se puede cambiar el estado de una obra FINALIZADA&quot;);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }*/
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (obra.getEstado().equals(EstadoObra.FINALIZADA)) {</span>
+            try {
+<span class="nc" id="L109">                throw new Exception(&quot;No se puede cambiar el estado de una obra FINALIZADA&quot;);</span>
+<span class="nc" id="L110">            } catch (Exception e) {</span>
+<span class="nc" id="L111">                e.printStackTrace();</span>
+            }
+        }
+
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        if (nuevoEstado.equals(EstadoObra.FINALIZADA)) {</span>
+            // Verificar si hay obras pendientes para habilitar
+<span class="nc" id="L117">            Obra obraPendiente = obraRepository.findFirstByEstado(EstadoObra.PENDIENTE);</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (obraPendiente != null) {</span>
+<span class="nc" id="L119">                obraPendiente.setEstado(EstadoObra.HABILITADA);</span>
+<span class="nc" id="L120">                obraRepository.save(obraPendiente);</span>
+            }
+        }
+        // No debe supera el maximo
+       /* if (nuevoEstado.equals(EstadoObra.HABILITADA)) {
+            Cliente cliente = obra.getCliente();
+            /*List&lt;Obra&gt; obrasHabilitadasCliente = this.obtenerObrasDeCliente(cliente.getId());
+            obrasHabilitadasCliente.stream()
+                                    .filter(o -&gt; o.getEstado().equals(EstadoObra.HABILITADA))
+                                    .collect(Collectors.toList());
+            if (obrasHabilitadasCliente.size() == cliente.getMaxObrasEnEjecucion()) {
+                try {
+                    throw new Exception(
+                            &quot;No se pueden habilitar más obras para el cliente: &quot; + cliente.getNombre()
+                                    + &quot;. Se alcanzó el máximo permitido de: &quot; + cliente.getMaxObrasEnEjecucion());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }*/
+
+        // Actualizamos estado
+<span class="nc" id="L142">        obra.setEstado(nuevoEstado);</span>
+
+        // Guardamos la actualizacion del estado
+<span class="nc" id="L145">        obra = obraRepository.save(obra);</span>
+
+<span class="nc" id="L147">        return obra;</span>
+    }
+
+    public Obra asignarObraACliente(Integer idCliente, Obra obra) throws Exception {
+        // recuperar estado habilitado del cliente
+<span class="nc" id="L152">        Cliente cliente = clienteRepository.findById(idCliente)</span>
+<span class="nc" id="L153">                .orElseThrow(() -&gt; new ClassNotFoundException(&quot;Cliente no encontrado con ID: &quot; + idCliente));</span>
+
+        // chequeamos si el cliente esta disponible
+        // if (!cliente.isEnabled()) {
+        // throw new Exception(&quot;El cliente no está habilitado para asignar obras: &quot; +
+        // idCliente);
+        // }
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        if(obra.getEstado()==EstadoObra.FINALIZADA){</span>
+<span class="nc" id="L161">            throw new ObraFinalizadaException(&quot;La obra se encuentra finalizada&quot;);</span>
+        }
+        else{
+<span class="nc" id="L164">            obra.setCliente(cliente);</span>
+<span class="nc" id="L165">            obra = obraRepository.save(obra);</span>
+<span class="nc" id="L166">            return obra;</span>
+        }
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

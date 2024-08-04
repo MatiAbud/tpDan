@@ -28,7 +28,6 @@ public class ClienteService {
     }
 
     public Cliente save(Cliente cliente) {
-        System.out.println(clienteConfig.getMaximoDescubierto());
         cliente.setMaximoDescubierto(clienteConfig.getMaximoDescubierto());
         return clienteRepository.save(cliente);
     }

@@ -34,10 +34,12 @@ public class ClienteControllerTest {
     @BeforeEach
     void setUp() {
         cliente = new Cliente();
-        cliente.setidCliente(1);
+        cliente.setId(1);
         cliente.setNombre("Test Cliente");
         cliente.setCorreoElectronico("test@cliente.com");
         cliente.setCuit("12998887776");
+        cliente.setMaxObrasEnEjecucion(10000);
+        cliente.setMaximoDescubierto(3);
     }
 
     @Test
@@ -100,7 +102,7 @@ public class ClienteControllerTest {
         mockMvc.perform(delete("/api/clientes/1"))
                 .andExpect(status().isNoContent());
     }
-
+    
     private static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);

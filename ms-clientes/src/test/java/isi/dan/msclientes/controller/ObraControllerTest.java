@@ -18,7 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import isi.dan.msclientes.model.Cliente;
+import isi.dan.msclientes.model.EstadoObra;
 import isi.dan.msclientes.model.Obra;
+import isi.dan.msclientes.servicios.ClienteService;
 import isi.dan.msclientes.servicios.ObraService;
 
 @WebMvcTest(ObraController.class)
@@ -30,14 +33,32 @@ public class ObraControllerTest {
     @MockBean
     private ObraService obraService;
 
+    @MockBean
+    private ClienteService clienteService;
+
     private Obra obra;
 
+    private Obra obra2;
+    
     @BeforeEach
     void setUp() {
         obra = new Obra();
+        obra.setEsRemodelacion(true);
         obra.setId(1);
         obra.setDireccion("Direccion Test Obra");
         obra.setPresupuesto(BigDecimal.valueOf(100));
+        obra.setEstado(EstadoObra.HABILITADA);
+        obra.setLat(45);
+        obra.setLng(43);
+
+        obra2 = new Obra();
+        obra2.setEsRemodelacion(true);
+        obra2.setId(2);
+        obra2.setDireccion("Direccion Test Obra pendiente");
+        obra2.setPresupuesto(BigDecimal.valueOf(100));
+        obra2.setEstado(EstadoObra.PENDIENTE);
+        obra2.setLat(45);
+        obra2.setLng(43);
     }
 
     @Test
@@ -90,6 +111,45 @@ public class ObraControllerTest {
 
         mockMvc.perform(delete("/api/obras/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void testMarcarHabilitada()throws Exception{
+        Mockito.when(obraService.findById(2)).thenReturn(Optional.of(obra2));
+        Mockito.when(obraService.cambiarEstadoObra(2, EstadoObra.HABILITADA)).thenReturn(obra2);
+
+        mockMvc.perform(put("/api/obras/2/habilitar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(obra2)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.direccion").value("Direccion Test Obra pendiente"));
+
+    }
+
+    @Test
+    void testMarcarFinalizada()throws Exception{
+        Mockito.when(obraService.findById(2)).thenReturn(Optional.of(obra2));
+        Mockito.when(obraService.cambiarEstadoObra(2, EstadoObra.FINALIZADA)).thenReturn(obra2);
+
+        mockMvc.perform(put("/api/obras/2/finalizar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(obra2)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.direccion").value("Direccion Test Obra pendiente"));
+
+    }
+
+    @Test
+    void testMarcarPendiente()throws Exception{
+        Mockito.when(obraService.findById(1)).thenReturn(Optional.of(obra));
+        Mockito.when(obraService.cambiarEstadoObra(1, EstadoObra.PENDIENTE)).thenReturn(obra);
+
+        mockMvc.perform(put("/api/obras/1/pendiente")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(obra)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.direccion").value("Direccion Test Obra"));
+
     }
 
     private static String asJsonString(final Object obj) {

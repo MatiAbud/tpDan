@@ -33,10 +33,9 @@ public class Cliente {
     @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "CORREO_ELECTRONICO", length = 30)
+    @Column(name = "CORREO_ELECTRONICO")
     @Email(message = "Email debe ser valido")
     @NotBlank(message = "Email es obligatorio")
-    @Email
     private String correoElectronico;
 
     private String cuit;
