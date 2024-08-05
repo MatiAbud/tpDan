@@ -40,22 +40,6 @@ public class ProductoController {
     @PostMapping
     @LogExecutionTime
     public ResponseEntity<Producto> createProducto(@RequestBody @Validated Producto producto) {
-        // Validamos atributos
-        if (producto.getNombre().isEmpty()) {
-            throw new IllegalArgumentException("El nombre del producto no puede ser vacío");
-        }
-        if (producto.getDescripcion().isEmpty()) {
-            throw new IllegalArgumentException("El producto debe tener una descripción");
-        }
-        if (producto.getCategoria().isValid()) {
-            throw new IllegalArgumentException("Se debe seleccionar una categoria para el producto");
-        }
-        if (producto.getStockMinimo() == 0 || producto.getStockMinimo() <= 0) {
-            producto.setStockMinimo(10);
-        }
-        if (producto.getPrecio() == null) {
-            throw new IllegalArgumentException("El precio del producto debe ser mayor que cero");
-        }
 
         // Seteamos el descuento
         producto.setDescuentoPromocional(0);
@@ -104,7 +88,7 @@ public class ProductoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/stock")
+    @PutMapping("/provision")
     @LogExecutionTime
     public ResponseEntity<Producto> actualizarStock(@RequestBody @Validated StockUpdateDTO stockUpdateDto)
             throws ProductoNotFoundException {
@@ -115,6 +99,8 @@ public class ProductoController {
 
         // Actualizamos el stock del producto
         producto.setStockActual(producto.getStockActual() + stockUpdateDto.getCantidad());
+        //Actualizamos el precio
+        producto.setPrecio(stockUpdateDto.getPrecio());
 
         // Guardamos los cambios
         Producto updatedProducto = productoService.saveProducto(producto);
@@ -122,6 +108,7 @@ public class ProductoController {
         return ResponseEntity.ok(updatedProducto);
     }
 
+    /*
     @PutMapping("/precio")
     @LogExecutionTime
     public ResponseEntity<Producto> actualizarPrecio(@RequestBody @Validated StockUpdateDTO stockUpdateDTO)
@@ -140,7 +127,7 @@ public class ProductoController {
 
         return ResponseEntity.ok(updatedProducto);
     }
-
+     */
     @PutMapping("/descuento")
     @LogExecutionTime
     public ResponseEntity<Producto> actualizarDescuentoPromocional(

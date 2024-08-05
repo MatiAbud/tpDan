@@ -1,5 +1,5 @@
-# Created at 2024-08-04T18:03:35.047
-Thread dump for process (5824@LAPTOP-EIHQFPL8) after 30 seconds shutdown timeout:
+# Created at 2024-08-05T00:17:16.374
+Thread dump for process (14776@LAPTOP-EIHQFPL8) after 30 seconds shutdown timeout:
 "main" 
    java.lang.Thread.State: WAITING
         at java.base@21/java.lang.Object.wait0(Native Method)
@@ -142,15 +142,28 @@ Thread dump for process (5824@LAPTOP-EIHQFPL8) after 30 seconds shutdown timeout
         at java.base@21/java.lang.Thread.runWith(Thread.java:1596)
         at java.base@21/java.lang.Thread.run(Thread.java:1583)
 
+"JNA Cleaner" 
+   java.lang.Thread.State: WAITING
+        at java.base@21/jdk.internal.misc.Unsafe.park(Native Method)
+        at java.base@21/java.util.concurrent.locks.LockSupport.park(LockSupport.java:371)
+        at java.base@21/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:519)
+        at java.base@21/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3780)
+        at java.base@21/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3725)
+        at java.base@21/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1707)
+        at java.base@21/java.lang.ref.ReferenceQueue.await(ReferenceQueue.java:67)
+        at java.base@21/java.lang.ref.ReferenceQueue.remove0(ReferenceQueue.java:158)
+        at java.base@21/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:234)
+        at app//com.sun.jna.internal.Cleaner$1.run(Cleaner.java:58)
+
 "testcontainers-ryuk" 
    java.lang.Thread.State: TIMED_WAITING
         at java.base@21/java.lang.Object.wait0(Native Method)
         at java.base@21/java.lang.Object.wait(Object.java:366)
         at app//org.testcontainers.utility.RyukResourceReaper.lambda$null$1(RyukResourceReaper.java:115)
-        at app//org.testcontainers.utility.RyukResourceReaper$$Lambda/0x000002848182bdb0.run(Unknown Source)
+        at app//org.testcontainers.utility.RyukResourceReaper$$Lambda/0x000001ff0183d6d0.run(Unknown Source)
         at app//org.rnorth.ducttape.ratelimits.RateLimiter.doWhenReady(RateLimiter.java:27)
         at app//org.testcontainers.utility.RyukResourceReaper.lambda$maybeStart$2(RyukResourceReaper.java:101)
-        at app//org.testcontainers.utility.RyukResourceReaper$$Lambda/0x000002848182bb90.run(Unknown Source)
+        at app//org.testcontainers.utility.RyukResourceReaper$$Lambda/0x000001ff0183d4b0.run(Unknown Source)
         at java.base@21/java.lang.Thread.runWith(Thread.java:1596)
         at java.base@21/java.lang.Thread.run(Thread.java:1583)
 
@@ -169,6 +182,19 @@ Thread dump for process (5824@LAPTOP-EIHQFPL8) after 30 seconds shutdown timeout
         at java.base@21/java.lang.Thread.run(Thread.java:1583)
 
 "HikariPool-1 housekeeper" 
+   java.lang.Thread.State: TIMED_WAITING
+        at java.base@21/jdk.internal.misc.Unsafe.park(Native Method)
+        at java.base@21/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:269)
+        at java.base@21/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1758)
+        at java.base@21/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+        at java.base@21/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+        at java.base@21/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1070)
+        at java.base@21/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+        at java.base@21/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+        at java.base@21/java.lang.Thread.runWith(Thread.java:1596)
+        at java.base@21/java.lang.Thread.run(Thread.java:1583)
+
+"HikariPool-2 housekeeper" 
    java.lang.Thread.State: TIMED_WAITING
         at java.base@21/jdk.internal.misc.Unsafe.park(Native Method)
         at java.base@21/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:269)
@@ -216,15 +242,15 @@ Thread dump for process (5824@LAPTOP-EIHQFPL8) after 30 seconds shutdown timeout
         at app//org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryClosing(SessionFactoryObserverForSchemaExport.java:48)
         at app//org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryClosing(SessionFactoryObserverChain.java:48)
         at app//org.hibernate.internal.SessionFactoryImpl.close(SessionFactoryImpl.java:922)
-        at java.base@21/java.lang.invoke.LambdaForm$DMH/0x000002848108c400.invokeInterface(LambdaForm$DMH)
-        at java.base@21/java.lang.invoke.LambdaForm$MH/0x0000028481688c00.invoke(LambdaForm$MH)
+        at java.base@21/java.lang.invoke.LambdaForm$DMH/0x000001ff0108c400.invokeInterface(LambdaForm$DMH)
+        at java.base@21/java.lang.invoke.LambdaForm$MH/0x000001ff01694400.invoke(LambdaForm$MH)
         at java.base@21/java.lang.invoke.Invokers$Holder.invokeExact_MT(Invokers$Holder)
         at java.base@21/jdk.internal.reflect.DirectMethodHandleAccessor.invokeImpl(DirectMethodHandleAccessor.java:153)
         at java.base@21/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
         at java.base@21/java.lang.reflect.Method.invoke(Method.java:580)
         at app//org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.invokeProxyMethod(AbstractEntityManagerFactoryBean.java:519)
         at app//org.springframework.orm.jpa.AbstractEntityManagerFactoryBean$ManagedEntityManagerFactoryInvocationHandler.invoke(AbstractEntityManagerFactoryBean.java:735)
-        at app/jdk.proxy2/jdk.proxy2.$Proxy195.close(Unknown Source)
+        at app/jdk.proxy2/jdk.proxy2.$Proxy196.close(Unknown Source)
         at app//org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.destroy(AbstractEntityManagerFactoryBean.java:652)
         at app//org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:211)
         at app//org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:587)
@@ -236,7 +262,7 @@ Thread dump for process (5824@LAPTOP-EIHQFPL8) after 30 seconds shutdown timeout
         at app//org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1156)
         at app//org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1102)
         at app//org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
-        at app//org.springframework.boot.SpringApplicationShutdownHook$$Lambda/0x0000028481eac780.accept(Unknown Source)
+        at app//org.springframework.boot.SpringApplicationShutdownHook$$Lambda/0x000001ff01ed6020.accept(Unknown Source)
         at java.base@21/java.lang.Iterable.forEach(Iterable.java:75)
         at app//org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
         at java.base@21/java.lang.Thread.runWith(Thread.java:1596)

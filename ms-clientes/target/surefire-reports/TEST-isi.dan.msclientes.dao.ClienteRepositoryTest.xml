@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="isi.dan.msclientes.controller.ObraControllerTest" time="2.707" tests="8" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="isi.dan.msclientes.dao.ClienteRepositoryTest" time="41.478" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -43,10 +43,13 @@
     <property name="os.version" value="10.0"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="file.encoding" value="UTF-8"/>
+    <property name="jnidispatch.path" value="C:\Users\matia\AppData\Local\Temp\jna-103668344\jna13882820101291195965.dll"/>
     <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
     <property name="localRepository" value="C:\Users\matia\.m2\repository"/>
+    <property name="jna.loaded" value="true"/>
     <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
     <property name="java.io.tmpdir" value="C:\Users\matia\AppData\Local\Temp\"/>
+    <property name="com.zaxxer.hikari.pool_number" value="1"/>
     <property name="java.version" value="21"/>
     <property name="user.dir" value="C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes"/>
     <property name="os.arch" value="amd64"/>
@@ -63,30 +66,51 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testGetById" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.14">
-    <system-out><![CDATA[&amp#27;[32m2024-08-05 00:15:30,241&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[AnnotationConfigContextLoaderUtils.java:83]&amp#27;[0;39m &amp#27;[34m: Could not detect default configuration classes for test class [isi.dan.msclientes.controller.ObraControllerTest]: ObraControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:30,302&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[SpringBootTestContextBootstrapper.java:234]&amp#27;[0;39m &amp#27;[34m: Found @SpringBootConfiguration isi.dan.msclientes.MsClientesApplication for test class isi.dan.msclientes.controller.ObraControllerTest
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:30,316&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[RestartApplicationListener.java:74]&amp#27;[0;39m &amp#27;[34m: Restart disabled due to context in which it is running
-&amp#27;[0;39m00:15:31,472 |-WARN in ch.qos.logback.classic.joran.action.LevelAction - <level> element is deprecated. Near [level] on line 42
-00:15:31,472 |-WARN in ch.qos.logback.classic.joran.action.LevelAction - Please use "level" attribute within <logger> or <root> elements instead.
-00:15:31,474 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
-00:15:31,474 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
-00:15:31,475 |-INFO in ch.qos.logback.core.model.processor.ImplicitModelHandler - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
-00:15:31,478 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [GELF]
-00:15:31,478 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [de.siegmar.logbackgelf.GelfUdpAppender]
-00:15:31,480 |-WARN in ch.qos.logback.core.model.processor.ImplicitModelHandler - Ignoring unknown property [useCompression] in [de.siegmar.logbackgelf.GelfUdpAppender]
-00:15:31,482 |-WARN in ch.qos.logback.core.model.processor.ImplicitModelHandler - Ignoring unknown property [shortPatternLayout] in [de.siegmar.logbackgelf.GelfEncoder]
-00:15:31,482 |-WARN in ch.qos.logback.core.model.processor.ImplicitModelHandler - Ignoring unknown property [fullPatternLayout] in [de.siegmar.logbackgelf.GelfEncoder]
-00:15:31,483 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
-00:15:31,483 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@4bec8704 - Propagating INFO level on Logger[ROOT] onto the JUL framework
-00:15:31,483 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
-00:15:31,483 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting additivity of logger [isi.dan.ms_productos] to false
-00:15:31,483 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@4bec8704 - Propagating DEBUG level on Logger[isi.dan.ms_productos] onto the JUL framework
-00:15:31,483 |-INFO in ch.qos.logback.classic.model.processor.LevelModelHandler - isi.dan.ms_productos level set to DEBUG
-00:15:31,483 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [GELF] to Logger[isi.dan.ms_productos]
-00:15:31,484 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[isi.dan.ms_productos]
-00:15:31,484 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@65d3d7d7 - End of configuration.
-00:15:31,484 |-INFO in org.springframework.boot.logging.logback.SpringBootJoranConfigurator@296ca76c - Registering current configuration as safe fallback point
+  <testcase name="testFindById" classname="isi.dan.msclientes.dao.ClienteRepositoryTest" time="0.623">
+    <system-out><![CDATA[&amp#27;[32m2024-08-05 00:15:33,000&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[AnnotationConfigContextLoaderUtils.java:83]&amp#27;[0;39m &amp#27;[34m: Could not detect default configuration classes for test class [isi.dan.msclientes.dao.ClienteRepositoryTest]: ClienteRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:33,084&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[SpringBootTestContextBootstrapper.java:234]&amp#27;[0;39m &amp#27;[34m: Found @SpringBootConfiguration isi.dan.msclientes.MsClientesApplication for test class isi.dan.msclientes.dao.ClienteRepositoryTest
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:33,267&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[PullPolicy.java:59]&amp#27;[0;39m &amp#27;[34m: Image pull policy will be performed by: DefaultPullPolicy()
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:33,279&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[ImageNameSubstitutor.java:60]&amp#27;[0;39m &amp#27;[34m: Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:34,414&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[DockerClientProviderStrategy.java:383]&amp#27;[0;39m &amp#27;[34m: Loaded org.testcontainers.dockerclient.NpipeSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:35,694&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[DockerClientProviderStrategy.java:293]&amp#27;[0;39m &amp#27;[34m: Found Docker environment with local Npipe socket (npipe:////./pipe/docker_engine)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:35,697&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[DockerClientFactory.java:206]&amp#27;[0;39m &amp#27;[34m: Docker host IP address is localhost
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:35,753&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[DockerClientFactory.java:213]&amp#27;[0;39m &amp#27;[34m: Connected to docker: 
+  Server Version: 26.1.1
+  API Version: 1.45
+  Operating System: Docker Desktop
+  Total Memory: 7874 MB
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:35,886&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[GenericContainer.java:387]&amp#27;[0;39m &amp#27;[34m: Creating container for image: testcontainers/ryuk:0.7.0
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:36,639&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[GenericContainer.java:451]&amp#27;[0;39m &amp#27;[34m: Container testcontainers/ryuk:0.7.0 is starting: 80a51d6d00a6b720fc47e076925f848b83e21818189284b55eee1d18ba5a2443
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:37,981&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[GenericContainer.java:541]&amp#27;[0;39m &amp#27;[34m: Container testcontainers/ryuk:0.7.0 started in PT2.0944153S
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:38,002&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[RyukResourceReaper.java:43]&amp#27;[0;39m &amp#27;[34m: Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:38,002&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[DockerClientFactory.java:243]&amp#27;[0;39m &amp#27;[34m: Checking the system...
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:38,005&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[DockerClientFactory.java:264]&amp#27;[0;39m &amp#27;[34m: ✔︎ Docker server version should be at least 1.6.0
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:38,015&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[GenericContainer.java:387]&amp#27;[0;39m &amp#27;[34m: Creating container for image: mysql:8.0
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:38,339&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[GenericContainer.java:451]&amp#27;[0;39m &amp#27;[34m: Container mysql:8.0 is starting: ccb09cce02e713ddbbb37288fef4acc8f8003b36c2d0ed63c721c0302e097f0b
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:39,027&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[JdbcDatabaseContainer.java:145]&amp#27;[0;39m &amp#27;[34m: Waiting for database connection to become available at jdbc:mysql://localhost:59340/testdb using query 'SELECT 1'
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:05,434&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[GenericContainer.java:541]&amp#27;[0;39m &amp#27;[34m: Container mysql:8.0 started in PT27.4186533S
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:05,435&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[JdbcDatabaseContainer.java:187]&amp#27;[0;39m &amp#27;[34m: Container is started (JDBC URL: jdbc:mysql://localhost:59340/testdb)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:05,449&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[RestartApplicationListener.java:74]&amp#27;[0;39m &amp#27;[34m: Restart disabled due to context in which it is running
+&amp#27;[0;39m00:16:06,580 |-WARN in ch.qos.logback.classic.joran.action.LevelAction - <level> element is deprecated. Near [level] on line 42
+00:16:06,580 |-WARN in ch.qos.logback.classic.joran.action.LevelAction - Please use "level" attribute within <logger> or <root> elements instead.
+00:16:06,581 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+00:16:06,581 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+00:16:06,581 |-INFO in ch.qos.logback.core.model.processor.ImplicitModelHandler - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+00:16:06,582 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [GELF]
+00:16:06,582 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [de.siegmar.logbackgelf.GelfUdpAppender]
+00:16:06,583 |-WARN in ch.qos.logback.core.model.processor.ImplicitModelHandler - Ignoring unknown property [useCompression] in [de.siegmar.logbackgelf.GelfUdpAppender]
+00:16:06,584 |-WARN in ch.qos.logback.core.model.processor.ImplicitModelHandler - Ignoring unknown property [shortPatternLayout] in [de.siegmar.logbackgelf.GelfEncoder]
+00:16:06,584 |-WARN in ch.qos.logback.core.model.processor.ImplicitModelHandler - Ignoring unknown property [fullPatternLayout] in [de.siegmar.logbackgelf.GelfEncoder]
+00:16:06,584 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+00:16:06,584 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@56625ce9 - Propagating INFO level on Logger[ROOT] onto the JUL framework
+00:16:06,585 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+00:16:06,585 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting additivity of logger [isi.dan.ms_productos] to false
+00:16:06,585 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@56625ce9 - Propagating DEBUG level on Logger[isi.dan.ms_productos] onto the JUL framework
+00:16:06,585 |-INFO in ch.qos.logback.classic.model.processor.LevelModelHandler - isi.dan.ms_productos level set to DEBUG
+00:16:06,585 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [GELF] to Logger[isi.dan.ms_productos]
+00:16:06,585 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[isi.dan.ms_productos]
+00:16:06,585 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@55dfdcd0 - End of configuration.
+00:16:06,585 |-INFO in org.springframework.boot.logging.logback.SpringBootJoranConfigurator@76805f32 - Registering current configuration as safe fallback point
 
 
   .   ____          _            __ _ _
@@ -98,19 +122,183 @@
 
  :: Spring Boot ::                (v3.3.2)
 
-&amp#27;[32m2024-08-05 00:15:31,504&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[StartupInfoLogger.java:50]&amp#27;[0;39m &amp#27;[34m: Starting ObraControllerTest using Java 21 with PID 14776 (started by matia in C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes)
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:31,505&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[SpringApplication.java:654]&amp#27;[0;39m &amp#27;[34m: No active profile set, falling back to 1 default profile: "default"
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:32,517&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[MockServletContext.java:437]&amp#27;[0;39m &amp#27;[34m: Initializing Spring TestDispatcherServlet ''
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:32,517&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[FrameworkServlet.java:532]&amp#27;[0;39m &amp#27;[34m: Initializing Servlet ''
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:32,520&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[FrameworkServlet.java:554]&amp#27;[0;39m &amp#27;[34m: Completed initialization in 2 ms
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:32,539&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[StartupInfoLogger.java:56]&amp#27;[0;39m &amp#27;[34m: Started ObraControllerTest in 2.226 seconds (process running for 20.399)
+&amp#27;[32m2024-08-05 00:16:06,617&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[StartupInfoLogger.java:50]&amp#27;[0;39m &amp#27;[34m: Starting ClienteRepositoryTest using Java 21 with PID 14776 (started by matia in C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:06,618&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[SpringApplication.java:660]&amp#27;[0;39m &amp#27;[34m: The following 1 profile is active: "db"
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:07,024&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[RepositoryConfigurationDelegate.java:143]&amp#27;[0;39m &amp#27;[34m: Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:07,127&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[RepositoryConfigurationDelegate.java:211]&amp#27;[0;39m &amp#27;[34m: Finished Spring Data repository scanning in 84 ms. Found 3 JPA repository interfaces.
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:07,591&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[LogHelper.java:31]&amp#27;[0;39m &amp#27;[34m: HHH000204: Processing PersistenceUnitInfo [name: default]
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:07,795&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[Version.java:44]&amp#27;[0;39m &amp#27;[34m: HHH000412: Hibernate ORM core version 6.5.2.Final
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:07,917&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[RegionFactoryInitiator.java:50]&amp#27;[0;39m &amp#27;[34m: HHH000026: Second-level cache disabled
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:08,374&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[SpringPersistenceUnitInfo.java:87]&amp#27;[0;39m &amp#27;[34m: No LoadTimeWeaver setup: ignoring JPA class transformer
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:08,471&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[HikariDataSource.java:109]&amp#27;[0;39m &amp#27;[34m: HikariPool-1 - Starting...
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:08,894&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[HikariPool.java:554]&amp#27;[0;39m &amp#27;[34m: HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@44d58089
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:08,899&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[HikariDataSource.java:122]&amp#27;[0;39m &amp#27;[34m: HikariPool-1 - Start completed.
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:09,009&amp#27;[0;39m &amp#27;[31mWARN &amp#27;[0;39m &amp#27;[33m[DialectFactoryImpl.java:153]&amp#27;[0;39m &amp#27;[34m: HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:09,014&amp#27;[0;39m &amp#27;[31mWARN &amp#27;[0;39m &amp#27;[33m[DialectFactoryImpl.java:101]&amp#27;[0;39m &amp#27;[34m: HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:09,111&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[DdlTypeRegistry.java:64]&amp#27;[0;39m &amp#27;[34m: addDescriptor(12, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@77b760b3) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@1019f8d8)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:09,113&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[DdlTypeRegistry.java:64]&amp#27;[0;39m &amp#27;[34m: addDescriptor(-9, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@748028ad) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@1510b629)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:09,113&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[DdlTypeRegistry.java:64]&amp#27;[0;39m &amp#27;[34m: addDescriptor(-3, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@596efec0) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@66e020d)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:09,114&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[DdlTypeRegistry.java:64]&amp#27;[0;39m &amp#27;[34m: addDescriptor(4003, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@73de872d) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@63efd681)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:09,115&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[DdlTypeRegistry.java:64]&amp#27;[0;39m &amp#27;[34m: addDescriptor(4001, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@4dd9acc2) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@3bd1b11e)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:09,116&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[DdlTypeRegistry.java:64]&amp#27;[0;39m &amp#27;[34m: addDescriptor(4002, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@3cb1bea6) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@21772c6f)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:09,117&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[DdlTypeRegistry.java:64]&amp#27;[0;39m &amp#27;[34m: addDescriptor(2004, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@21482b3f) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@17a72749)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:09,117&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[DdlTypeRegistry.java:64]&amp#27;[0;39m &amp#27;[34m: addDescriptor(2005, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@26d2ef95) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@3e5eab74)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:09,118&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[DdlTypeRegistry.java:64]&amp#27;[0;39m &amp#27;[34m: addDescriptor(2011, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@5eaf7e53) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@701c87a0)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:11,371&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[JtaPlatformInitiator.java:59]&amp#27;[0;39m &amp#27;[34m: HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:11,412&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[SqlStatementLogger.java:135]&amp#27;[0;39m &amp#27;[34m: alter table ms_cli_obra drop foreign key FKf9qx8r2g75mof2uey4jh1i2mq
+&amp#27;[0;39mHibernate: alter table ms_cli_obra drop foreign key FKf9qx8r2g75mof2uey4jh1i2mq
+&amp#27;[32m2024-08-05 00:16:11,463&amp#27;[0;39m &amp#27;[31mWARN &amp#27;[0;39m &amp#27;[33m[ExceptionHandlerLoggedImpl.java:27]&amp#27;[0;39m &amp#27;[34m: GenerationTarget encountered exception accepting command : Error executing DDL "alter table ms_cli_obra drop foreign key FKf9qx8r2g75mof2uey4jh1i2mq" via JDBC [Table 'testdb.ms_cli_obra' doesn't exist]
+&amp#27;[0;39morg.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "alter table ms_cli_obra drop foreign key FKf9qx8r2g75mof2uey4jh1i2mq" via JDBC [Table 'testdb.ms_cli_obra' doesn't exist]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.Helper.applySqlString(Helper.java:233)
+	at org.hibernate.tool.schema.internal.Helper.applySqlStrings(Helper.java:217)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.applyConstraintDropping(SchemaDropperImpl.java:476)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.dropConstraintsTablesSequences(SchemaDropperImpl.java:242)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.dropFromMetadata(SchemaDropperImpl.java:215)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.performDrop(SchemaDropperImpl.java:185)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.doDrop(SchemaDropperImpl.java:155)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.doDrop(SchemaDropperImpl.java:115)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:238)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:322)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:457)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1506)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1853)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1802)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:954)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:625)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.test.context.SpringBootContextLoader.lambda$loadContext$3(SpringBootContextLoader.java:137)
+	at org.springframework.util.function.ThrowingSupplier.get(ThrowingSupplier.java:58)
+	at org.springframework.util.function.ThrowingSupplier.get(ThrowingSupplier.java:46)
+	at org.springframework.boot.SpringApplication.withHook(SpringApplication.java:1463)
+	at org.springframework.boot.test.context.SpringBootContextLoader$ContextLoaderHook.run(SpringBootContextLoader.java:553)
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:137)
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:108)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:225)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:152)
+	at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
+	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.injectDependencies(DependencyInjectionTestExecutionListener.java:142)
+	at org.springframework.test.context.support.DependencyInjectionTestExecutionListener.prepareTestInstance(DependencyInjectionTestExecutionListener.java:98)
+	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:260)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.postProcessTestInstance(SpringExtension.java:163)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$10(ClassBasedTestDescriptor.java:378)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.executeAndMaskThrowable(ClassBasedTestDescriptor.java:383)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$11(ClassBasedTestDescriptor.java:378)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:310)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:735)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeTestInstancePostProcessors(ClassBasedTestDescriptor.java:377)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$instantiateAndPostProcessTestInstance$6(ClassBasedTestDescriptor.java:290)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.instantiateAndPostProcessTestInstance(ClassBasedTestDescriptor.java:289)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$4(ClassBasedTestDescriptor.java:279)
+	at java.base/java.util.Optional.orElseGet(Optional.java:364)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$5(ClassBasedTestDescriptor.java:278)
+	at org.junit.jupiter.engine.execution.TestInstancesProvider.getTestInstances(TestInstancesProvider.java:31)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$prepare$0(TestMethodTestDescriptor.java:106)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:105)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$prepare$2(NodeTestTask.java:123)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.prepare(NodeTestTask.java:123)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:90)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:184)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:148)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:122)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+Caused by: java.sql.SQLSyntaxErrorException: Table 'testdb.ms_cli_obra' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeInternal(StatementImpl.java:770)
+	at com.mysql.cj.jdbc.StatementImpl.execute(StatementImpl.java:653)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 117 common frames omitted
+&amp#27;[32m2024-08-05 00:16:11,465&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[SqlStatementLogger.java:135]&amp#27;[0;39m &amp#27;[34m: drop table if exists ms_cli_cliente
+&amp#27;[0;39mHibernate: drop table if exists ms_cli_cliente
+&amp#27;[32m2024-08-05 00:16:11,484&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[SqlStatementLogger.java:135]&amp#27;[0;39m &amp#27;[34m: drop table if exists ms_cli_obra
+&amp#27;[0;39mHibernate: drop table if exists ms_cli_obra
+&amp#27;[32m2024-08-05 00:16:11,498&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[SqlStatementLogger.java:135]&amp#27;[0;39m &amp#27;[34m: drop table if exists usuario_habilitado
+&amp#27;[0;39mHibernate: drop table if exists usuario_habilitado
+&amp#27;[32m2024-08-05 00:16:11,522&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[SqlStatementLogger.java:135]&amp#27;[0;39m &amp#27;[34m: create table ms_cli_cliente (id integer not null auto_increment, max_obras_en_ejecucion integer, maximo_descubierto integer, correo_electronico varchar(255) not null, cuit varchar(255), nombre varchar(255) not null, primary key (id)) engine=InnoDB
+&amp#27;[0;39mHibernate: create table ms_cli_cliente (id integer not null auto_increment, max_obras_en_ejecucion integer, maximo_descubierto integer, correo_electronico varchar(255) not null, cuit varchar(255), nombre varchar(255) not null, primary key (id)) engine=InnoDB
+&amp#27;[32m2024-08-05 00:16:11,924&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[SqlStatementLogger.java:135]&amp#27;[0;39m &amp#27;[34m: create table ms_cli_obra (es_remodelacion bit, id integer not null auto_increment, id_cliente integer, lat float(23) not null, lng float(23) not null, presupuesto decimal(38,2) not null, direccion varchar(255), estado_obra enum ('FINALIZADA','HABILITADA','PENDIENTE'), primary key (id)) engine=InnoDB
+&amp#27;[0;39mHibernate: create table ms_cli_obra (es_remodelacion bit, id integer not null auto_increment, id_cliente integer, lat float(23) not null, lng float(23) not null, presupuesto decimal(38,2) not null, direccion varchar(255), estado_obra enum ('FINALIZADA','HABILITADA','PENDIENTE'), primary key (id)) engine=InnoDB
+&amp#27;[32m2024-08-05 00:16:11,987&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[SqlStatementLogger.java:135]&amp#27;[0;39m &amp#27;[34m: create table usuario_habilitado (id integer not null auto_increment, apellido varchar(255), correo_electronico varchar(255), dni varchar(255), nombre varchar(255), primary key (id)) engine=InnoDB
+&amp#27;[0;39mHibernate: create table usuario_habilitado (id integer not null auto_increment, apellido varchar(255), correo_electronico varchar(255), dni varchar(255), nombre varchar(255), primary key (id)) engine=InnoDB
+&amp#27;[32m2024-08-05 00:16:12,048&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[SqlStatementLogger.java:135]&amp#27;[0;39m &amp#27;[34m: alter table ms_cli_obra add constraint FKf9qx8r2g75mof2uey4jh1i2mq foreign key (id_cliente) references ms_cli_cliente (id)
+&amp#27;[0;39mHibernate: alter table ms_cli_obra add constraint FKf9qx8r2g75mof2uey4jh1i2mq foreign key (id_cliente) references ms_cli_cliente (id)
+&amp#27;[32m2024-08-05 00:16:12,272&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[AbstractEntityManagerFactoryBean.java:437]&amp#27;[0;39m &amp#27;[34m: Initialized JPA EntityManagerFactory for persistence unit 'default'
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:13,151&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[StartupInfoLogger.java:56]&amp#27;[0;39m &amp#27;[34m: Started ClienteRepositoryTest in 7.704 seconds (process running for 61.011)
+&amp#27;[0;39m&amp#27;[32m2024-08-05 00:16:13,460&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[SqlStatementLogger.java:135]&amp#27;[0;39m &amp#27;[34m: select c1_0.id,c1_0.correo_electronico,c1_0.cuit,c1_0.max_obras_en_ejecucion,c1_0.maximo_descubierto,c1_0.nombre from ms_cli_cliente c1_0
+&amp#27;[0;39mHibernate: select c1_0.id,c1_0.correo_electronico,c1_0.cuit,c1_0.max_obras_en_ejecucion,c1_0.maximo_descubierto,c1_0.nombre from ms_cli_cliente c1_0
+&amp#27;[32m2024-08-05 00:16:13,502&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[SqlStatementLogger.java:135]&amp#27;[0;39m &amp#27;[34m: select c1_0.id,c1_0.correo_electronico,c1_0.cuit,c1_0.max_obras_en_ejecucion,c1_0.maximo_descubierto,c1_0.nombre from ms_cli_cliente c1_0 where c1_0.id=?
+&amp#27;[0;39mHibernate: select c1_0.id,c1_0.correo_electronico,c1_0.cuit,c1_0.max_obras_en_ejecucion,c1_0.maximo_descubierto,c1_0.nombre from ms_cli_cliente c1_0 where c1_0.id=?
+&amp#27;[32m2024-08-05 00:16:13,545&amp#27;[0;39m &amp#27;[39mDEBUG&amp#27;[0;39m &amp#27;[33m[SqlStatementLogger.java:135]&amp#27;[0;39m &amp#27;[34m: insert into ms_cli_cliente (correo_electronico,cuit,max_obras_en_ejecucion,maximo_descubierto,nombre) values (?,?,?,?,?)
+&amp#27;[0;39mHibernate: insert into ms_cli_cliente (correo_electronico,cuit,max_obras_en_ejecucion,maximo_descubierto,nombre) values (?,?,?,?,?)
+&amp#27;[32m2024-08-05 00:16:13,587&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[ClienteRepositoryTest.java:88]&amp#27;[0;39m &amp#27;[34m: Encontre: Optional[Cliente(id=1, nombre=prueba, correoElectronico=asa@asfs.com, cuit=123, maximoDescubierto=10000, maxObrasEnEjecucion=3, obrasClientes=null)] 
 &amp#27;[0;39m]]></system-out>
   </testcase>
-  <testcase name="testMarcarFinalizada" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.042"/>
-  <testcase name="testMarcarPendiente" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.04"/>
-  <testcase name="testMarcarHabilitada" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.022"/>
-  <testcase name="testCreate" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.07"/>
-  <testcase name="testDelete" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.014"/>
-  <testcase name="testGetAll" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.013"/>
-  <testcase name="testUpdate" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.024"/>
 </testsuite>

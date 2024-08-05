@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: isi.dan.msclientes.controller.ObraControllerTest
 -------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.990 s -- in isi.dan.msclientes.controller.ObraControllerTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.707 s -- in isi.dan.msclientes.controller.ObraControllerTest

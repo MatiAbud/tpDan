@@ -16,7 +16,7 @@ import isi.dan.msclientes.model.EstadoObra;
 import isi.dan.msclientes.model.Obra;
 
 @Service
-<span class="nc" id="L19">public class ObraService {</span>
+<span class="fc" id="L19">public class ObraService {</span>
 
     @Autowired
     private ObraRepository obraRepository;
@@ -84,11 +84,11 @@ import isi.dan.msclientes.model.Obra;
     public Obra cambiarEstadoObra(Integer idObra, EstadoObra nuevoEstado)
             throws Exception {
 
-<span class="nc" id="L87">        Obra obra = obraRepository.findById(idObra)</span>
-<span class="nc" id="L88">                .orElseThrow();</span>
+<span class="fc" id="L87">        Obra obra = obraRepository.findById(idObra)</span>
+<span class="fc" id="L88">                .orElseThrow();</span>
 
         // Validamos nuevo estado
-<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (!EstadoObra.getValidEstados().contains(nuevoEstado)) {</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (!EstadoObra.getValidEstados().contains(nuevoEstado)) {</span>
             try {
 <span class="nc" id="L93">                throw new Exception(&quot;Estado no válido: &quot; + nuevoEstado);</span>
 <span class="nc" id="L94">            } catch (Exception e) {</span>
@@ -104,20 +104,16 @@ import isi.dan.msclientes.model.Obra;
                 e.printStackTrace();
             }
         }*/
-<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (obra.getEstado().equals(EstadoObra.FINALIZADA)) {</span>
-            try {
-<span class="nc" id="L109">                throw new Exception(&quot;No se puede cambiar el estado de una obra FINALIZADA&quot;);</span>
-<span class="nc" id="L110">            } catch (Exception e) {</span>
-<span class="nc" id="L111">                e.printStackTrace();</span>
-            }
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (obra.getEstado().equals(EstadoObra.FINALIZADA)) {</span>
+<span class="fc" id="L108">            throw new Exception(&quot;No se puede cambiar el estado de una obra FINALIZADA&quot;);</span>
         }
 
-<span class="nc bnc" id="L115" title="All 2 branches missed.">        if (nuevoEstado.equals(EstadoObra.FINALIZADA)) {</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        if (nuevoEstado.equals(EstadoObra.FINALIZADA)) {</span>
             // Verificar si hay obras pendientes para habilitar
-<span class="nc" id="L117">            Obra obraPendiente = obraRepository.findFirstByEstado(EstadoObra.PENDIENTE);</span>
-<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (obraPendiente != null) {</span>
-<span class="nc" id="L119">                obraPendiente.setEstado(EstadoObra.HABILITADA);</span>
-<span class="nc" id="L120">                obraRepository.save(obraPendiente);</span>
+<span class="fc" id="L113">            Obra obraPendiente = obraRepository.findFirstByEstado(EstadoObra.PENDIENTE);</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">            if (obraPendiente != null) {</span>
+<span class="fc" id="L115">                obraPendiente.setEstado(EstadoObra.HABILITADA);</span>
+<span class="fc" id="L116">                obraRepository.save(obraPendiente);</span>
             }
         }
         // No debe supera el maximo
@@ -139,31 +135,31 @@ import isi.dan.msclientes.model.Obra;
         }*/
 
         // Actualizamos estado
-<span class="nc" id="L142">        obra.setEstado(nuevoEstado);</span>
+<span class="fc" id="L138">        obra.setEstado(nuevoEstado);</span>
 
         // Guardamos la actualizacion del estado
-<span class="nc" id="L145">        obra = obraRepository.save(obra);</span>
+<span class="fc" id="L141">        obra = obraRepository.save(obra);</span>
 
-<span class="nc" id="L147">        return obra;</span>
+<span class="fc" id="L143">        return obra;</span>
     }
 
     public Obra asignarObraACliente(Integer idCliente, Obra obra) throws Exception {
         // recuperar estado habilitado del cliente
-<span class="nc" id="L152">        Cliente cliente = clienteRepository.findById(idCliente)</span>
-<span class="nc" id="L153">                .orElseThrow(() -&gt; new ClassNotFoundException(&quot;Cliente no encontrado con ID: &quot; + idCliente));</span>
+<span class="nc" id="L148">        Cliente cliente = clienteRepository.findById(idCliente)</span>
+<span class="nc" id="L149">                .orElseThrow(() -&gt; new ClassNotFoundException(&quot;Cliente no encontrado con ID: &quot; + idCliente));</span>
 
         // chequeamos si el cliente esta disponible
         // if (!cliente.isEnabled()) {
         // throw new Exception(&quot;El cliente no está habilitado para asignar obras: &quot; +
         // idCliente);
         // }
-<span class="nc bnc" id="L160" title="All 2 branches missed.">        if(obra.getEstado()==EstadoObra.FINALIZADA){</span>
-<span class="nc" id="L161">            throw new ObraFinalizadaException(&quot;La obra se encuentra finalizada&quot;);</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if(obra.getEstado()==EstadoObra.FINALIZADA){</span>
+<span class="nc" id="L157">            throw new ObraFinalizadaException(&quot;La obra se encuentra finalizada&quot;);</span>
         }
         else{
-<span class="nc" id="L164">            obra.setCliente(cliente);</span>
-<span class="nc" id="L165">            obra = obraRepository.save(obra);</span>
-<span class="nc" id="L166">            return obra;</span>
+<span class="nc" id="L160">            obra.setCliente(cliente);</span>
+<span class="nc" id="L161">            obra = obraRepository.save(obra);</span>
+<span class="nc" id="L162">            return obra;</span>
         }
 
     }

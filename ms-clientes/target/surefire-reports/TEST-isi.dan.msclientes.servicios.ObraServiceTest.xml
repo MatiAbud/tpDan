@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="isi.dan.msclientes.controller.ObraControllerTest" time="2.707" tests="8" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="isi.dan.msclientes.servicios.ObraServiceTest" time="0.494" tests="2" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -43,10 +43,13 @@
     <property name="os.version" value="10.0"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="file.encoding" value="UTF-8"/>
+    <property name="jnidispatch.path" value="C:\Users\matia\AppData\Local\Temp\jna-103668344\jna13882820101291195965.dll"/>
     <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
     <property name="localRepository" value="C:\Users\matia\.m2\repository"/>
+    <property name="jna.loaded" value="true"/>
     <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
     <property name="java.io.tmpdir" value="C:\Users\matia\AppData\Local\Temp\"/>
+    <property name="com.zaxxer.hikari.pool_number" value="3"/>
     <property name="java.version" value="21"/>
     <property name="user.dir" value="C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes"/>
     <property name="os.arch" value="amd64"/>
@@ -63,54 +66,12 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testGetById" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.14">
-    <system-out><![CDATA[&amp#27;[32m2024-08-05 00:15:30,241&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[AnnotationConfigContextLoaderUtils.java:83]&amp#27;[0;39m &amp#27;[34m: Could not detect default configuration classes for test class [isi.dan.msclientes.controller.ObraControllerTest]: ObraControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:30,302&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[SpringBootTestContextBootstrapper.java:234]&amp#27;[0;39m &amp#27;[34m: Found @SpringBootConfiguration isi.dan.msclientes.MsClientesApplication for test class isi.dan.msclientes.controller.ObraControllerTest
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:30,316&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[RestartApplicationListener.java:74]&amp#27;[0;39m &amp#27;[34m: Restart disabled due to context in which it is running
-&amp#27;[0;39m00:15:31,472 |-WARN in ch.qos.logback.classic.joran.action.LevelAction - <level> element is deprecated. Near [level] on line 42
-00:15:31,472 |-WARN in ch.qos.logback.classic.joran.action.LevelAction - Please use "level" attribute within <logger> or <root> elements instead.
-00:15:31,474 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
-00:15:31,474 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
-00:15:31,475 |-INFO in ch.qos.logback.core.model.processor.ImplicitModelHandler - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
-00:15:31,478 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [GELF]
-00:15:31,478 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [de.siegmar.logbackgelf.GelfUdpAppender]
-00:15:31,480 |-WARN in ch.qos.logback.core.model.processor.ImplicitModelHandler - Ignoring unknown property [useCompression] in [de.siegmar.logbackgelf.GelfUdpAppender]
-00:15:31,482 |-WARN in ch.qos.logback.core.model.processor.ImplicitModelHandler - Ignoring unknown property [shortPatternLayout] in [de.siegmar.logbackgelf.GelfEncoder]
-00:15:31,482 |-WARN in ch.qos.logback.core.model.processor.ImplicitModelHandler - Ignoring unknown property [fullPatternLayout] in [de.siegmar.logbackgelf.GelfEncoder]
-00:15:31,483 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
-00:15:31,483 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@4bec8704 - Propagating INFO level on Logger[ROOT] onto the JUL framework
-00:15:31,483 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
-00:15:31,483 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting additivity of logger [isi.dan.ms_productos] to false
-00:15:31,483 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@4bec8704 - Propagating DEBUG level on Logger[isi.dan.ms_productos] onto the JUL framework
-00:15:31,483 |-INFO in ch.qos.logback.classic.model.processor.LevelModelHandler - isi.dan.ms_productos level set to DEBUG
-00:15:31,483 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [GELF] to Logger[isi.dan.ms_productos]
-00:15:31,484 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[isi.dan.ms_productos]
-00:15:31,484 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@65d3d7d7 - End of configuration.
-00:15:31,484 |-INFO in org.springframework.boot.logging.logback.SpringBootJoranConfigurator@296ca76c - Registering current configuration as safe fallback point
-
-
-  .   ____          _            __ _ _
- /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
-( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
- \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-  '  |____| .__|_| |_|_| |_\__, | / / / /
- =========|_|==============|___/=/_/_/_/
-
- :: Spring Boot ::                (v3.3.2)
-
-&amp#27;[32m2024-08-05 00:15:31,504&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[StartupInfoLogger.java:50]&amp#27;[0;39m &amp#27;[34m: Starting ObraControllerTest using Java 21 with PID 14776 (started by matia in C:\Users\matia\OneDrive\Escritorio\facultad\4to\DAN\Tpgit\tpDan\ms-clientes)
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:31,505&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[SpringApplication.java:654]&amp#27;[0;39m &amp#27;[34m: No active profile set, falling back to 1 default profile: "default"
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:32,517&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[MockServletContext.java:437]&amp#27;[0;39m &amp#27;[34m: Initializing Spring TestDispatcherServlet ''
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:32,517&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[FrameworkServlet.java:532]&amp#27;[0;39m &amp#27;[34m: Initializing Servlet ''
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:32,520&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[FrameworkServlet.java:554]&amp#27;[0;39m &amp#27;[34m: Completed initialization in 2 ms
-&amp#27;[0;39m&amp#27;[32m2024-08-05 00:15:32,539&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[33m[StartupInfoLogger.java:56]&amp#27;[0;39m &amp#27;[34m: Started ObraControllerTest in 2.226 seconds (process running for 20.399)
-&amp#27;[0;39m]]></system-out>
+  <testcase name="testObraFinalizada" classname="isi.dan.msclientes.servicios.ObraServiceTest" time="0.464">
+    <system-out><![CDATA[SetUp executed: Obra(id=1, direccion=pruebaHabilitada, esRemodelacion=true, lat=10.0, lng=10.0, cliente=Cliente(id=1, nombre=pruebaMax1, correoElectronico=Prueba@asdsa.com, cuit=123, maximoDescubierto=10000, maxObrasEnEjecucion=1, obrasClientes=null), presupuesto=150, estado=null)
+]]></system-out>
   </testcase>
-  <testcase name="testMarcarFinalizada" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.042"/>
-  <testcase name="testMarcarPendiente" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.04"/>
-  <testcase name="testMarcarHabilitada" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.022"/>
-  <testcase name="testCreate" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.07"/>
-  <testcase name="testDelete" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.014"/>
-  <testcase name="testGetAll" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.013"/>
-  <testcase name="testUpdate" classname="isi.dan.msclientes.controller.ObraControllerTest" time="0.024"/>
+  <testcase name="testFinalizarObra" classname="isi.dan.msclientes.servicios.ObraServiceTest" time="0.022">
+    <system-out><![CDATA[SetUp executed: Obra(id=1, direccion=pruebaHabilitada, esRemodelacion=true, lat=10.0, lng=10.0, cliente=Cliente(id=1, nombre=pruebaMax1, correoElectronico=Prueba@asdsa.com, cuit=123, maximoDescubierto=10000, maxObrasEnEjecucion=1, obrasClientes=null), presupuesto=150, estado=null)
+]]></system-out>
+  </testcase>
 </testsuite>
