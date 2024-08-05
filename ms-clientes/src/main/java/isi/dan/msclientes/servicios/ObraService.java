@@ -105,11 +105,7 @@ public class ObraService {
             }
         }*/
         if (obra.getEstado().equals(EstadoObra.FINALIZADA)) {
-            try {
-                throw new Exception("No se puede cambiar el estado de una obra FINALIZADA");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new Exception("No se puede cambiar el estado de una obra FINALIZADA");
         }
 
         if (nuevoEstado.equals(EstadoObra.FINALIZADA)) {
