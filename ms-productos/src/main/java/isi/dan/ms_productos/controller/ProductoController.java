@@ -1,21 +1,30 @@
 package isi.dan.ms_productos.controller;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import isi.dan.ms_productos.aop.LogExecutionTime;
+import isi.dan.ms_productos.dto.DescuentoUpdateDTO;
+import isi.dan.ms_productos.dto.StockUpdateDTO;
 import isi.dan.ms_productos.exception.ProductoNotFoundException;
 import isi.dan.ms_productos.modelo.Producto;
 import isi.dan.ms_productos.servicio.EchoClientFeign;
 import isi.dan.ms_productos.servicio.ProductoService;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
@@ -31,22 +40,6 @@ public class ProductoController {
     @PostMapping
     @LogExecutionTime
     public ResponseEntity<Producto> createProducto(@RequestBody @Validated Producto producto) {
-        // Validamos atributos
-        if (producto.getNombre().isEmpty()) {
-            throw new IllegalArgumentException("El nombre del producto no puede ser vacío");
-        }
-        if (producto.getDescripcion().isEmpty()) {
-            throw new IllegalArgumentException("El producto debe tener una descripción");
-        }
-        if (producto.getCategoria().isValid()) {
-            throw new IllegalArgumentException("Se debe seleccionar una categoria para el producto");
-        }
-        if (producto.getStockMinimo() == 0 || producto.getStockMinimo() <= 0) {
-            producto.setStockMinimo(10);
-        }
-        if (producto.getPrecio() == null) {
-            throw new IllegalArgumentException("El precio del producto debe ser mayor que cero");
-        }
 
         // Seteamos el descuento
         producto.setDescuentoPromocional(0);
@@ -94,4 +87,64 @@ public class ProductoController {
         productoService.deleteProducto(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/provision")
+    @LogExecutionTime
+    public ResponseEntity<Producto> actualizarStock(@RequestBody @Validated StockUpdateDTO stockUpdateDto)
+            throws ProductoNotFoundException {
+        Producto producto = productoService.getProductoById(stockUpdateDto.getIdProducto());
+
+        if (producto == null)
+            throw new ProductoNotFoundException(stockUpdateDto.getIdProducto());
+
+        // Actualizamos el stock del producto
+        producto.setStockActual(producto.getStockActual() + stockUpdateDto.getCantidad());
+        //Actualizamos el precio
+        producto.setPrecio(stockUpdateDto.getPrecio());
+
+        // Guardamos los cambios
+        Producto updatedProducto = productoService.saveProducto(producto);
+
+        return ResponseEntity.ok(updatedProducto);
+    }
+
+    /*
+    @PutMapping("/precio")
+    @LogExecutionTime
+    public ResponseEntity<Producto> actualizarPrecio(@RequestBody @Validated StockUpdateDTO stockUpdateDTO)
+            throws ProductoNotFoundException {
+        Producto producto = productoService.getProductoById(stockUpdateDTO.getIdProducto());
+
+        if (producto == null)
+            throw new ProductoNotFoundException(stockUpdateDTO.getIdProducto());
+
+        // Actualizamos el precio del producto
+        producto.setPrecioInicial(BigDecimal.valueOf(stockUpdateDTO.getCantidad())); // Asumiendo que 'cantidad' es el
+                                                                                     // precio
+
+        // Guardamos los cambios
+        Producto updatedProducto = productoService.saveProducto(producto);
+
+        return ResponseEntity.ok(updatedProducto);
+    }
+     */
+    @PutMapping("/descuento")
+    @LogExecutionTime
+    public ResponseEntity<Producto> actualizarDescuentoPromocional(
+            @RequestBody @Validated DescuentoUpdateDTO descuentoUpdateDto) throws ProductoNotFoundException {
+        Producto producto = productoService.getProductoById(descuentoUpdateDto.getIdProducto());
+
+        if (producto == null)
+            throw new ProductoNotFoundException(descuentoUpdateDto.getIdProducto());
+
+        // Actualizamos el descuento promocional del producto
+        producto.setDescuentoPromocional(descuentoUpdateDto.getDescuentoPromocional());
+
+        // Guardamos los cambios
+        Producto updatedProducto = productoService.saveProducto(producto);
+
+        return ResponseEntity.ok(updatedProducto);
+
+    }
+
 }

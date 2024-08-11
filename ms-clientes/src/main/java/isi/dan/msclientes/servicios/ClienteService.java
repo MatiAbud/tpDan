@@ -1,19 +1,23 @@
 package isi.dan.msclientes.servicios;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import isi.dan.msclientes.dao.ClienteRepository;
 import isi.dan.msclientes.model.Cliente;
-
-import java.util.List;
-import java.util.Optional;
+import isi.dan.msclientes.config.ClienteConfig;
 
 @Service
 public class ClienteService {
-    
+
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ClienteConfig clienteConfig;
 
     public List<Cliente> findAll() {
         return clienteRepository.findAll();
@@ -24,6 +28,7 @@ public class ClienteService {
     }
 
     public Cliente save(Cliente cliente) {
+        cliente.setMaximoDescubierto(clienteConfig.getMaximoDescubierto());
         return clienteRepository.save(cliente);
     }
 

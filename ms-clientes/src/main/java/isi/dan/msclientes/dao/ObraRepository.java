@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import isi.dan.msclientes.model.Cliente;
 import isi.dan.msclientes.model.EstadoObra;
 import isi.dan.msclientes.model.Obra;
 
@@ -18,6 +19,5 @@ public interface ObraRepository extends JpaRepository<Obra, Integer> {
 
     Obra findFirstByEstado(EstadoObra pendiente);
 
-    int countByClienteAndEstado(Integer id, EstadoObra habilitada);
+    int countByClienteAndEstado(Cliente cliente, EstadoObra habilitada);
 }
-

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ObraController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ms-clientes</a> &gt; <a href="index.source.html" class="el_package">isi.dan.msclientes.controller</a> &gt; <span class="el_source">ObraController.java</span></div><h1>ObraController.java</h1><pre class="source lang-java linenums">package isi.dan.msclientes.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import isi.dan.msclientes.aop.LogExecutionTime;
+import isi.dan.msclientes.exception.ClienteNotFoundException;
+import isi.dan.msclientes.model.Cliente;
+import isi.dan.msclientes.model.EstadoObra;
+import isi.dan.msclientes.model.Obra;
+import isi.dan.msclientes.servicios.ClienteService;
+import isi.dan.msclientes.servicios.ObraService;
+import jakarta.validation.Valid;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+
+
+@RestController
+@RequestMapping(&quot;/api/obras&quot;)
+<span class="fc" id="L25">public class ObraController {</span>
+
+    @Autowired
+    private ObraService obraService;
+    @Autowired
+    private ClienteService clienteService;
+
+    @GetMapping
+    @LogExecutionTime
+    public List&lt;Obra&gt; getAll() {
+<span class="fc" id="L35">        return obraService.findAll();</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    @LogExecutionTime
+    public ResponseEntity&lt;Obra&gt; getById(@PathVariable Integer id) {
+<span class="fc" id="L41">        Optional&lt;Obra&gt; obra = obraService.findById(id);</span>
+<span class="pc" id="L42">        return obra.map(ResponseEntity::ok).orElseGet(() -&gt; ResponseEntity.notFound().build());</span>
+    }
+
+    @PostMapping
+    public Obra create(@Valid @RequestBody Obra obra) {
+<span class="fc" id="L47">        return obraService.save(obra);</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Obra&gt; update(@PathVariable Integer id, @RequestBody Obra obra) {
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (!obraService.findById(id).isPresent()) {</span>
+<span class="nc" id="L53">            return ResponseEntity.notFound().build();</span>
+        }
+<span class="fc" id="L55">        obra.setId(id);</span>
+<span class="fc" id="L56">        return ResponseEntity.ok(obraService.update(obra));</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; delete(@PathVariable Integer id) {
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (!obraService.findById(id).isPresent()) {</span>
+<span class="nc" id="L62">            return ResponseEntity.notFound().build();</span>
+        }
+<span class="fc" id="L64">        obraService.deleteById(id);</span>
+<span class="fc" id="L65">        return ResponseEntity.noContent().build();</span>
+    }
+
+    @PutMapping(&quot;/{id}/habilitar&quot;)
+    public ResponseEntity&lt;Obra&gt; marcarHabilitada(@PathVariable Integer id) {
+        try {
+            // Delegación al servicio para marcar la obra como pendiente
+<span class="fc" id="L72">            Obra obraActualizada = obraService.cambiarEstadoObra(id,EstadoObra.HABILITADA);</span>
+
+            // Validación de la existencia de la obra
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">            if (obraActualizada == null) {</span>
+<span class="nc" id="L76">                return ResponseEntity.notFound().build();</span>
+            }
+            // Retorno de la obra actualizada con código de estado OK (200)
+<span class="fc" id="L79">            return ResponseEntity.ok(obraActualizada);</span>
+<span class="nc" id="L80">        } catch (Exception e) {</span>
+            // Manejo de excepciones generales
+<span class="nc" id="L82">            return ResponseEntity.internalServerError().build();</span>
+        }
+    }
+
+    @PutMapping(&quot;/{id}/finalizar&quot;)
+    public ResponseEntity&lt;Obra&gt; marcarFinalizada(@PathVariable Integer id) {
+        try {
+            // Llamada al service para marcar la obra como finalizada
+<span class="fc" id="L90">            Obra obraActualizada = obraService.cambiarEstadoObra(id,EstadoObra.FINALIZADA);</span>
+
+            // Validación de la existencia de la obra
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            if (obraActualizada == null) {</span>
+<span class="nc" id="L94">                return ResponseEntity.notFound().build();</span>
+            }
+
+            // Retorno de la obra actualizada con código de estado OK (200)
+<span class="fc" id="L98">            return ResponseEntity.ok(obraActualizada);</span>
+<span class="nc" id="L99">        } catch (Exception e) {</span>
+            // Manejo de excepciones generales
+<span class="nc" id="L101">            return ResponseEntity.internalServerError().build();</span>
+        }
+    }
+
+    @PutMapping(&quot;/{id}/pendiente&quot;)
+    public ResponseEntity&lt;Obra&gt; marcarPendiente(@PathVariable Integer id) {
+        try {
+            // Delegación al servicio para marcar la obra como pendiente
+<span class="fc" id="L109">            Obra obraActualizada = obraService.cambiarEstadoObra(id,EstadoObra.PENDIENTE);</span>
+
+            // Validación de la existencia de la obra
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">            if (obraActualizada == null) {</span>
+<span class="nc" id="L113">                return ResponseEntity.notFound().build();</span>
+            }
+            // Retorno de la obra actualizada con código de estado OK (200)
+<span class="fc" id="L116">            return ResponseEntity.ok(obraActualizada);</span>
+<span class="nc" id="L117">        } catch (Exception e) {</span>
+            // Manejo de excepciones generales
+<span class="nc" id="L119">            return ResponseEntity.internalServerError().build();</span>
+        }
+    }
+
+    @GetMapping(&quot;/clientes/{idCliente}&quot;)
+    public ResponseEntity&lt;Object&gt; obtenerObrasDeCliente(@PathVariable Integer idCliente) {
+        try {
+            // Validación de entrada básica
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            if (idCliente == null) {</span>
+<span class="nc" id="L128">                throw new IllegalArgumentException(&quot;El ID del cliente debe ser un Long válido&quot;);</span>
+            }
+
+            // Delegación al servicio para obtener las obras del cliente
+<span class="nc" id="L132">            List&lt;Obra&gt; obras = obraService.obtenerObrasDeCliente(idCliente);</span>
+
+            // Validación de la existencia del cliente
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            if (obras.isEmpty()) {</span>
+                // Maneja la respuesta no encontrada con el cuerpo extraído si es necesario
+<span class="nc" id="L137">                return ResponseEntity.notFound().build();</span>
+            }
+
+            // Retorno de la lista de obras con código de estado OK
+<span class="nc" id="L141">            return ResponseEntity.ok(obras);</span>
+
+<span class="nc" id="L143">        } catch (ClienteNotFoundException e) {</span>
+            // Manejo de la excepción de cliente no encontrado
+<span class="nc" id="L145">            return ResponseEntity.notFound().build();</span>
+<span class="nc" id="L146">        } catch (Exception e) {</span>
+            // Manejo de excepciones generales
+<span class="nc" id="L148">            return ResponseEntity.internalServerError().body(&quot;Error al obtener las obras del cliente&quot;);</span>
+        }
+    }
+
+    @PutMapping(&quot;/{id}/{idCliente}&quot;)
+    public ResponseEntity&lt;Obra&gt; asignarCliente(@PathVariable Integer id, @PathVariable Integer idCliente) throws Exception {
+<span class="nc" id="L154">        Optional&lt;Obra&gt; obra = obraService.findById(id);</span>
+<span class="nc" id="L155">        Optional&lt;Cliente&gt; cliente = clienteService.findById(idCliente);</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if(!cliente.isPresent()){</span>
+<span class="nc" id="L157">            throw new Exception();</span>
+        }
+<span class="nc" id="L159">        List&lt;Obra&gt; obrasHabilitadasCliente = obraService.obtenerObrasDeCliente(cliente.get().getId());</span>
+<span class="nc" id="L160">            obrasHabilitadasCliente.stream()</span>
+<span class="nc" id="L161">                                    .filter(o -&gt; o.getEstado().equals(EstadoObra.HABILITADA))</span>
+<span class="nc" id="L162">                                    .collect(Collectors.toList());</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        if(obra.get().getEstado().equals(EstadoObra.HABILITADA)){</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">            if(obrasHabilitadasCliente.size()==cliente.get().getMaxObrasEnEjecucion()){</span>
+<span class="nc" id="L165">                throw new Exception(&quot;se alcanzo el max de obras ejecutadas&quot;);</span>
+            }
+<span class="nc" id="L167">            obra.get().setCliente(cliente.get());</span>
+<span class="nc" id="L168">            return ResponseEntity.ok(obraService.cambiarEstadoObra(id, EstadoObra.HABILITADA));</span>
+        }
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        else if(obra.get().getEstado().equals(EstadoObra.PENDIENTE)){</span>
+<span class="nc" id="L171">            obra.get().setCliente(cliente.get());</span>
+<span class="nc" id="L172">            return ResponseEntity.ok(obraService.cambiarEstadoObra(id, EstadoObra.PENDIENTE));</span>
+        }
+        else{
+<span class="nc" id="L175">            obra.get().setCliente(cliente.get());</span>
+<span class="nc" id="L176">            return ResponseEntity.ok(obraService.cambiarEstadoObra(id, EstadoObra.FINALIZADA));</span>
+        }
+        
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

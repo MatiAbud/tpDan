@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,24 +24,26 @@ public class Obra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
+    @Column(name = "direccion")
     private String direccion;
 
     @Column(name = "ES_REMODELACION")
     private Boolean esRemodelacion;
-    
+
     private float lat;
-    
+
     private float lng;
-    
+
     @ManyToOne
-    @JoinColumn(name = "ID_CLIENTE")
+    @JoinColumn(name = "idCliente")
     private Cliente cliente;
-    
+
     @NotNull(message = "El presupuesto es obligatorio")
-    @Min(value=100, message = "El presupuesto debe ser al menos de 100")
+    @Min(value = 100, message = "El presupuesto debe ser al menos de 100")
     private BigDecimal presupuesto;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estadoObra")
     private EstadoObra estado;
-
 }

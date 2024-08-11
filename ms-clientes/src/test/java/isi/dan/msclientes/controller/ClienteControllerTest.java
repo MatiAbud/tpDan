@@ -1,9 +1,10 @@
 package isi.dan.msclientes.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import isi.dan.msclientes.model.Cliente;
-import isi.dan.msclientes.servicios.ClienteService;
+import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +15,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
-import java.util.Optional;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import isi.dan.msclientes.model.Cliente;
+import isi.dan.msclientes.servicios.ClienteService;
 
 @WebMvcTest(ClienteController.class)
 public class ClienteControllerTest {
@@ -38,6 +38,8 @@ public class ClienteControllerTest {
         cliente.setNombre("Test Cliente");
         cliente.setCorreoElectronico("test@cliente.com");
         cliente.setCuit("12998887776");
+        cliente.setMaxObrasEnEjecucion(10000);
+        cliente.setMaximoDescubierto(3);
     }
 
     @Test
@@ -60,6 +62,7 @@ public class ClienteControllerTest {
                 .andExpect(jsonPath("$.nombre").value("Test Cliente"))
                 .andExpect(jsonPath("$.cuit").value("12998887776"));
     }
+
     @Test
     void testGetById_NotFound() throws Exception {
         Mockito.when(clienteService.findById(2)).thenReturn(Optional.empty());
@@ -99,7 +102,7 @@ public class ClienteControllerTest {
         mockMvc.perform(delete("/api/clientes/1"))
                 .andExpect(status().isNoContent());
     }
-
+    
     private static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
@@ -108,4 +111,3 @@ public class ClienteControllerTest {
         }
     }
 }
-

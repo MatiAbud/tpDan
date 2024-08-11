@@ -6,12 +6,19 @@ import org.springframework.web.bind.annotation.*;
 
 import isi.dan.msclientes.aop.LogExecutionTime;
 import isi.dan.msclientes.exception.ClienteNotFoundException;
+import isi.dan.msclientes.model.Cliente;
+import isi.dan.msclientes.model.EstadoObra;
 import isi.dan.msclientes.model.Obra;
+import isi.dan.msclientes.servicios.ClienteService;
 import isi.dan.msclientes.servicios.ObraService;
 import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+
 
 @RestController
 @RequestMapping("/api/obras")
@@ -19,6 +26,8 @@ public class ObraController {
 
     @Autowired
     private ObraService obraService;
+    @Autowired
+    private ClienteService clienteService;
 
     @GetMapping
     @LogExecutionTime
@@ -56,16 +65,29 @@ public class ObraController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}/habilitar")
+    public ResponseEntity<Obra> marcarHabilitada(@PathVariable Integer id) {
+        try {
+            // Delegación al servicio para marcar la obra como pendiente
+            Obra obraActualizada = obraService.cambiarEstadoObra(id,EstadoObra.HABILITADA);
+
+            // Validación de la existencia de la obra
+            if (obraActualizada == null) {
+                return ResponseEntity.notFound().build();
+            }
+            // Retorno de la obra actualizada con código de estado OK (200)
+            return ResponseEntity.ok(obraActualizada);
+        } catch (Exception e) {
+            // Manejo de excepciones generales
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @PutMapping("/{id}/finalizar")
     public ResponseEntity<Obra> marcarFinalizada(@PathVariable Integer id) {
         try {
-            // Validación básica de datos de entrada
-            if (id == null) {
-                throw new IllegalArgumentException("El ID de la obra es obligatorio");
-            }
-
             // Llamada al service para marcar la obra como finalizada
-            Obra obraActualizada = obraService.marcarObraComoFinalizada(id);
+            Obra obraActualizada = obraService.cambiarEstadoObra(id,EstadoObra.FINALIZADA);
 
             // Validación de la existencia de la obra
             if (obraActualizada == null) {
@@ -83,19 +105,13 @@ public class ObraController {
     @PutMapping("/{id}/pendiente")
     public ResponseEntity<Obra> marcarPendiente(@PathVariable Integer id) {
         try {
-            // Validación de entrada básica
-            if (id == null) {
-                throw new IllegalArgumentException("El ID de la obra debe ser un entero válido");
-            }
-
             // Delegación al servicio para marcar la obra como pendiente
-            Obra obraActualizada = obraService.marcarObraComoPendiente(id);
+            Obra obraActualizada = obraService.cambiarEstadoObra(id,EstadoObra.PENDIENTE);
 
             // Validación de la existencia de la obra
             if (obraActualizada == null) {
                 return ResponseEntity.notFound().build();
             }
-
             // Retorno de la obra actualizada con código de estado OK (200)
             return ResponseEntity.ok(obraActualizada);
         } catch (Exception e) {
@@ -131,5 +147,34 @@ public class ObraController {
             // Manejo de excepciones generales
             return ResponseEntity.internalServerError().body("Error al obtener las obras del cliente");
         }
+    }
+
+    @PutMapping("/{id}/{idCliente}")
+    public ResponseEntity<Obra> asignarCliente(@PathVariable Integer id, @PathVariable Integer idCliente) throws Exception {
+        Optional<Obra> obra = obraService.findById(id);
+        Optional<Cliente> cliente = clienteService.findById(idCliente);
+        if(!cliente.isPresent()){
+            throw new Exception();
+        }
+        List<Obra> obrasHabilitadasCliente = obraService.obtenerObrasDeCliente(cliente.get().getId());
+            obrasHabilitadasCliente.stream()
+                                    .filter(o -> o.getEstado().equals(EstadoObra.HABILITADA))
+                                    .collect(Collectors.toList());
+        if(obra.get().getEstado().equals(EstadoObra.HABILITADA)){
+            if(obrasHabilitadasCliente.size()==cliente.get().getMaxObrasEnEjecucion()){
+                throw new Exception("se alcanzo el max de obras ejecutadas");
+            }
+            obra.get().setCliente(cliente.get());
+            return ResponseEntity.ok(obraService.cambiarEstadoObra(id, EstadoObra.HABILITADA));
+        }
+        else if(obra.get().getEstado().equals(EstadoObra.PENDIENTE)){
+            obra.get().setCliente(cliente.get());
+            return ResponseEntity.ok(obraService.cambiarEstadoObra(id, EstadoObra.PENDIENTE));
+        }
+        else{
+            obra.get().setCliente(cliente.get());
+            return ResponseEntity.ok(obraService.cambiarEstadoObra(id, EstadoObra.FINALIZADA));
+        }
+        
     }
 }
