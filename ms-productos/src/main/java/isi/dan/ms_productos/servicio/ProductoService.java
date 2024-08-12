@@ -1,5 +1,6 @@
 package isi.dan.ms_productos.servicio;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -35,9 +36,9 @@ public class ProductoService {
             // Obtener ID de producto y cantidad
             Long productId = (Long) messageData.get("idProducto");
             Integer cantidad = (Integer) messageData.get("cantidad");
-
+            BigDecimal precio = (BigDecimal) messageData.get("precio");
             // Crear objeto DTO
-            StockUpdateDTO stockUpdate = new StockUpdateDTO(productId, cantidad);
+            StockUpdateDTO stockUpdate = new StockUpdateDTO(productId, cantidad, precio);
 
             // Buscar el producto
             Producto producto = productoRepository.findById(stockUpdate.getIdProducto())
