@@ -9,6 +9,7 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 public class EurekaSrvApplication {
 
 	public static void main(String[] args) {
+		System.out.println("SPRING_EUREKA_PORT: " + System.getenv("SPRING_EUREKA_PORT"));
 		SpringApplication.run(EurekaSrvApplication.class, args);
 	}
 

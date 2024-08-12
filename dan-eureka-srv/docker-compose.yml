@@ -9,9 +9,9 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      SPRING_EUREKA_DEFAULT_ZONE: http://ms-eureka-svc:8761/eureka/
-      SPRING_EUREKA_HOST_NAME: ms-eureka-svc
-      SPRING_EUREKA_PORT: 8761
+      - SPRING_EUREKA_DEFAULT_ZONE=http://ms-eureka-svc:8761/eureka/
+      - SPRING_EUREKA_HOST_NAME=ms-eureka-svc
+      - SPRING_EUREKA_PORT=8761
     ports:
       - "8761:8761"
     networks:
