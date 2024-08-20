@@ -2,7 +2,6 @@
 
     <property name="port" value="12201" />
     <property name="host" value="graylog" />
-    <springProperty name="instancia" source="dan.productos.instancia" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
       <encoder>
@@ -17,7 +16,6 @@
       <maxChunkSize>508</maxChunkSize>
       <useCompression>true</useCompression>
       <encoder class="de.siegmar.logbackgelf.GelfEncoder">
-        <originHost>${instancia}</originHost>
         <includeRawMessage>false</includeRawMessage>
         <includeMarker>true</includeMarker>
         <includeMdcData>true</includeMdcData>
@@ -43,5 +41,6 @@
       <appender-ref ref="GELF" />
       <appender-ref ref="STDOUT"/>
     </logger>
+  
   
   </configuration>

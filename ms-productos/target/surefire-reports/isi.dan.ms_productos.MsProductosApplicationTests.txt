@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: isi.dan.ms_productos.MsProductosApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 35.42 s -- in isi.dan.ms_productos.MsProductosApplicationTests

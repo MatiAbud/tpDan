@@ -1,0 +1,16 @@
+isi\dan\ms_productos\conf\RabbitMQConfig.class
+isi\dan\ms_productos\exception\ProductoNotFoundException.class
+isi\dan\ms_productos\exception\RestControllerException.class
+isi\dan\ms_productos\servicio\EchoClientFeign.class
+isi\dan\ms_productos\MsProductosApplication.class
+isi\dan\ms_productos\aop\LogExecutionTime.class
+isi\dan\ms_productos\dto\DescuentoUpdateDTO.class
+isi\dan\ms_productos\dao\ProductoRepository.class
+isi\dan\ms_productos\controller\ProductoController.class
+isi\dan\ms_productos\exception\ErrorInfo.class
+isi\dan\ms_productos\servicio\ProductoService.class
+isi\dan\ms_productos\dto\StockUpdateDTO.class
+isi\dan\ms_productos\modelo\Categoria.class
+isi\dan\ms_productos\aop\LoggingAspect.class
+isi\dan\ms_productos\controller\CategoriaController.class
+isi\dan\ms_productos\modelo\Producto.class
