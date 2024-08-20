@@ -47,7 +47,7 @@ services:
       SPRING_EUREKA_DEFAULT_ZONE: http://ms-eureka-svc:8761/eureka/
       SPRING_INSTANCIA: ms-clientes-svc-1
     ports:
-      - "6080:8082"
+      - "6080:8080"
     depends_on:
       - mysql
     networks:
@@ -71,7 +71,7 @@ services:
       SPRING_EUREKA_DEFAULT_ZONE: http://ms-eureka-svc:8761/eureka/
       SPRING_INSTANCIA: ms-clientes-svc-2
     ports:
-      - "6081:8082"
+      - "6081:8080"
     depends_on:
       - mysql
     networks:
@@ -95,7 +95,7 @@ services:
       SPRING_EUREKA_DEFAULT_ZONE: http://ms-eureka-svc:8761/eureka/
       SPRING_INSTANCIA: ms-clientes-svc-3
     ports:
-      - "6082:8082"
+      - "6082:8080"
     depends_on:
       - mysql
     networks:
