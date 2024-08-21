@@ -1,0 +1,10 @@
+isi\dan\ms\pedidos\modelo\DetallePedido.class
+isi\dan\ms\pedidos\controller\PedidoController.class
+isi\dan\ms\pedidos\conf\RabbitMQConfig.class
+isi\dan\ms\pedidos\servicio\PedidoService.class
+isi\dan\ms\pedidos\dto\StockUpdateDTO.class
+isi\dan\ms\pedidos\modelo\Pedido.class
+isi\dan\ms\pedidos\modelo\Producto.class
+isi\dan\ms\pedidos\MsPedidosApplication.class
+isi\dan\ms\pedidos\dao\PedidoRepository.class
+isi\dan\ms\pedidos\modelo\Cliente.class
