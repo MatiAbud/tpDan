@@ -6,4 +6,5 @@ import lombok.Data;
 public class StockUpdateDTO {
     private Long idProducto;
     private Integer cantidad;
+
 }

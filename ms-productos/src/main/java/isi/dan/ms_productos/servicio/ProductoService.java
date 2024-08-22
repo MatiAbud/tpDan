@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import isi.dan.ms.pedidos.modelo.Pedido;
 import isi.dan.ms_productos.conf.RabbitMQConfig;
 import isi.dan.ms_productos.dao.ProductoRepository;
 import isi.dan.ms_productos.dto.StockUpdateDTO;
@@ -37,6 +38,7 @@ public class ProductoService {
             Long productId = (Long) messageData.get("idProducto");
             Integer cantidad = (Integer) messageData.get("cantidad");
             BigDecimal precio = (BigDecimal) messageData.get("precio");
+
             // Crear objeto DTO
             StockUpdateDTO stockUpdate = new StockUpdateDTO(productId, cantidad, precio);
 
@@ -50,6 +52,19 @@ public class ProductoService {
             log.info("Stock actualizado para el producto ID: {} a {}", producto.getId(), producto.getStockActual());
 
             // verificar el punto de pedido y generar un pedido
+            if (producto.getStockActual() <= producto.getStockMinimo()) {
+                log.info("El stock está por debajo del mínimo. Generando nuevo pedido...");
+
+                // Generar un nuevo pedido
+                Pedido nuevoPedido = new Pedido();
+                nuevoPedido.setProducto(producto);
+                nuevoPedido.setCantidad(producto.getStockMinimo() - producto.getStockActual());
+                nuevoPedido.setPrecio(producto.getPrecio());
+
+                // Guardar el nuevo pedido (asumiendo que tienes un PedidoRepository o similar)
+                // pedidoRepository.save(nuevoPedido);
+                log.info("Nuevo pedido generado: {}", nuevoPedido);
+            }
 
         } catch (Exception e) {
             log.error("Error al procesar la actualización de stock", e);
