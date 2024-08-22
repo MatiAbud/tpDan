@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import isi.dan.msclientes.servicios.ClienteService;
 
 @RestController
 @RequestMapping("/api/clientes")
+@CrossOrigin
 public class ClienteController {
 
     Logger log = LoggerFactory.getLogger(ClienteController.class);

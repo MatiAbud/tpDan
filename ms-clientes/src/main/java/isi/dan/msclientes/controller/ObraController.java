@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/obras")
 public class ObraController {
 
