@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import isi.dan.msclientes.model.Obra;
 import lombok.Data;
 
 @Document(collection = "pedidos")
@@ -21,9 +22,21 @@ public class Pedido {
     private String observaciones;
 
     private Cliente cliente;
+    private Obra obra;
     private BigDecimal total;
 
-    @Field("detalle")
-    private List<DetallePedido> detalle;
+    private EstadoPedido estado;
 
+    @Field("detalle")
+    private List<OrdenCompraDetalle> detalle;
+
+    @Field("historialEstado")
+    private List<HistorialEstado> historialEstado;
+
+    // Método para calcular el total del pedido
+    public void calcularTotal() {
+        this.total = detalle.stream()
+                .map(OrdenCompraDetalle::getPrecioFinal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

@@ -16,7 +16,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Table(name = "MS_PRD_PRODUCTO")
 @Data
@@ -36,87 +35,9 @@ public class Producto {
     @Column(name = "STOCK_MINIMO")
     private int stockMinimo;
     private BigDecimal precio;
-    private double descuentoPromocional = 0;
+    private double descuentoPromocional;
 
     @Enumerated(EnumType.STRING)
     private Categoria categoria;
-
-    public Producto(Long id, @NotNull String nombre, String descripcion, int stockActual, int stockMinimo,
-            BigDecimal precio, Categoria categoria, double descuentoPromocional) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.stockActual = stockActual;
-        this.stockMinimo = stockMinimo;
-        this.precio = precio;
-        this.categoria = categoria;
-        this.descuentoPromocional = descuentoPromocional;
-    }
-
-    // Getters y setters
-
-    public Long getIdProducto() {
-        return id;
-    }
-
-    public void setIdProducto(Long id) {
-        this.id = id;
-    }
-
-    public String getNombreP() {
-        return nombre;
-    }
-
-    public void setNombreP(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public int getStockMinimo() {
-        return stockMinimo;
-    }
-
-    public void setStockMinimo(int stockMinimo) {
-        this.stockMinimo = stockMinimo;
-    }
-
-    public BigDecimal getPrecioInicial() {
-        return precio;
-    }
-
-    public void setPrecioInicial(BigDecimal precioInicial) {
-        this.precio = precioInicial;
-    }
-
-    public int getStockActual() {
-        return stockActual;
-    }
-
-    public void setStockActual(int stockActual) {
-        this.stockActual = stockActual;
-    }
-
-    public double getDescuentoPromocional() {
-        return descuentoPromocional;
-    }
-
-    public void setDescuentoPromocional(double descuentoPromocional) {
-        this.descuentoPromocional = descuentoPromocional;
-    }
 
 }

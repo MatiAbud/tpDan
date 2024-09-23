@@ -1,6 +1,5 @@
 package isi.dan.ms_productos.controller;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -99,7 +98,7 @@ public class ProductoController {
 
         // Actualizamos el stock del producto
         producto.setStockActual(producto.getStockActual() + stockUpdateDto.getCantidad());
-        //Actualizamos el precio
+        // Actualizamos el precio
         producto.setPrecio(stockUpdateDto.getPrecio());
 
         // Guardamos los cambios
@@ -109,24 +108,28 @@ public class ProductoController {
     }
 
     /*
-    @PutMapping("/precio")
-    @LogExecutionTime
-    public ResponseEntity<Producto> actualizarPrecio(@RequestBody @Validated StockUpdateDTO stockUpdateDTO)
-            throws ProductoNotFoundException {
-        Producto producto = productoService.getProductoById(stockUpdateDTO.getIdProducto());
-
-        if (producto == null)
-            throw new ProductoNotFoundException(stockUpdateDTO.getIdProducto());
-
-        // Actualizamos el precio del producto
-        producto.setPrecioInicial(BigDecimal.valueOf(stockUpdateDTO.getCantidad())); // Asumiendo que 'cantidad' es el
-                                                                                     // precio
-
-        // Guardamos los cambios
-        Producto updatedProducto = productoService.saveProducto(producto);
-
-        return ResponseEntity.ok(updatedProducto);
-    }
+     * @PutMapping("/precio")
+     * 
+     * @LogExecutionTime
+     * public ResponseEntity<Producto> actualizarPrecio(@RequestBody @Validated
+     * StockUpdateDTO stockUpdateDTO)
+     * throws ProductoNotFoundException {
+     * Producto producto =
+     * productoService.getProductoById(stockUpdateDTO.getIdProducto());
+     * 
+     * if (producto == null)
+     * throw new ProductoNotFoundException(stockUpdateDTO.getIdProducto());
+     * 
+     * // Actualizamos el precio del producto
+     * producto.setPrecioInicial(BigDecimal.valueOf(stockUpdateDTO.getCantidad()));
+     * // Asumiendo que 'cantidad' es el
+     * // precio
+     * 
+     * // Guardamos los cambios
+     * Producto updatedProducto = productoService.saveProducto(producto);
+     * 
+     * return ResponseEntity.ok(updatedProducto);
+     * }
      */
     @PutMapping("/descuento")
     @LogExecutionTime
