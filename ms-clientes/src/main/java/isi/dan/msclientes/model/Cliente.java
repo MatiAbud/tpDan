@@ -55,7 +55,7 @@ public class Cliente {
     public void setidCliente(Integer id) {
         throw new UnsupportedOperationException("Unimplemented method 'setidCliente'");
     }
-
+    @Column
     private BigDecimal Saldo;
     // @OneToMany
     // @JoinColumn(name="clienteId",referencedColumnName = "id")

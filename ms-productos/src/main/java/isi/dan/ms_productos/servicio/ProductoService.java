@@ -25,8 +25,8 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    @Autowired
-    private PedidoService pedidoService;
+    //@Autowired
+    //private PedidoService pedidoService;
 
     Logger log = LoggerFactory.getLogger(ProductoService.class);
 
@@ -57,7 +57,7 @@ public class ProductoService {
             log.info("Stock actualizado para el producto ID: {} a {}", producto.getId(), producto.getStockActual());
 
             // verificar el punto de pedido y generar un pedido
-            pedidoService.verificarPuntoPedidoYGenerarPedido(producto);
+            //pedidoService.verificarPuntoPedidoYGenerarPedido(producto);
 
         } catch (Exception e) {
             log.error("Error al procesar la actualización de stock", e);
