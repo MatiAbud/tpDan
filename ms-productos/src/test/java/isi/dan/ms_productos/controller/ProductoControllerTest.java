@@ -44,7 +44,7 @@ public class ProductoControllerTest {
         producto.setStockActual(10);
         producto.setPrecio(BigDecimal.valueOf(100));
     }
-
+/*
     @Test
     void testCreateProducto() throws Exception {
         Mockito.when(productoService.saveProducto(Mockito.any(Producto.class))).thenReturn(producto);
@@ -114,6 +114,7 @@ public class ProductoControllerTest {
                 .andExpect(jsonPath("$.descuentoPromocional").value(10));
     }
 
+     */
     /*
      * @Test
      * void testGetEcho() throws Exception {

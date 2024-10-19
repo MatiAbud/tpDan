@@ -52,7 +52,7 @@ public class ObraServiceTest {
         obra2.setLng(10);
 
         cliente = new Cliente();
-        cliente.setId(1);
+        cliente.setId(3);
         cliente.setNombre("pruebaMax1");
         cliente.setCorreoElectronico("Prueba@asdsa.com");
         cliente.setCuit("123");

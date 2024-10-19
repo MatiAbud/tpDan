@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import isi.dan.ms.pedidos.servicio.PedidoService;
+//import isi.dan.ms.pedidos.servicio.PedidoService;
 import isi.dan.ms_productos.conf.RabbitMQConfig;
 import isi.dan.ms_productos.dao.ProductoRepository;
 import isi.dan.ms_productos.dto.StockUpdateDTO;

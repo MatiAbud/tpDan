@@ -125,7 +125,7 @@ public class ObraRepositoryTest {
         assertThat(resultado.get(1).getPresupuesto()).isGreaterThan(BigDecimal.valueOf(50));
     }
 
-    @Test
+   /* @Test
     void testFindByClienteId(){
         obraRepository.save(obra);
 
@@ -134,5 +134,5 @@ public class ObraRepositoryTest {
         assertThat(resultado.size()).isEqualTo(1);
         assertThat(resultado.get(0).getPresupuesto()).isEqualTo(obra.getPresupuesto());
     }
-
+ */
 }

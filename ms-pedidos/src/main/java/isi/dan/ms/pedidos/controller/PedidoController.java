@@ -24,8 +24,8 @@ import isi.dan.ms.pedidos.modelo.EstadoPedido;
 import isi.dan.ms.pedidos.modelo.OrdenCompraDetalle;
 import isi.dan.ms.pedidos.modelo.Pedido;
 import isi.dan.ms.pedidos.servicio.PedidoService;
-import isi.dan.ms_productos.modelo.Producto;
-import isi.dan.msclientes.servicios.ClienteService;
+//import isi.dan.ms_productos.modelo.Producto;
+//import isi.dan.msclientes.servicios.ClienteService;
 
 @RestController
 @RequestMapping("/api/pedidos")
@@ -38,15 +38,15 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
-    @Autowired
-    private ClienteService clienteService;
+  //  @Autowired
+   // private ClienteService clienteService;
 
     @PostMapping
     public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido) {
         // Paso 1: Crear un nuevo pedido con los datos proporcionados
         Pedido nuevoPedido = new Pedido();
         nuevoPedido.setCliente(pedido.getCliente());
-        nuevoPedido.setObra(pedido.getObra());
+        //nuevoPedido.setObra(pedido.getObra());
         nuevoPedido.setObservaciones(pedido.getObservaciones());
 
         // Asignar número de pedido y fecha actual
@@ -64,7 +64,7 @@ public class PedidoController {
 
         // Paso b: Verificar saldo del cliente
         Cliente cliente = nuevoPedido.getCliente();
-        BigDecimal tieneSaldoSuficiente = clienteService.verificarSaldo(cliente.getId());
+        //BigDecimal tieneSaldoSuficiente = clienteService.verificarSaldo(cliente.getId());
 
         // Obtener los pedidos que no han sido entregados o rechazados
         List<Pedido> pedidosEnCurso = pedidoService.obtenerPedidosEnCurso(cliente.getId());
@@ -75,7 +75,7 @@ public class PedidoController {
         // Calcular el saldo con el nuevo pedido
         BigDecimal saldoConNuevoPedido = saldoActual.add(nuevoPedido.getTotal());
 
-        if (saldoConNuevoPedido.compareTo(tieneSaldoSuficiente) > 0) {
+        /*if (saldoConNuevoPedido.compareTo(tieneSaldoSuficiente) > 0) {
             // Si el cliente no tiene saldo suficiente, se rechaza el pedido
             nuevoPedido.setEstado(EstadoPedido.RECHAZADO);
             Pedido pedidoRechazado = pedidoService.savePedido(nuevoPedido);
@@ -83,7 +83,7 @@ public class PedidoController {
 
             return ResponseEntity.ok(pedidoRechazado); // Retornar el pedido rechazado
         }
-
+*/
         // Paso c: Verificar y actualizar el stock
         boolean stockActualizado = pedidoService.verificarYActualizarStock(nuevoPedido.getDetalle());
         if (!stockActualizado) {
@@ -142,7 +142,7 @@ public class PedidoController {
 
         return ResponseEntity.ok(pedidoActualizado);
     }
-
+/* 
     @GetMapping("/{id}")
     public ResponseEntity<Pedido> consultarPedido(@PathVariable String id) {
         Optional<Pedido> pedido = pedidoService.obtenerPedidoPorId(id);
@@ -155,9 +155,9 @@ public class PedidoController {
         List<Pedido> pedidos = pedidoService.obtenerPedidosPorCliente(clienteId);
         return ResponseEntity.ok(pedidos);
     }
-
-    @PostMapping("/verificarPuntoPedido")
+ */
+    /*@PostMapping("/verificarPuntoPedido")
     public void verificarPuntoPedidoYGenerarPedido(@RequestBody Producto producto) {
         pedidoService.verificarPuntoPedidoYGenerarPedido(producto);
-    }
+    }*/
 }

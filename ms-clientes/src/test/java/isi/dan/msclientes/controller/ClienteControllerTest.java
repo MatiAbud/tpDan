@@ -3,6 +3,8 @@ package isi.dan.msclientes.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -40,6 +42,7 @@ public class ClienteControllerTest {
         cliente.setCuit("12998887776");
         cliente.setMaxObrasEnEjecucion(10000);
         cliente.setMaximoDescubierto(3);
+        cliente.setSaldo(new BigDecimal(1234));
     }
 
     @Test

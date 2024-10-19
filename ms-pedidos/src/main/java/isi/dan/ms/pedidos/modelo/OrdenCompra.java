@@ -3,7 +3,7 @@ package isi.dan.ms.pedidos.modelo;
 import java.time.Instant;
 import java.util.List;
 
-import isi.dan.msclientes.model.Obra;
+//import isi.dan.msclientes.model.Obra;
 import lombok.Data;
 
 @Data

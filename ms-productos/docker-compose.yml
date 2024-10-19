@@ -46,7 +46,7 @@ services:
       SPRING_EUREKA_DEFAULT_ZONE: http://ms-eureka-svc:8761/eureka/
       SPRING_INSTANCIA: ms-productos-svc-1
     ports:
-      - "6180:8081"
+      - "6180:8080"
     depends_on:
       - pg-dan
     networks:

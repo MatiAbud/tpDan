@@ -2,7 +2,7 @@ package isi.dan.ms.pedidos.modelo;
 
 import java.math.BigDecimal;
 
-import isi.dan.ms_productos.modelo.Categoria;
+//import isi.dan.ms_productos.modelo.Categoria;
 import lombok.Data;
 
 @Data

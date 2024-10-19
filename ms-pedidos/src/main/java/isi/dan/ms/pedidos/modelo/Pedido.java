@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import isi.dan.msclientes.model.Obra;
+//import isi.dan.msclientes.model.Obra;
 import lombok.Data;
 
 @Document(collection = "pedidos")

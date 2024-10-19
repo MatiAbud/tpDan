@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import isi.dan.ms_productos.modelo.Producto;
+//import isi.dan.ms_productos.modelo.Producto;
 import lombok.Data;
 
 @Data

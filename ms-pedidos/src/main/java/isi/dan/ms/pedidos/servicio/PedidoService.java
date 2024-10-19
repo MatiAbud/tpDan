@@ -21,7 +21,7 @@ import isi.dan.ms.pedidos.dto.StockUpdateDTO;
 import isi.dan.ms.pedidos.modelo.EstadoPedido;
 import isi.dan.ms.pedidos.modelo.OrdenCompraDetalle;
 import isi.dan.ms.pedidos.modelo.Pedido;
-import isi.dan.ms_productos.modelo.Producto;
+//import isi.dan.ms_productos.modelo.Producto;
 
 @Service
 public class PedidoService {
@@ -82,6 +82,7 @@ public class PedidoService {
     }
 
     // Método para verificar punto de pedido y generar un pedido
+    /*
     public void verificarPuntoPedidoYGenerarPedido(@RequestBody Producto producto) {
         try {
             if (producto.getStockActual() <= producto.getStockMinimo()) {
@@ -116,7 +117,7 @@ public class PedidoService {
             log.error("Error al verificar el stock mínimo o generar un pedido", e);
         }
     }
-
+ */
     private int generarNumeroPedido() {
         // Lógica para generar un número de pedido único
         return (int) (Math.random() * 10000);
