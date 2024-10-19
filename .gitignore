@@ -1,0 +1,18 @@
+# Archivos de compilación Java
+*.class
+
+# Directorios de construcción
+/target/
+/bin/
+/build/
+
+# Archivos de configuración de IDEs
+/.idea/
+/*.iml
+/.vscode/
+
+# Logs
+*.log
+
+# Archivos del sistema
+.DS_Store
