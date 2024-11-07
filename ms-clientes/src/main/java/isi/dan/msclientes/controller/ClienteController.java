@@ -38,7 +38,7 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    @GetMapping
+    @GetMapping("/todos")
     @LogExecutionTime
     public List<Cliente> getAll() {
         return clienteService.findAll();
@@ -63,7 +63,7 @@ public class ClienteController {
     @LogExecutionTime
     public Cliente create(@RequestBody @Validated Cliente cliente) {
         return clienteService.save(cliente);
-    }
+    } 
 
     @PutMapping("/{id}")
     @LogExecutionTime

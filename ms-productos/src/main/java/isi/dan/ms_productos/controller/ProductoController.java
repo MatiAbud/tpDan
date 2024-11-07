@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +26,10 @@ import isi.dan.ms_productos.modelo.Producto;
 import isi.dan.ms_productos.servicio.EchoClientFeign;
 import isi.dan.ms_productos.servicio.ProductoService;
 
+
 @RestController
 @RequestMapping("/api/productos")
+@CrossOrigin
 public class ProductoController {
     @Autowired
     private ProductoService productoService;
@@ -68,7 +71,7 @@ public class ProductoController {
         return resultado;
     }
 
-    @GetMapping
+    @GetMapping("/todos")
     @LogExecutionTime
     public List<Producto> getAllProductos() {
         return productoService.getAllProductos();

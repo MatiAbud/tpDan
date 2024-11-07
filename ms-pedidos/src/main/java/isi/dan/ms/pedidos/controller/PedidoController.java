@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import isi.dan.ms.pedidos.servicio.PedidoService;
 //import isi.dan.ms_productos.modelo.Producto;
 //import isi.dan.msclientes.servicios.ClienteService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/pedidos")
 public class PedidoController {
@@ -104,7 +106,7 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoGuardado);
     }
 
-    @GetMapping
+    @GetMapping("/todos")
     public List<Pedido> getAllPedidos() {
         return pedidoService.getAllPedidos();
     }
