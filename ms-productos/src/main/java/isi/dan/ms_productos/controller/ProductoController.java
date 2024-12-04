@@ -26,7 +26,6 @@ import isi.dan.ms_productos.modelo.Producto;
 import isi.dan.ms_productos.servicio.EchoClientFeign;
 import isi.dan.ms_productos.servicio.ProductoService;
 
-
 @RestController
 @RequestMapping("/api/productos")
 @CrossOrigin
@@ -39,6 +38,7 @@ public class ProductoController {
     @Autowired
     EchoClientFeign echoSvc;
 
+    @CrossOrigin(origins = "http://localhost:3000") // Frontend en puerto 3000
     @PostMapping
     @LogExecutionTime
     public ResponseEntity<Producto> createProducto(@RequestBody @Validated Producto producto) {
@@ -53,6 +53,7 @@ public class ProductoController {
         return ResponseEntity.ok(savedProducto);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000") // Frontend en puerto 3000
     @GetMapping("/test")
     @LogExecutionTime
     public String getEcho() {
@@ -61,6 +62,7 @@ public class ProductoController {
         return resultado;
     }
 
+    @CrossOrigin(origins = "http://localhost:3000") // Frontend en puerto 3000
     @GetMapping("/test2")
     @LogExecutionTime
     public String getEcho2() {
@@ -71,18 +73,21 @@ public class ProductoController {
         return resultado;
     }
 
+    @CrossOrigin(origins = "http://localhost:3000") // Frontend en puerto 3000
     @GetMapping("/todos")
     @LogExecutionTime
     public List<Producto> getAllProductos() {
         return productoService.getAllProductos();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000") // Frontend en puerto 3000
     @GetMapping("/{id}")
     @LogExecutionTime
     public ResponseEntity<Producto> getProductoById(@PathVariable Long id) throws ProductoNotFoundException {
         return ResponseEntity.ok(productoService.getProductoById(id));
     }
 
+    @CrossOrigin(origins = "http://localhost:3000") // Frontend en puerto 3000
     @DeleteMapping("/{id}")
     @LogExecutionTime
     public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
@@ -90,6 +95,7 @@ public class ProductoController {
         return ResponseEntity.noContent().build();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000") // Frontend en puerto 3000
     @PutMapping("/provision")
     @LogExecutionTime
     public ResponseEntity<Producto> actualizarStock(@RequestBody @Validated StockUpdateDTO stockUpdateDto)
@@ -134,6 +140,8 @@ public class ProductoController {
      * return ResponseEntity.ok(updatedProducto);
      * }
      */
+
+    @CrossOrigin(origins = "http://localhost:3000") // Frontend en puerto 3000
     @PutMapping("/descuento")
     @LogExecutionTime
     public ResponseEntity<Producto> actualizarDescuentoPromocional(
