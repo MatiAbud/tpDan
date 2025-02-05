@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@SpringBootApplication
 @EnableDiscoveryClient
+@SpringBootApplication
 public class DanGatewayApplication {
 
 	public static void main(String[] args) {
@@ -17,9 +17,9 @@ public class DanGatewayApplication {
 	}
 
 	@Bean
-  	@LoadBalanced
-  	public WebClient.Builder loadBalancedWebClientBuilder() {
-    	return WebClient.builder();
-  	}
+	@LoadBalanced
+	public WebClient.Builder loadBalancedWebClientBuilder() {
+		return WebClient.builder();
+	}
 
 }
