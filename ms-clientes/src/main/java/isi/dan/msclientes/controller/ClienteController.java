@@ -25,9 +25,10 @@ import isi.dan.msclientes.exception.ClienteNotFoundException;
 import isi.dan.msclientes.model.Cliente;
 import isi.dan.msclientes.servicios.ClienteService;
 
+
 @RestController
 @RequestMapping("/api/clientes")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class ClienteController {
 
     Logger log = LoggerFactory.getLogger(ClienteController.class);
@@ -64,7 +65,7 @@ public class ClienteController {
     public Cliente create(@RequestBody @Validated Cliente cliente) {
         return clienteService.save(cliente);
     } 
-
+ 
     @PutMapping("/{id}")
     @LogExecutionTime
     public ResponseEntity<Cliente> update(@PathVariable final Integer id, @RequestBody Cliente cliente)

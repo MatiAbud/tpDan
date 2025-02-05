@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,9 +28,10 @@ import isi.dan.ms_productos.servicio.EchoClientFeign;
 import isi.dan.ms_productos.servicio.ProductoService;
 
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/productos")
-@CrossOrigin
+
 public class ProductoController {
     @Autowired
     private ProductoService productoService;
@@ -39,6 +41,12 @@ public class ProductoController {
     @Autowired
     EchoClientFeign echoSvc;
 
+    @RequestMapping(method = RequestMethod.OPTIONS)
+    public ResponseEntity<?> handleOptions() {
+        return ResponseEntity.ok().build();
+  
+    }
+    
     @PostMapping
     @LogExecutionTime
     public ResponseEntity<Producto> createProducto(@RequestBody @Validated Producto producto) {
@@ -134,12 +142,19 @@ public class ProductoController {
      * return ResponseEntity.ok(updatedProducto);
      * }
      */
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Producto> editar(@PathVariable final Long id, @RequestBody Producto producto) throws ProductoNotFoundException{
+        producto.setId(id);
+        return ResponseEntity.ok(productoService.saveProducto(producto));
+    }
+
     @PutMapping("/descuento")
     @LogExecutionTime
     public ResponseEntity<Producto> actualizarDescuentoPromocional(
             @RequestBody @Validated DescuentoUpdateDTO descuentoUpdateDto) throws ProductoNotFoundException {
         Producto producto = productoService.getProductoById(descuentoUpdateDto.getIdProducto());
-
+ 
         if (producto == null)
             throw new ProductoNotFoundException(descuentoUpdateDto.getIdProducto());
 

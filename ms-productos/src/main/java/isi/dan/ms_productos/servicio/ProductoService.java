@@ -71,7 +71,7 @@ public class ProductoService {
     public List<Producto> getAllProductos() {
         return productoRepository.findAll();
     }
-
+ 
     public Producto getProductoById(Long id) throws ProductoNotFoundException {
         return productoRepository.findById(id).orElseThrow(() -> new ProductoNotFoundException(id));
     }
