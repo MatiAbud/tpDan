@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import isi.dan.ms.pedidos.aop.LogExecutionTime;
 import isi.dan.ms.pedidos.modelo.Cliente;
 import isi.dan.ms.pedidos.modelo.EstadoPedido;
 import isi.dan.ms.pedidos.modelo.OrdenCompraDetalle;
@@ -28,7 +29,7 @@ import isi.dan.ms.pedidos.servicio.PedidoService;
 //import isi.dan.ms_productos.modelo.Producto;
 //import isi.dan.msclientes.servicios.ClienteService;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost")
 @RestController
 @RequestMapping("/api/pedidos")
 public class PedidoController {
@@ -40,15 +41,16 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
-  //  @Autowired
-   // private ClienteService clienteService;
+    // @Autowired
+    // private ClienteService clienteService;
 
     @PostMapping
+    @LogExecutionTime
     public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido) {
         // Paso 1: Crear un nuevo pedido con los datos proporcionados
         Pedido nuevoPedido = new Pedido();
         nuevoPedido.setCliente(pedido.getCliente());
-        //nuevoPedido.setObra(pedido.getObra());
+        // nuevoPedido.setObra(pedido.getObra());
         nuevoPedido.setObservaciones(pedido.getObservaciones());
 
         // Asignar número de pedido y fecha actual
@@ -66,7 +68,8 @@ public class PedidoController {
 
         // Paso b: Verificar saldo del cliente
         Cliente cliente = nuevoPedido.getCliente();
-        //BigDecimal tieneSaldoSuficiente = clienteService.verificarSaldo(cliente.getId());
+        // BigDecimal tieneSaldoSuficiente =
+        // clienteService.verificarSaldo(cliente.getId());
 
         // Obtener los pedidos que no han sido entregados o rechazados
         List<Pedido> pedidosEnCurso = pedidoService.obtenerPedidosEnCurso(cliente.getId());
@@ -77,15 +80,16 @@ public class PedidoController {
         // Calcular el saldo con el nuevo pedido
         BigDecimal saldoConNuevoPedido = saldoActual.add(nuevoPedido.getTotal());
 
-        /*if (saldoConNuevoPedido.compareTo(tieneSaldoSuficiente) > 0) {
-            // Si el cliente no tiene saldo suficiente, se rechaza el pedido
-            nuevoPedido.setEstado(EstadoPedido.RECHAZADO);
-            Pedido pedidoRechazado = pedidoService.savePedido(nuevoPedido);
-            log.info("Pedido rechazado por falta de saldo: {}", pedidoRechazado);
-
-            return ResponseEntity.ok(pedidoRechazado); // Retornar el pedido rechazado
-        }
-*/
+        /*
+         * if (saldoConNuevoPedido.compareTo(tieneSaldoSuficiente) > 0) {
+         * // Si el cliente no tiene saldo suficiente, se rechaza el pedido
+         * nuevoPedido.setEstado(EstadoPedido.RECHAZADO);
+         * Pedido pedidoRechazado = pedidoService.savePedido(nuevoPedido);
+         * log.info("Pedido rechazado por falta de saldo: {}", pedidoRechazado);
+         * 
+         * return ResponseEntity.ok(pedidoRechazado); // Retornar el pedido rechazado
+         * }
+         */
         // Paso c: Verificar y actualizar el stock
         boolean stockActualizado = pedidoService.verificarYActualizarStock(nuevoPedido.getDetalle());
         if (!stockActualizado) {
@@ -107,23 +111,27 @@ public class PedidoController {
     }
 
     @GetMapping("/todos")
+    @LogExecutionTime
     public List<Pedido> getAllPedidos() {
         return pedidoService.getAllPedidos();
     }
 
     @GetMapping("/{id}")
+    @LogExecutionTime
     public ResponseEntity<Pedido> getPedidoById(@PathVariable String id) {
         Pedido pedido = pedidoService.getPedidoById(id);
         return pedido != null ? ResponseEntity.ok(pedido) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
+    @LogExecutionTime
     public ResponseEntity<Void> deletePedido(@PathVariable String id) {
         pedidoService.deletePedido(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/estado")
+    @LogExecutionTime
     public ResponseEntity<Pedido> actualizarEstado(@PathVariable String id, @RequestBody EstadoPedido estado) {
         Optional<Pedido> pedidoOptional = pedidoService.obtenerPedidoPorId(id);
 
@@ -144,22 +152,26 @@ public class PedidoController {
 
         return ResponseEntity.ok(pedidoActualizado);
     }
-/* 
-    @GetMapping("/{id}")
-    public ResponseEntity<Pedido> consultarPedido(@PathVariable String id) {
-        Optional<Pedido> pedido = pedidoService.obtenerPedidoPorId(id);
-        return pedido.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/cliente/{clienteId}")
-    public ResponseEntity<List<Pedido>> consultarPedidosPorCliente(@PathVariable String clienteId) {
-        List<Pedido> pedidos = pedidoService.obtenerPedidosPorCliente(clienteId);
-        return ResponseEntity.ok(pedidos);
-    }
- */
-    /*@PostMapping("/verificarPuntoPedido")
-    public void verificarPuntoPedidoYGenerarPedido(@RequestBody Producto producto) {
-        pedidoService.verificarPuntoPedidoYGenerarPedido(producto);
-    }*/
+    /*
+     * @GetMapping("/{id}")
+     * public ResponseEntity<Pedido> consultarPedido(@PathVariable String id) {
+     * Optional<Pedido> pedido = pedidoService.obtenerPedidoPorId(id);
+     * return pedido.map(ResponseEntity::ok)
+     * .orElseGet(() -> ResponseEntity.notFound().build());
+     * }
+     * 
+     * @GetMapping("/cliente/{clienteId}")
+     * public ResponseEntity<List<Pedido>> consultarPedidosPorCliente(@PathVariable
+     * String clienteId) {
+     * List<Pedido> pedidos = pedidoService.obtenerPedidosPorCliente(clienteId);
+     * return ResponseEntity.ok(pedidos);
+     * }
+     */
+    /*
+     * @PostMapping("/verificarPuntoPedido")
+     * public void verificarPuntoPedidoYGenerarPedido(@RequestBody Producto
+     * producto) {
+     * pedidoService.verificarPuntoPedidoYGenerarPedido(producto);
+     * }
+     */
 }

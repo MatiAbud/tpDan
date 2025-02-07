@@ -23,7 +23,6 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // @Column(length = 2)
     private Integer id;
 
     @NotBlank(message = "El nombre es obligatorio")
@@ -31,36 +30,27 @@ public class Cliente {
     private String nombre;
 
     @Column(name = "CORREO_ELECTRONICO")
-    @Email(message = "Email debe ser valido")
+    @Email(message = "Email debe ser válido")
     @NotBlank(message = "Email es obligatorio")
     private String correoElectronico;
 
     private String cuit;
 
     @Column(name = "MAXIMO_DESCUBIERTO")
-    // @Min(value = 10000, message = "El descubierto maximo debe ser al menos
-    // 10000")
     private Integer maximoDescubierto;
 
     private Integer maxObrasEnEjecucion;
-
-    public Integer getMaxObrasEnEjecucion() {
-        return maxObrasEnEjecucion;
-    }
 
     @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Obra> obrasClientes;
 
-    public void setidCliente(Integer id) {
-        throw new UnsupportedOperationException("Unimplemented method 'setidCliente'");
-    }
     @Column
-    private BigDecimal Saldo;
-    // @OneToMany
-    // @JoinColumn(name="clienteId",referencedColumnName = "id")
-    // private List<UsuarioHabilitado> listaUsuariosHabilitados;
+    private BigDecimal saldo;
 
-    // getters y setters
+    // Considera implementar correctamente setidCliente si es necesario
+    public void setidCliente(Integer id) {
+        this.id = id;
+    }
 
 }
