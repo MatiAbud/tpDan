@@ -46,8 +46,13 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
-    // @Autowired
-    // private ClienteService clienteService;
+    private final ClienteClient clienteClient;
+    private final ProductoClient productoClient;
+
+    public PedidoController(ClienteClient clienteClient, ProductoClient productoClient) {
+        this.clienteClient = clienteClient;
+        this.productoClient = productoClient;
+    }
 
     @PostMapping
     @LogExecutionTime
@@ -86,7 +91,6 @@ public class PedidoController {
         nuevoPedido.setDetalle(detallesCompletos);
 
         // Paso b: Verificar saldo del cliente
-        Cliente cliente = nuevoPedido.getCliente();
         // BigDecimal tieneSaldoSuficiente =
         // clienteService.verificarSaldo(cliente.getId());
 
