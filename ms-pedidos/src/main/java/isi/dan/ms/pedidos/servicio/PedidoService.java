@@ -31,7 +31,7 @@ public class PedidoService {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
-
+ 
     @Autowired
     private RestTemplate restTemplate;
 

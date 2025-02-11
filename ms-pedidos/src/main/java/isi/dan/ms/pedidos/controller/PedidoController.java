@@ -2,6 +2,7 @@ package isi.dan.ms.pedidos.controller;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -9,6 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,10 +22,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import isi.dan.ms.pedidos.feignClients.ClienteClient;
+import isi.dan.ms.pedidos.feignClients.ProductoClient;
 import isi.dan.ms.pedidos.modelo.Cliente;
 import isi.dan.ms.pedidos.modelo.EstadoPedido;
 import isi.dan.ms.pedidos.modelo.OrdenCompraDetalle;
 import isi.dan.ms.pedidos.modelo.Pedido;
+import isi.dan.ms.pedidos.modelo.Producto;
 import isi.dan.ms.pedidos.servicio.PedidoService;
 //import isi.dan.ms_productos.modelo.Producto;
 //import isi.dan.msclientes.servicios.ClienteService;
@@ -40,14 +45,24 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
-  //  @Autowired
-   // private ClienteService clienteService;
+    private final ClienteClient clienteClient;
+    private final ProductoClient productoClient;
+
+    public PedidoController(ClienteClient clienteClient, ProductoClient productoClient, PedidoService pedidoService) {
+        this.clienteClient = clienteClient;
+        this.productoClient = productoClient;
+    }
 
     @PostMapping
     public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido) {
         // Paso 1: Crear un nuevo pedido con los datos proporcionados
         Pedido nuevoPedido = new Pedido();
-        nuevoPedido.setCliente(pedido.getCliente());
+        Cliente cliente = pedido.getCliente();
+        if (cliente == null) {
+            log.error("Cliente con ID {} no encontrado", pedido.getCliente().getId());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        nuevoPedido.setCliente(cliente);
         //nuevoPedido.setObra(pedido.getObra());
         nuevoPedido.setObservaciones(pedido.getObservaciones());
 
@@ -56,16 +71,24 @@ public class PedidoController {
         nuevoPedido.setFecha(Instant.now());
 
         // Paso 2: Calcular el total del pedido y el total de cada línea
-        BigDecimal totalPedido = BigDecimal.ZERO;
+        List<OrdenCompraDetalle> detallesCompletos = new ArrayList<>();
+
         for (OrdenCompraDetalle detalle : pedido.getDetalle()) {
+            Producto producto = productoClient.obtenerProducto(detalle.getProducto().getId());
+            if (producto == null) {
+                log.error("Producto con ID {} no encontrado", detalle.getProducto().getId());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+            // Completar los datos del producto en el detalle del pedido
+            detalle.setProducto(producto);
             detalle.calcularTotalLinea();
-            totalPedido = totalPedido.add(detalle.getPrecioFinal());
+            detallesCompletos.add(detalle);
         }
-        nuevoPedido.setDetalle(pedido.getDetalle());
-        nuevoPedido.setTotal(totalPedido);
+
+        nuevoPedido.setDetalle(detallesCompletos);
 
         // Paso b: Verificar saldo del cliente
-        Cliente cliente = nuevoPedido.getCliente();
         //BigDecimal tieneSaldoSuficiente = clienteService.verificarSaldo(cliente.getId());
 
         // Obtener los pedidos que no han sido entregados o rechazados

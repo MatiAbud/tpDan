@@ -75,6 +75,12 @@ public class ProductoService {
     public Producto getProductoById(Long id) throws ProductoNotFoundException {
         return productoRepository.findById(id).orElseThrow(() -> new ProductoNotFoundException(id));
     }
+    public List<Producto> getProductoByNombre(String nombre) throws ProductoNotFoundException {
+        List <Producto> productos = productoRepository.findByNombreContaining(nombre);
+
+        if (productos.isEmpty()) throw new RuntimeException(nombre);
+        else return productos; 
+    }
 
     public void deleteProducto(Long id) {
         Producto producto = productoRepository.findById(id).orElseThrow();

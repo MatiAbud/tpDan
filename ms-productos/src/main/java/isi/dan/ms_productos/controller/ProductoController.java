@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -84,10 +85,16 @@ public class ProductoController {
         return productoService.getAllProductos();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id")
     @LogExecutionTime
-    public ResponseEntity<Producto> getProductoById(@PathVariable Long id) throws ProductoNotFoundException {
+    public ResponseEntity<Producto> getProductoById(@RequestParam Long id) throws ProductoNotFoundException {
         return ResponseEntity.ok(productoService.getProductoById(id));
+    }
+
+    @GetMapping("/nombre")
+    @LogExecutionTime
+    public ResponseEntity<List<Producto>> getProductoByNombre(@RequestParam String nombre) throws ProductoNotFoundException {
+        return ResponseEntity.ok(productoService.getProductoByNombre(nombre));
     }
 
     @DeleteMapping("/{id}")
