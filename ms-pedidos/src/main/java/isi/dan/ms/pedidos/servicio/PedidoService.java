@@ -62,8 +62,8 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public Optional<Pedido> obtenerPedidoPorId(String id) {
-        return pedidoRepository.findById(id);
+    public Pedido getPedidoPorNumero(Integer id) throws Exception {
+        return pedidoRepository.findByNumeroPedido(id);
     }
 
     public List<Pedido> obtenerPedidosPorCliente(String clienteId) {

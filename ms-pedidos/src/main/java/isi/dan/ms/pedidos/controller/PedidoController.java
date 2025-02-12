@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.bson.codecs.IntegerCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +116,7 @@ public class PedidoController {
          * }
          */
         // Paso c: Verificar y actualizar el stock
-        boolean stockActualizado = pedidoService.verificarYActualizarStock(nuevoPedido.getDetalle());
+        /*boolean stockActualizado = pedidoService.verificarYActualizarStock(nuevoPedido.getDetalle());
         if (!stockActualizado) {
             // Si no se pudo actualizar el stock de todos los productos, el pedido queda en
             // estado "ACEPTADO"
@@ -125,7 +126,8 @@ public class PedidoController {
             // guarda en estado "EN_PREPARACION"
             nuevoPedido.setEstado(EstadoPedido.EN_PREPARACION);
         }
-
+*/
+        nuevoPedido.setEstado(EstadoPedido.ACEPTADO);
         // Guardar el pedido en la base de datos
         Pedido pedidoGuardado = pedidoService.savePedido(nuevoPedido);
 
@@ -142,9 +144,9 @@ public class PedidoController {
 
     @GetMapping("/{id}")
     @LogExecutionTime
-    public ResponseEntity<Pedido> getPedidoById(@PathVariable String id) {
-        Pedido pedido = pedidoService.getPedidoById(id);
-        return pedido != null ? ResponseEntity.ok(pedido) : ResponseEntity.notFound().build();
+    public ResponseEntity<Pedido> getPedidoPorNumero(@PathVariable Integer id) throws Exception {
+        Pedido pedido = pedidoService.getPedidoPorNumero(id);
+        return ResponseEntity.ok(pedido);
     }
 
     @DeleteMapping("/{id}")
@@ -156,14 +158,8 @@ public class PedidoController {
 
     @PutMapping("/{id}/estado")
     @LogExecutionTime
-    public ResponseEntity<Pedido> actualizarEstado(@PathVariable String id, @RequestBody EstadoPedido estado) {
-        Optional<Pedido> pedidoOptional = pedidoService.obtenerPedidoPorId(id);
-
-        if (!pedidoOptional.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Pedido pedido = pedidoOptional.get();
+    public ResponseEntity<Pedido> actualizarEstado(@PathVariable Integer id, @RequestBody EstadoPedido estado) throws Exception {
+        Pedido pedido = pedidoService.getPedidoPorNumero(id);
 
         // If the state is being updated to "CANCELADO", send message to return stock
         if (estado == EstadoPedido.CANCELADO) {
