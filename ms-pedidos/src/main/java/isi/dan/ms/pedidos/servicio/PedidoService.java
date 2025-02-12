@@ -76,7 +76,7 @@ public class PedidoService {
 
     public boolean verificarYActualizarStock(List<OrdenCompraDetalle> detalles) {
         // Llamada al servicio de productos para verificar y actualizar el stock
-        String url = "http://ms-productos/actualizar-stock";
+        String url = "http://localhost3080/productos/api/productos/provision";
         ResponseEntity<Boolean> response = restTemplate.postForEntity(url, detalles, Boolean.class);
         return response.getBody(); // Retorna true si el stock fue actualizado correctamente
     }

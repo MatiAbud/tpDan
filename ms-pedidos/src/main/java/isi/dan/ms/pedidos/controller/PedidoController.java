@@ -76,7 +76,7 @@ public class PedidoController {
         List<OrdenCompraDetalle> detallesCompletos = new ArrayList<>();
 
         for (OrdenCompraDetalle detalle : pedido.getDetalle()) {
-            Producto producto = productoClient.obtenerProducto(detalle.getProducto().getId());
+            Producto producto = detalle.getProducto();
             if (producto == null) {
                 log.error("Producto con ID {} no encontrado", detalle.getProducto().getId());
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -101,7 +101,8 @@ public class PedidoController {
         BigDecimal saldoActual = pedidosEnCurso.stream().map(Pedido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // Calcular el saldo con el nuevo pedido
-        BigDecimal saldoConNuevoPedido = saldoActual.add(nuevoPedido.getTotal());
+        BigDecimal totalPedido = (nuevoPedido.getTotal() != null) ? nuevoPedido.getTotal() : BigDecimal.ZERO;
+        BigDecimal saldoConNuevoPedido = saldoActual.add(totalPedido);
 
         /*
          * if (saldoConNuevoPedido.compareTo(tieneSaldoSuficiente) > 0) {
