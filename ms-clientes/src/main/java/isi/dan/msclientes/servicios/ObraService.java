@@ -2,14 +2,13 @@ package isi.dan.msclientes.servicios;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import isi.dan.msclientes.dao.ClienteRepository;
 import isi.dan.msclientes.dao.ObraRepository;
+import isi.dan.msclientes.exception.MaxObrasExceededException;
 import isi.dan.msclientes.exception.ObraFinalizadaException;
 import isi.dan.msclientes.model.Cliente;
 import isi.dan.msclientes.model.EstadoObra;
@@ -73,16 +72,18 @@ public class ObraService {
     public List<Obra> obtenerObrasDeCliente(Integer idCliente) throws Exception {
         List<Obra> obras = obraRepository.findByClienteId(idCliente);
 
-        /*if (obras.isEmpty()) {
-            throw new Exception("No se encontraron obras para el cliente con ID: " + idCliente);
-        }*/
+        /*
+         * if (obras.isEmpty()) {
+         * throw new Exception("No se encontraron obras para el cliente con ID: " +
+         * idCliente);
+         * }
+         */
 
         return obras;
     }
 
     // Otros métodos según necesidades
-    public Obra cambiarEstadoObra(Integer idObra, EstadoObra nuevoEstado)
-            throws Exception {
+    public Obra cambiarEstadoObra(Integer idObra, EstadoObra nuevoEstado) throws Exception {
 
         Obra obra = obraRepository.findById(idObra)
                 .orElseThrow();
@@ -97,13 +98,16 @@ public class ObraService {
         }
 
         // Chequeamos si el estado finalizado cambia a otro estado
-        /*if (obra.getEstado().equals(EstadoObra.FINALIZADA) && !nuevoEstado.equals(EstadoObra.FINALIZADA)) {
-            try {
-                throw new Exception("No se puede cambiar el estado de una obra FINALIZADA");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }*/
+        /*
+         * if (obra.getEstado().equals(EstadoObra.FINALIZADA) &&
+         * !nuevoEstado.equals(EstadoObra.FINALIZADA)) {
+         * try {
+         * throw new Exception("No se puede cambiar el estado de una obra FINALIZADA");
+         * } catch (Exception e) {
+         * e.printStackTrace();
+         * }
+         * }
+         */
         if (obra.getEstado().equals(EstadoObra.FINALIZADA)) {
             throw new Exception("No se puede cambiar el estado de una obra FINALIZADA");
         }
@@ -117,22 +121,26 @@ public class ObraService {
             }
         }
         // No debe supera el maximo
-       /* if (nuevoEstado.equals(EstadoObra.HABILITADA)) {
-            Cliente cliente = obra.getCliente();
-            /*List<Obra> obrasHabilitadasCliente = this.obtenerObrasDeCliente(cliente.getId());
-            obrasHabilitadasCliente.stream()
-                                    .filter(o -> o.getEstado().equals(EstadoObra.HABILITADA))
-                                    .collect(Collectors.toList());
-            if (obrasHabilitadasCliente.size() == cliente.getMaxObrasEnEjecucion()) {
-                try {
-                    throw new Exception(
-                            "No se pueden habilitar más obras para el cliente: " + cliente.getNombre()
-                                    + ". Se alcanzó el máximo permitido de: " + cliente.getMaxObrasEnEjecucion());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }*/
+        /*
+         * if (nuevoEstado.equals(EstadoObra.HABILITADA)) {
+         * Cliente cliente = obra.getCliente();
+         * /*List<Obra> obrasHabilitadasCliente =
+         * this.obtenerObrasDeCliente(cliente.getId());
+         * obrasHabilitadasCliente.stream()
+         * .filter(o -> o.getEstado().equals(EstadoObra.HABILITADA))
+         * .collect(Collectors.toList());
+         * if (obrasHabilitadasCliente.size() == cliente.getMaxObrasEnEjecucion()) {
+         * try {
+         * throw new Exception(
+         * "No se pueden habilitar más obras para el cliente: " + cliente.getNombre()
+         * + ". Se alcanzó el máximo permitido de: " +
+         * cliente.getMaxObrasEnEjecucion());
+         * } catch (Exception e) {
+         * e.printStackTrace();
+         * }
+         * }
+         * }
+         */
 
         // Actualizamos estado
         obra.setEstado(nuevoEstado);
@@ -140,7 +148,19 @@ public class ObraService {
         // Guardamos la actualizacion del estado
         obra = obraRepository.save(obra);
 
+        if (nuevoEstado == EstadoObra.FINALIZADA) {
+            habilitarObraPendiente();
+        }
+
         return obra;
+    }
+
+    private void habilitarObraPendiente() {
+        Obra obraPendiente = obraRepository.findFirstByEstado(EstadoObra.PENDIENTE);
+        if (obraPendiente != null) {
+            obraPendiente.setEstado(EstadoObra.HABILITADA);
+            obraRepository.save(obraPendiente);
+        }
     }
 
     public Obra asignarObraACliente(Integer idCliente, Obra obra) throws Exception {
@@ -153,10 +173,13 @@ public class ObraService {
         // throw new Exception("El cliente no está habilitado para asignar obras: " +
         // idCliente);
         // }
-        if(obra.getEstado()==EstadoObra.FINALIZADA){
-            throw new ObraFinalizadaException("La obra se encuentra finalizada");
+        if (obra.getEstado() == EstadoObra.HABILITADA &&
+                cliente.getObrasHabilitadas().size() >= cliente.getMaxObrasEnEjecucion()) {
+            throw new MaxObrasExceededException("Cliente ha alcanzado el máximo de obras habilitadas.");
         }
-        else{
+        if (obra.getEstado() == EstadoObra.FINALIZADA) {
+            throw new ObraFinalizadaException("La obra se encuentra finalizada");
+        } else {
             obra.setCliente(cliente);
             obra = obraRepository.save(obra);
             return obra;

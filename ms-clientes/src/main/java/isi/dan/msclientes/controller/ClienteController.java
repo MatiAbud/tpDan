@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import isi.dan.msclientes.aop.LogExecutionTime;
 import isi.dan.msclientes.exception.ClienteNotFoundException;
+import isi.dan.msclientes.exception.ErrorInfo;
+import isi.dan.msclientes.exception.InvalidEmailException;
+import isi.dan.msclientes.exception.UsuarioHabilitadoNotFoundException;
 import isi.dan.msclientes.model.Cliente;
 import isi.dan.msclientes.servicios.ClienteService;
-
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -60,12 +61,26 @@ public class ClienteController {
                 .ok(cliente.orElseThrow(() -> new ClienteNotFoundException("Cliente " + id + " no encontrado")));
     }
 
-    @PostMapping
-    @LogExecutionTime
-    public Cliente create(@RequestBody @Validated Cliente cliente) {
-        return clienteService.save(cliente);
-    } 
- 
+    public ResponseEntity<?> create(@RequestBody @Validated Cliente cliente) {
+        try {
+            Cliente nuevoCliente = clienteService.crearCliente(cliente);
+            return ResponseEntity.ok(nuevoCliente); // Devuelve el cliente creado
+        } catch (UsuarioHabilitadoNotFoundException e) { // Captura la excepción específica primero
+            Instant fecha = Instant.now();
+            ErrorInfo error = new ErrorInfo(fecha, e.getMessage(), "Detalle del error", 400);
+            return ResponseEntity.badRequest().body(error);
+        } catch (InvalidEmailException e) { // Luego las otras excepciones específicas
+            Instant fecha = Instant.now();
+            ErrorInfo error = new ErrorInfo(fecha, e.getMessage(), "Detalle del error", 400);
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) { // Finalmente, la excepción general
+            Instant fecha = Instant.now();
+            ErrorInfo error = new ErrorInfo(fecha, e.getMessage(), "Detalle del error", 500); // Otro código para
+                                                                                              // errores generales
+            return ResponseEntity.internalServerError().body(error);
+        }
+    }
+
     @PutMapping("/{id}")
     @LogExecutionTime
     public ResponseEntity<Cliente> update(@PathVariable final Integer id, @RequestBody Cliente cliente)

@@ -2,6 +2,7 @@ package isi.dan.msclientes.model;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,6 +11,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -51,6 +54,28 @@ public class Cliente {
     // Considera implementar correctamente setidCliente si es necesario
     public void setidCliente(Integer id) {
         this.id = id;
+    }
+
+    public List<Obra> getObrasHabilitadas() {
+        return obrasClientes.stream()
+                .filter(obra -> obra.getEstado() == EstadoObra.HABILITADA)
+                .collect(Collectors.toList());
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario_habilitado") // Nombre de la columna FK en la tabla Cliente
+    private UsuarioHabilitado usuarioHabilitado;
+
+    private Integer idUsuarioHabilitado;
+
+    public boolean puedeAgregarObra() {
+        if (maxObrasEnEjecucion == null) {
+            return true;
+        }
+        long obrasEnEjecucion = obrasClientes.stream()
+                .filter(obra -> obra.getEstado() == EstadoObra.HABILITADA)
+                .count();
+        return obrasEnEjecucion < maxObrasEnEjecucion;
     }
 
 }
