@@ -26,6 +26,8 @@ import isi.dan.msclientes.exception.InvalidEmailException;
 import isi.dan.msclientes.exception.UsuarioHabilitadoNotFoundException;
 import isi.dan.msclientes.model.Cliente;
 import isi.dan.msclientes.servicios.ClienteService;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -61,6 +63,8 @@ public class ClienteController {
                 .ok(cliente.orElseThrow(() -> new ClienteNotFoundException("Cliente " + id + " no encontrado")));
     }
 
+    @PostMapping
+    @LogExecutionTime
     public ResponseEntity<?> create(@RequestBody @Validated Cliente cliente) {
         try {
             Cliente nuevoCliente = clienteService.crearCliente(cliente);
