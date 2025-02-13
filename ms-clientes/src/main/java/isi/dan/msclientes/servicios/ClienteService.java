@@ -54,7 +54,7 @@ public class ClienteService {
         return matcher.matches();
     }
 
-    public Cliente crearCliente(Cliente cliente) {
+    public Cliente crearCliente(Cliente cliente) throws Exception {
         // 1. Validar correo electrónico
         if (!isValidEmail(cliente.getCorreoElectronico())) {
             throw new InvalidEmailException("El correo electrónico no es válido.");
