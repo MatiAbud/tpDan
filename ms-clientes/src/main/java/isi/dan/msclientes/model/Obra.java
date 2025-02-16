@@ -2,6 +2,10 @@ package isi.dan.msclientes.model;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -35,9 +39,10 @@ public class Obra {
 
     private float lng;
 
-    @ManyToOne
-    @JoinColumn(name = "idCliente")
-    private Cliente cliente;
+
+    //@JsonIgnoreProperties("obrasHabilitadas")
+    @Column(name = "idCliente")
+    private Integer idCliente;
 
     @NotNull(message = "El presupuesto es obligatorio")
     @Min(value = 100, message = "El presupuesto debe ser al menos de 100")

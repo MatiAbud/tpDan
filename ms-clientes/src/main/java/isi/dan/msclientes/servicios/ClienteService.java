@@ -41,8 +41,8 @@ public class ClienteService {
     @Autowired
     private UsuarioHabilitadoRepository usuarioHabilitadoRepository;
 
-    @Autowired
-    private UsuariosHabilitados usuariosHabilitados;
+    //@Autowired
+    //private UsuariosHabilitados usuariosHabilitados;
 
     @Value("${cliente.maximo.descubierto.default:0}") // Valor por defecto 0 si no se encuentra en el properties
     private int maximoDescubiertoDefault;
@@ -61,7 +61,7 @@ public class ClienteService {
         }
 
         // 2. Buscar UsuarioHabilitado (usando el ID que viene en el objeto Cliente)
-        Integer idUsuarioHabilitado = cliente.getIdUsuarioHabilitado(); // Obtiene el ID del request
+        Integer idUsuarioHabilitado = cliente.getUsuarioHabilitado().getId(); // Obtiene el ID del request
         if (idUsuarioHabilitado == null) {
             throw new IllegalArgumentException("Debe proporcionar el ID del usuario habilitado.");
         }
@@ -120,7 +120,7 @@ public class ClienteService {
             throw new MaxObrasExceededException("El cliente ha alcanzado el máximo de obras en ejecución.");
         }
 
-        obra.setCliente(cliente);
+        obra.setIdCliente(cliente.getId());
         obra.setEstado(EstadoObra.PENDIENTE); // Initial state
         return obraRepository.save(obra);
     }

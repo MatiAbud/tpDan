@@ -103,7 +103,7 @@ public class ObraController {
         }
     }
 
-    @PutMapping("/{id}/pendiente")
+    @PutMapping("/{id}/pendiente") 
     public ResponseEntity<Obra> marcarPendiente(@PathVariable Integer id) {
         try {
             // Delegación al servicio para marcar la obra como pendiente
@@ -165,15 +165,15 @@ public class ObraController {
             if(obrasHabilitadasCliente.size()==cliente.get().getMaxObrasEnEjecucion()){
                 throw new Exception("se alcanzo el max de obras ejecutadas");
             }
-            obra.get().setCliente(cliente.get());
+            obra.get().setIdCliente(cliente.get().getId());
             return ResponseEntity.ok(obraService.cambiarEstadoObra(id, EstadoObra.HABILITADA));
         }
         else if(obra.get().getEstado().equals(EstadoObra.PENDIENTE)){
-            obra.get().setCliente(cliente.get());
+            obra.get().setIdCliente(cliente.get().getId());
             return ResponseEntity.ok(obraService.cambiarEstadoObra(id, EstadoObra.PENDIENTE));
         }
         else{
-            obra.get().setCliente(cliente.get());
+            obra.get().setIdCliente(cliente.get().getId());
             return ResponseEntity.ok(obraService.cambiarEstadoObra(id, EstadoObra.FINALIZADA));
         }
         

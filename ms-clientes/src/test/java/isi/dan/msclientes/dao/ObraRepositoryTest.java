@@ -85,7 +85,7 @@ public class ObraRepositoryTest {
         clienteRepository.save(cliente);
        
         
-        obra.setCliente(cliente);
+        obra.setIdCliente(cliente.getId());
     }
 
     @BeforeEach

@@ -2,6 +2,7 @@ package isi.dan.msclientes.servicios;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,7 +71,7 @@ public class ObraService {
     }
 
     public List<Obra> obtenerObrasDeCliente(Integer idCliente) throws Exception {
-        List<Obra> obras = obraRepository.findByClienteId(idCliente);
+        List<Obra> obras = obraRepository.findByIdCliente(idCliente);
 
         /*
          * if (obras.isEmpty()) {
@@ -121,26 +122,34 @@ public class ObraService {
             }
         }
         // No debe supera el maximo
-        /*
-         * if (nuevoEstado.equals(EstadoObra.HABILITADA)) {
-         * Cliente cliente = obra.getCliente();
-         * /*List<Obra> obrasHabilitadasCliente =
-         * this.obtenerObrasDeCliente(cliente.getId());
-         * obrasHabilitadasCliente.stream()
-         * .filter(o -> o.getEstado().equals(EstadoObra.HABILITADA))
-         * .collect(Collectors.toList());
-         * if (obrasHabilitadasCliente.size() == cliente.getMaxObrasEnEjecucion()) {
-         * try {
-         * throw new Exception(
-         * "No se pueden habilitar más obras para el cliente: " + cliente.getNombre()
-         * + ". Se alcanzó el máximo permitido de: " +
-         * cliente.getMaxObrasEnEjecucion());
-         * } catch (Exception e) {
-         * e.printStackTrace();
-         * }
-         * }
-         * }
-         */
+        
+         if (nuevoEstado.equals(EstadoObra.HABILITADA)) {
+            Optional<Cliente> cliente = clienteRepository.findById(obra.getIdCliente());
+            List<Obra> obrasHabilitadasCliente = this.obtenerObrasDeCliente(cliente.get().getId());
+            System.out.println("------------------------------------------------");
+            System.out.println("------------------------------------------------");
+            System.out.println("OBRAS ANTES DE FILTRO:");
+            System.out.println(obrasHabilitadasCliente);
+            System.out.println("------------------------------------------------");
+            System.out.println("------------------------------------------------");
+            
+            List <Obra> aux= obrasHabilitadasCliente.stream()
+            .filter(o -> o.getEstado().equals(EstadoObra.HABILITADA))
+            .collect(Collectors.toList());
+            System.out.println("------------------------------------------------");
+            System.out.println("------------------------------------------------");
+            System.out.println("OBRAS DESPUES DE FILTRO:");
+            System.out.println(aux);
+            System.out.println("------------------------------------------------");
+            System.out.println("------------------------------------------------");
+         if (aux.size() == cliente.get().getMaxObrasEnEjecucion()) {
+            throw new Exception(
+            "No se pueden habilitar más obras para el cliente: " + cliente.get().getNombre()
+            + ". Se alcanzó el máximo permitido de: " +
+            cliente.get().getMaxObrasEnEjecucion());
+         } 
+         }
+         
 
         // Actualizamos estado
         obra.setEstado(nuevoEstado);
@@ -180,7 +189,7 @@ public class ObraService {
         if (obra.getEstado() == EstadoObra.FINALIZADA) {
             throw new ObraFinalizadaException("La obra se encuentra finalizada");
         } else {
-            obra.setCliente(cliente);
+            obra.setIdCliente(cliente.getId());
             obra = obraRepository.save(obra);
             return obra;
         }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,8 +45,7 @@ public class Cliente {
 
     private Integer maxObrasEnEjecucion;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany()
     private List<Obra> obrasClientes;
 
     @Column
@@ -65,8 +65,6 @@ public class Cliente {
     @ManyToOne
     @JoinColumn(name = "id_usuario_habilitado") // Nombre de la columna FK en la tabla Cliente
     private UsuarioHabilitado usuarioHabilitado;
-
-    private Integer idUsuarioHabilitado;
 
     public boolean puedeAgregarObra() {
         if (maxObrasEnEjecucion == null) {

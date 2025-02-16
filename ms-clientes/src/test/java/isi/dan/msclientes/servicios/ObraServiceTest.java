@@ -59,8 +59,8 @@ public class ObraServiceTest {
         cliente.setMaxObrasEnEjecucion(1);
         cliente.setMaximoDescubierto(10000);
 
-        obra.setCliente(cliente);
-        obra2.setCliente(cliente);
+        obra.setIdCliente(cliente.getId());
+        obra2.setIdCliente(cliente.getId());
         
         System.out.println("SetUp executed: " + obra);
     }
