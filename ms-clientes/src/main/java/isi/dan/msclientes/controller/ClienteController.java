@@ -1,5 +1,6 @@
 package isi.dan.msclientes.controller;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,8 @@ import isi.dan.msclientes.exception.UsuarioHabilitadoNotFoundException;
 import isi.dan.msclientes.model.Cliente;
 import isi.dan.msclientes.servicios.ClienteService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -62,6 +65,12 @@ public class ClienteController {
         return ResponseEntity
                 .ok(cliente.orElseThrow(() -> new ClienteNotFoundException("Cliente " + id + " no encontrado")));
     }
+
+    @GetMapping("/{id}/saldo")
+    public BigDecimal getSaldo(@PathVariable Integer id) {
+        return clienteService.verificarSaldo(id);
+    }
+    
 
     @PostMapping
     @LogExecutionTime

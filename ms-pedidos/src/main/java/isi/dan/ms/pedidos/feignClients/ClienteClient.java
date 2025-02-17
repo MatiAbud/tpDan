@@ -1,13 +1,18 @@
 package isi.dan.ms.pedidos.feignClients;
 
+import java.math.BigDecimal;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import isi.dan.ms.pedidos.modelo.Cliente;
 
-@FeignClient(name = "clienteService", url = "http://localhost:8080")
+@FeignClient(name = "clienteService", url = "http://ms-gateway-svc:8080/clientes/api/clientes")
 public interface ClienteClient {
-    @GetMapping("/clientes/api/clientes/{id}")
-    Cliente obtenerCliente(@PathVariable("id") Integer id);
+    @GetMapping("/{id}")
+    Cliente obtenerCliente(@PathVariable Integer id);
+
+    @GetMapping("/{id}/saldo")
+    BigDecimal verificarSaldo(@PathVariable Integer id);
 }

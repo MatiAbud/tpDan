@@ -92,29 +92,27 @@ public class PedidoController {
         nuevoPedido.setDetalle(detallesCompletos);
 
         // Paso b: Verificar saldo del cliente
-        // BigDecimal tieneSaldoSuficiente =
-        // clienteService.verificarSaldo(cliente.getId());
+        BigDecimal saldoCliente = clienteClient.verificarSaldo(pedido.getCliente().getId());
 
         // Obtener los pedidos que no han sido entregados o rechazados
-        List<Pedido> pedidosEnCurso = pedidoService.obtenerPedidosEnCurso(cliente.getId());
+        //List<Pedido> pedidosEnCurso = pedidoService.obtenerPedidosEnCurso(cliente.getId());
 
         // Sumar el monto de esos pedidos
-        BigDecimal saldoActual = pedidosEnCurso.stream().map(Pedido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+        //BigDecimal saldoActual = pedidosEnCurso.stream().map(Pedido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // Calcular el saldo con el nuevo pedido
         BigDecimal totalPedido = (nuevoPedido.getTotal() != null) ? nuevoPedido.getTotal() : BigDecimal.ZERO;
-        BigDecimal saldoConNuevoPedido = saldoActual.add(totalPedido);
 
-        /*
-         * if (saldoConNuevoPedido.compareTo(tieneSaldoSuficiente) > 0) {
-         * // Si el cliente no tiene saldo suficiente, se rechaza el pedido
-         * nuevoPedido.setEstado(EstadoPedido.RECHAZADO);
-         * Pedido pedidoRechazado = pedidoService.savePedido(nuevoPedido);
-         * log.info("Pedido rechazado por falta de saldo: {}", pedidoRechazado);
-         * 
-         * return ResponseEntity.ok(pedidoRechazado); // Retornar el pedido rechazado
-         * }
-         */
+        
+        if (saldoCliente.compareTo(totalPedido) < 0) {
+            // Si el cliente no tiene saldo suficiente, se rechaza el pedido
+            nuevoPedido.setEstado(EstadoPedido.RECHAZADO);
+            Pedido pedidoRechazado = pedidoService.savePedido(nuevoPedido);
+            log.info("Pedido rechazado por falta de saldo: {}", pedidoRechazado);
+            
+            return ResponseEntity.ok(pedidoRechazado); // Retornar el pedido rechazado
+        }
+         
         // Paso c: Verificar y actualizar el stock
         /*boolean stockActualizado = pedidoService.verificarYActualizarStock(nuevoPedido.getDetalle());
         if (!stockActualizado) {
