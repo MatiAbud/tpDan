@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import isi.dan.msclientes.config.ClienteConfig;
@@ -132,6 +133,13 @@ public class ClienteService {
 
         obra.setEstado(nuevoEstado);
         obraRepository.save(obra);
+    }
+
+    @Transactional
+    public Cliente restarSaldo(Integer id, BigDecimal gasto){
+        Cliente cliente = clienteRepository.findById(id).orElseThrow();
+        cliente.setSaldo(cliente.getSaldo().subtract(gasto));
+        return clienteRepository.save(cliente);
     }
 
     

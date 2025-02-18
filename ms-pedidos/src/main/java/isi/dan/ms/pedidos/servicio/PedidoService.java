@@ -10,6 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import isi.dan.ms.pedidos.conf.RabbitMQConfig;
 import isi.dan.ms.pedidos.dao.PedidoRepository;
 import isi.dan.ms.pedidos.dto.StockUpdateDTO;
+import isi.dan.ms.pedidos.feignClients.ProductoClient;
 import isi.dan.ms.pedidos.modelo.EstadoPedido;
 import isi.dan.ms.pedidos.modelo.OrdenCompraDetalle;
 import isi.dan.ms.pedidos.modelo.Pedido;
@@ -74,11 +79,22 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public boolean verificarYActualizarStock(List<OrdenCompraDetalle> detalles) {
-        // Llamada al servicio de productos para verificar y actualizar el stock
-        String url = "http://localhost3080/productos/api/productos/provision";
-        ResponseEntity<Boolean> response = restTemplate.postForEntity(url, detalles, Boolean.class);
-        return response.getBody(); // Retorna true si el stock fue actualizado correctamente
+    public Boolean verificarYActualizarStock(List<OrdenCompraDetalle> detalles) {
+        // URL del servicio de productos
+        String url = "http://ms-gateway-svc:8080/productos/api/productos/provision";
+
+        // Configurar los headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // Envolver la lista de detalles en un HttpEntity
+        HttpEntity<List<OrdenCompraDetalle>> requestEntity = new HttpEntity<>(detalles, headers);
+
+        // Hacer la llamada PUT y obtener la respuesta
+        ResponseEntity<Boolean> response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Boolean.class);
+
+        // Retornar true si la respuesta es exitosa y el cuerpo no es null
+        return response.getBody() != null && response.getBody();
     }
 
     // Método para verificar punto de pedido y generar un pedido

@@ -3,8 +3,10 @@ package isi.dan.ms.pedidos.feignClients;
 import java.math.BigDecimal;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import isi.dan.ms.pedidos.modelo.Cliente;
 
@@ -15,4 +17,8 @@ public interface ClienteClient {
 
     @GetMapping("/{id}/saldo")
     BigDecimal verificarSaldo(@PathVariable Integer id);
+
+    @PutMapping("/{id}/saldo/{gasto}")
+    ResponseEntity <Cliente> restarSaldo(@PathVariable Integer id, @PathVariable BigDecimal gasto);
+
 }

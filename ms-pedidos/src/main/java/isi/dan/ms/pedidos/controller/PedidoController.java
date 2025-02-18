@@ -88,19 +88,22 @@ public class PedidoController {
             
             return ResponseEntity.ok(pedidoRechazado); // Retornar el pedido rechazado
         }
+        else{
+            clienteClient.restarSaldo(cliente.getId(), pedido.getTotal());
+        }
          
         // Paso c: Verificar y actualizar el stock
-        /*boolean stockActualizado = pedidoService.verificarYActualizarStock(nuevoPedido.getDetalle());
+        boolean stockActualizado = pedidoService.verificarYActualizarStock(pedido.getDetalle());
         if (!stockActualizado) {
             // Si no se pudo actualizar el stock de todos los productos, el pedido queda en
             // estado "ACEPTADO"
-            nuevoPedido.setEstado(EstadoPedido.ACEPTADO);
+            pedido.setEstado(EstadoPedido.ACEPTADO);
         } else {
             // Si el stock se actualizó correctamente para todos los productos, el pedido se
             // guarda en estado "EN_PREPARACION"
-            nuevoPedido.setEstado(EstadoPedido.EN_PREPARACION);
+            pedido.setEstado(EstadoPedido.EN_PREPARACION);
         }
-*/
+
         pedido.setEstado(EstadoPedido.ACEPTADO);
         // Guardar el pedido en la base de datos
         Pedido pedidoGuardado = pedidoService.savePedido(pedido);

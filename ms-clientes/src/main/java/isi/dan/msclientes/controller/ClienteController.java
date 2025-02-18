@@ -114,4 +114,9 @@ public class ClienteController {
         clienteService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/saldo/{gasto}")
+    public ResponseEntity<Cliente> restarSaldo(@PathVariable Integer id, @PathVariable BigDecimal gasto) {
+        return ResponseEntity.ok(clienteService.restarSaldo(id, gasto));
+    }
 }
