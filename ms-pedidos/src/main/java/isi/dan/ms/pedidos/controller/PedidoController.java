@@ -59,37 +59,13 @@ public class PedidoController {
     @LogExecutionTime
     public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido) {
         // Paso 1: Crear un nuevo pedido con los datos proporcionados
-        Pedido nuevoPedido = new Pedido();
         Cliente cliente = pedido.getCliente();
         if (cliente == null) {
             log.error("Cliente con ID {} no encontrado", pedido.getCliente().getId());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        nuevoPedido.setCliente(cliente);
-        // nuevoPedido.setObra(pedido.getObra());
-        nuevoPedido.setObservaciones(pedido.getObservaciones());
-
-        // Asignar número de pedido y fecha actual
-        nuevoPedido.setNumeroPedido(pedidoCounter.incrementAndGet());
-        nuevoPedido.setFecha(Instant.now());
-
-        // Paso 2: Calcular el total del pedido y el total de cada línea
-        List<OrdenCompraDetalle> detallesCompletos = new ArrayList<>();
-
-        for (OrdenCompraDetalle detalle : pedido.getDetalle()) {
-            Producto producto = detalle.getProducto();
-            if (producto == null) {
-                log.error("Producto con ID {} no encontrado", detalle.getProducto().getId());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-            }
-
-            // Completar los datos del producto en el detalle del pedido
-            detalle.setProducto(producto);
-            detalle.calcularTotalLinea();
-            detallesCompletos.add(detalle);
-        }
-
-        nuevoPedido.setDetalle(detallesCompletos);
+        pedido.setNumeroPedido(pedidoCounter.incrementAndGet());
+        pedido.setFecha(Instant.now());
 
         // Paso b: Verificar saldo del cliente
         BigDecimal saldoCliente = clienteClient.verificarSaldo(pedido.getCliente().getId());
@@ -101,13 +77,13 @@ public class PedidoController {
         //BigDecimal saldoActual = pedidosEnCurso.stream().map(Pedido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // Calcular el saldo con el nuevo pedido
-        BigDecimal totalPedido = (nuevoPedido.getTotal() != null) ? nuevoPedido.getTotal() : BigDecimal.ZERO;
+        BigDecimal totalPedido = (pedido.getTotal() != null) ? pedido.getTotal() : BigDecimal.ZERO;
 
         
         if (saldoCliente.compareTo(totalPedido) < 0) {
             // Si el cliente no tiene saldo suficiente, se rechaza el pedido
-            nuevoPedido.setEstado(EstadoPedido.RECHAZADO);
-            Pedido pedidoRechazado = pedidoService.savePedido(nuevoPedido);
+            pedido.setEstado(EstadoPedido.RECHAZADO);
+            Pedido pedidoRechazado = pedidoService.savePedido(pedido);
             log.info("Pedido rechazado por falta de saldo: {}", pedidoRechazado);
             
             return ResponseEntity.ok(pedidoRechazado); // Retornar el pedido rechazado
@@ -125,9 +101,9 @@ public class PedidoController {
             nuevoPedido.setEstado(EstadoPedido.EN_PREPARACION);
         }
 */
-        nuevoPedido.setEstado(EstadoPedido.ACEPTADO);
+        pedido.setEstado(EstadoPedido.ACEPTADO);
         // Guardar el pedido en la base de datos
-        Pedido pedidoGuardado = pedidoService.savePedido(nuevoPedido);
+        Pedido pedidoGuardado = pedidoService.savePedido(pedido);
 
         log.info("Nuevo pedido creado: {}", pedidoGuardado);
 
