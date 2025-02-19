@@ -108,7 +108,6 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con ID: " + clienteId));
 
-        // Verificar si el saldo del cliente es suficiente para cubrir el pedido
         return cliente.getSaldo();
     }
 
@@ -136,9 +135,9 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente restarSaldo(Integer id, BigDecimal gasto){
+    public Cliente sumarSaldo(Integer id, BigDecimal gasto){
         Cliente cliente = clienteRepository.findById(id).orElseThrow();
-        cliente.setSaldo(cliente.getSaldo().subtract(gasto));
+        cliente.setSaldo(cliente.getSaldo().add(gasto));
         return clienteRepository.save(cliente);
     }
 

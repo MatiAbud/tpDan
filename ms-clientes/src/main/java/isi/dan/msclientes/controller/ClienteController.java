@@ -116,7 +116,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}/saldo/{gasto}")
-    public ResponseEntity<Cliente> restarSaldo(@PathVariable Integer id, @PathVariable BigDecimal gasto) {
-        return ResponseEntity.ok(clienteService.restarSaldo(id, gasto));
+    public ResponseEntity<Cliente> sumarSaldo(@PathVariable Integer id, @PathVariable BigDecimal gasto) {
+        return ResponseEntity.ok(clienteService.sumarSaldo(id, gasto));
     }
 }

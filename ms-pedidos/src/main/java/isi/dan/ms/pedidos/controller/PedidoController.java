@@ -67,20 +67,11 @@ public class PedidoController {
         pedido.setNumeroPedido(pedidoCounter.incrementAndGet());
         pedido.setFecha(Instant.now());
 
-        // Paso b: Verificar saldo del cliente
         BigDecimal saldoCliente = clienteClient.verificarSaldo(pedido.getCliente().getId());
-
-        // Obtener los pedidos que no han sido entregados o rechazados
-        //List<Pedido> pedidosEnCurso = pedidoService.obtenerPedidosEnCurso(cliente.getId());
-
-        // Sumar el monto de esos pedidos
-        //BigDecimal saldoActual = pedidosEnCurso.stream().map(Pedido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        // Calcular el saldo con el nuevo pedido
         BigDecimal totalPedido = (pedido.getTotal() != null) ? pedido.getTotal() : BigDecimal.ZERO;
-
+        BigDecimal saldoNuevo = saldoCliente.add(totalPedido);
         
-        if (saldoCliente.compareTo(totalPedido) < 0) {
+        if (saldoNuevo.compareTo(cliente.getMaximoDescubierto()) > 0) {
             // Si el cliente no tiene saldo suficiente, se rechaza el pedido
             pedido.setEstado(EstadoPedido.RECHAZADO);
             Pedido pedidoRechazado = pedidoService.savePedido(pedido);
@@ -89,7 +80,7 @@ public class PedidoController {
             return ResponseEntity.ok(pedidoRechazado); // Retornar el pedido rechazado
         }
         else{
-            clienteClient.restarSaldo(cliente.getId(), pedido.getTotal());
+            clienteClient.sumarSaldo(cliente.getId(), pedido.getTotal().abs());
         }
          
         // Paso c: Verificar y actualizar el stock
@@ -106,7 +97,7 @@ public class PedidoController {
 
         pedido.setEstado(EstadoPedido.ACEPTADO);
         // Guardar el pedido en la base de datos
-        Pedido pedidoGuardado = pedidoService.savePedido(pedido);
+        Pedido pedidoGuardado = pedidoService.crearPedido(pedido);
 
         log.info("Nuevo pedido creado: {}", pedidoGuardado);
 
@@ -130,6 +121,13 @@ public class PedidoController {
     @LogExecutionTime
     public ResponseEntity<Void> deletePedido(@PathVariable String id) {
         pedidoService.deletePedido(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/numero/{num}")
+    @LogExecutionTime
+    public ResponseEntity<Void> deletePedidoNumero(@PathVariable Integer num) {
+        pedidoService.deletePedidoNumero(num);
         return ResponseEntity.noContent().build();
     }
 

@@ -13,4 +13,6 @@ public interface PedidoRepository extends MongoRepository<Pedido, String> {
     List<Pedido> findByClienteIdAndEstadoIn(Integer clienteId, List<EstadoPedido> estados);
 
     Pedido findByNumeroPedido(Integer numeroPedido);
+
+    Void deleteByNumeroPedido(Integer numeroPedido);
 }

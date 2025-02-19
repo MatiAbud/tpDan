@@ -6,4 +6,9 @@ import lombok.Data;
 public class StockUpdateDTO {
     private Long idProducto;
     private Integer cantidad;
+
+    public StockUpdateDTO(Long id, Integer cantidad){
+        this.idProducto=id;
+        this.cantidad=cantidad;
+    }
 }

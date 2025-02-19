@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import isi.dan.ms.pedidos.conf.RabbitMQConfig;
 import isi.dan.ms.pedidos.dao.PedidoRepository;
 import isi.dan.ms.pedidos.dto.StockUpdateDTO;
@@ -43,10 +46,17 @@ public class PedidoService {
     Logger log = LoggerFactory.getLogger(PedidoService.class);
 
     public Pedido savePedido(Pedido pedido) {
+        ObjectMapper objectMapper = new ObjectMapper();
         for (OrdenCompraDetalle dp : pedido.getDetalle()) {
-            log.info("Enviando {}", dp.getProducto().getId() + ";" + dp.getCantidad());
-            rabbitTemplate.convertAndSend(RabbitMQConfig.STOCK_UPDATE_QUEUE,
-                    dp.getProducto().getId() + ";" + dp.getCantidad());
+            try {
+                StockUpdateDTO stock = new StockUpdateDTO(dp.getProducto().getId(), dp.getCantidad());
+                String message = objectMapper.writeValueAsString(stock);
+                log.info("Enviando {}", message);
+                rabbitTemplate.convertAndSend(RabbitMQConfig.STOCK_UPDATE_QUEUE, message);
+            }  catch (Exception e) {
+                log.error("Error serializando mensaje para RabbitMQ", e);
+            }
+
         }
         return pedidoRepository.save(pedido);
     }
@@ -61,6 +71,10 @@ public class PedidoService {
 
     public void deletePedido(String id) {
         pedidoRepository.deleteById(id);
+    }
+
+    public void deletePedidoNumero(Integer num) {
+        pedidoRepository.deleteByNumeroPedido(num);
     }
 
     public Pedido crearPedido(Pedido pedido) {
@@ -82,19 +96,18 @@ public class PedidoService {
     public Boolean verificarYActualizarStock(List<OrdenCompraDetalle> detalles) {
         // URL del servicio de productos
         String url = "http://ms-gateway-svc:8080/productos/api/productos/provision";
-
-        // Configurar los headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // Envolver la lista de detalles en un HttpEntity
-        HttpEntity<List<OrdenCompraDetalle>> requestEntity = new HttpEntity<>(detalles, headers);
-
-        // Hacer la llamada PUT y obtener la respuesta
-        ResponseEntity<Boolean> response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Boolean.class);
-
-        // Retornar true si la respuesta es exitosa y el cuerpo no es null
-        return response.getBody() != null && response.getBody();
+        for (OrdenCompraDetalle orden : detalles) {
+            StockUpdateDTO stock =new StockUpdateDTO(orden.getProducto().getId(),-orden.getCantidad());
+            HttpEntity<StockUpdateDTO> requestEntity = new HttpEntity<>(stock, headers);
+            ResponseEntity<Boolean> response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Boolean.class);
+            if (!Boolean.TRUE.equals(response.getBody())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // Método para verificar punto de pedido y generar un pedido
@@ -147,10 +160,7 @@ public class PedidoService {
 
     public void enviarMensajeDevolverStock(Pedido pedido) {
         for (OrdenCompraDetalle detalle : pedido.getDetalle()) {
-            StockUpdateDTO stockUpdateDTO = new StockUpdateDTO();
-            stockUpdateDTO.setIdProducto(detalle.getProducto().getId());
-            stockUpdateDTO.setCantidad(detalle.getCantidad());
-
+            StockUpdateDTO stockUpdateDTO = new StockUpdateDTO(detalle.getProducto().getId(),detalle.getCantidad());
             // Send the message to RabbitMQ
             rabbitTemplate.convertAndSend("devolverStockQueue", stockUpdateDTO);
             log.info("Mensaje enviado a la cola devolverStockQueue: {}", stockUpdateDTO);
