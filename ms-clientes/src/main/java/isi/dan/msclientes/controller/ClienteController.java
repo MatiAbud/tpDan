@@ -68,7 +68,7 @@ public class ClienteController {
 
     @GetMapping("/{id}/saldo")
     public BigDecimal getSaldo(@PathVariable Integer id) {
-        return clienteService.verificarSaldo(id);
+        return clienteService.getSaldo(id);
     }
     
 
@@ -116,7 +116,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}/saldo/{gasto}")
-    public ResponseEntity<Cliente> sumarSaldo(@PathVariable Integer id, @PathVariable BigDecimal gasto) {
-        return ResponseEntity.ok(clienteService.sumarSaldo(id, gasto));
+    public ResponseEntity<Boolean> verificarSaldo(@PathVariable Integer id, @PathVariable BigDecimal gasto) {
+        return ResponseEntity.ok(clienteService.verificarSaldo(id, gasto));
     }
 }

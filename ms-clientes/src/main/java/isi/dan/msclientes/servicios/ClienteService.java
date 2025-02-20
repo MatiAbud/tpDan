@@ -46,7 +46,7 @@ public class ClienteService {
     //private UsuariosHabilitados usuariosHabilitados;
 
     @Value("${cliente.maximo.descubierto.default:0}") // Valor por defecto 0 si no se encuentra en el properties
-    private int maximoDescubiertoDefault;
+    private BigDecimal maximoDescubiertoDefault;
 
     public static boolean isValidEmail(String email) {
         String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
@@ -62,6 +62,7 @@ public class ClienteService {
         }
 
         // 2. Buscar UsuarioHabilitado (usando el ID que viene en el objeto Cliente)
+        /* 
         Integer idUsuarioHabilitado = cliente.getUsuarioHabilitado().getId(); // Obtiene el ID del request
         if (idUsuarioHabilitado == null) {
             throw new IllegalArgumentException("Debe proporcionar el ID del usuario habilitado.");
@@ -72,7 +73,7 @@ public class ClienteService {
 
         // 3. Asignar UsuarioHabilitado al cliente
         cliente.setUsuarioHabilitado(usuario);
-
+*/
         // 4. Asignar valor por defecto a maximoDescubierto SI ES NULO ***
         if (cliente.getMaximoDescubierto() == null) {
             cliente.setMaximoDescubierto(maximoDescubiertoDefault);
@@ -103,7 +104,7 @@ public class ClienteService {
         clienteRepository.deleteById(id);
     }
 
-    public BigDecimal verificarSaldo(Integer clienteId) {
+    public BigDecimal getSaldo(Integer clienteId) {
         // Obtener el cliente por ID
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con ID: " + clienteId));
@@ -135,10 +136,17 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente sumarSaldo(Integer id, BigDecimal gasto){
+    public Boolean verificarSaldo(Integer id, BigDecimal gasto){
         Cliente cliente = clienteRepository.findById(id).orElseThrow();
-        cliente.setSaldo(cliente.getSaldo().add(gasto));
-        return clienteRepository.save(cliente);
+        if(cliente.getSaldo().add(gasto).compareTo(cliente.getMaximoDescubierto())>0){
+            return false;
+        }
+        else{
+            cliente.setSaldo(cliente.getSaldo().add(gasto));
+            clienteRepository.save(cliente);
+            return true;
+        }
+
     }
 
     

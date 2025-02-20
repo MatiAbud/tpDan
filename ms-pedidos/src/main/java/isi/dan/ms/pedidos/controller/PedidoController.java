@@ -67,11 +67,8 @@ public class PedidoController {
         pedido.setNumeroPedido(pedidoCounter.incrementAndGet());
         pedido.setFecha(Instant.now());
 
-        BigDecimal saldoCliente = clienteClient.verificarSaldo(pedido.getCliente().getId());
-        BigDecimal totalPedido = (pedido.getTotal() != null) ? pedido.getTotal() : BigDecimal.ZERO;
-        BigDecimal saldoNuevo = saldoCliente.add(totalPedido);
-        
-        if (saldoNuevo.compareTo(cliente.getMaximoDescubierto()) > 0) {
+        if (!clienteClient.verificarSaldo(cliente.getId(), pedido.getTotal().abs()).getBody()) {
+            System.out.println("ENTRE AL IF !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             // Si el cliente no tiene saldo suficiente, se rechaza el pedido
             pedido.setEstado(EstadoPedido.RECHAZADO);
             Pedido pedidoRechazado = pedidoService.savePedido(pedido);
@@ -79,11 +76,9 @@ public class PedidoController {
             
             return ResponseEntity.ok(pedidoRechazado); // Retornar el pedido rechazado
         }
-        else{
-            clienteClient.sumarSaldo(cliente.getId(), pedido.getTotal().abs());
-        }
-         
-        // Paso c: Verificar y actualizar el stock
+
+        System.out.println("SALDO VERIFICADO Y ACTUALIZADO");
+
         boolean stockActualizado = pedidoService.verificarYActualizarStock(pedido.getDetalle());
         if (!stockActualizado) {
             // Si no se pudo actualizar el stock de todos los productos, el pedido queda en
@@ -94,8 +89,6 @@ public class PedidoController {
             // guarda en estado "EN_PREPARACION"
             pedido.setEstado(EstadoPedido.EN_PREPARACION);
         }
-
-        pedido.setEstado(EstadoPedido.ACEPTADO);
         // Guardar el pedido en la base de datos
         Pedido pedidoGuardado = pedidoService.crearPedido(pedido);
 

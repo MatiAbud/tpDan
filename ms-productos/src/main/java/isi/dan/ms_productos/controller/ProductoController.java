@@ -106,19 +106,13 @@ public class ProductoController {
 
     @PutMapping("/provision")
     @LogExecutionTime
-    public ResponseEntity<Boolean> actualizarStock(@RequestBody @Validated StockUpdateDTO stockUpdateDto)
-            throws ProductoNotFoundException {
-        Producto producto = productoService.getProductoById(stockUpdateDto.getIdProducto());
-
-        if (producto == null)
-            throw new ProductoNotFoundException(stockUpdateDto.getIdProducto());
-
-        // Actualizamos el stock del producto
-        producto.setStockActual(producto.getStockActual() + stockUpdateDto.getCantidad());
-        // Guardamos los cambios
-        productoService.saveProducto(producto);
-
-        return ResponseEntity.ok(true);
+    public ResponseEntity<Boolean> actualizarStock(@RequestBody @Validated StockUpdateDTO stockUpdateDto) throws Exception{    
+        if(productoService.consumirStock(stockUpdateDto)){  
+            return ResponseEntity.ok(true);            
+        }
+        else{
+            return ResponseEntity.ok(false);
+        }
     }
 
     /*

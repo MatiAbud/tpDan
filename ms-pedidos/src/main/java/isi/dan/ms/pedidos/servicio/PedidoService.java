@@ -100,7 +100,7 @@ public class PedidoService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         for (OrdenCompraDetalle orden : detalles) {
-            StockUpdateDTO stock =new StockUpdateDTO(orden.getProducto().getId(),-orden.getCantidad());
+            StockUpdateDTO stock =new StockUpdateDTO(orden.getProducto().getId(),orden.getCantidad());
             HttpEntity<StockUpdateDTO> requestEntity = new HttpEntity<>(stock, headers);
             ResponseEntity<Boolean> response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Boolean.class);
             if (!Boolean.TRUE.equals(response.getBody())) {

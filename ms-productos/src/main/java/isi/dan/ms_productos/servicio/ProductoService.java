@@ -68,6 +68,18 @@ public class ProductoService {
         return productoRepository.save(producto);
     }
 
+    public Boolean consumirStock(StockUpdateDTO stockUpdateDto) throws Exception{
+        Producto producto = productoRepository.findById(stockUpdateDto.getIdProducto()).get();
+        if(producto.getStockActual()-stockUpdateDto.getCantidad()<producto.getStockMinimo()){
+            return false;
+        }
+        else{
+            producto.setStockActual(producto.getStockActual()-stockUpdateDto.getCantidad());
+            productoRepository.save(producto);
+            return true;
+        }
+    }
+
     public List<Producto> getAllProductos() {
         return productoRepository.findAll();
     } 

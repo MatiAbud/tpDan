@@ -16,9 +16,9 @@ public interface ClienteClient {
     Cliente obtenerCliente(@PathVariable Integer id);
 
     @GetMapping("/{id}/saldo")
-    BigDecimal verificarSaldo(@PathVariable Integer id);
+    BigDecimal getSaldo(@PathVariable Integer id);
 
     @PutMapping("/{id}/saldo/{gasto}")
-    ResponseEntity <Cliente> sumarSaldo(@PathVariable Integer id, @PathVariable BigDecimal gasto);
+    ResponseEntity <Boolean> verificarSaldo(@PathVariable Integer id, @PathVariable BigDecimal gasto);
 
 }

@@ -57,7 +57,7 @@ public class ObraServiceTest {
         cliente.setCorreoElectronico("Prueba@asdsa.com");
         cliente.setCuit("123");
         cliente.setMaxObrasEnEjecucion(1);
-        cliente.setMaximoDescubierto(10000);
+        cliente.setMaximoDescubierto(BigDecimal.valueOf(10000));
 
         obra.setIdCliente(cliente.getId());
         obra2.setIdCliente(cliente.getId());

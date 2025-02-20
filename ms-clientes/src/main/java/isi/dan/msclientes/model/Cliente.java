@@ -1,6 +1,7 @@
 package isi.dan.msclientes.model;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,7 @@ public class Cliente {
     private String cuit;
 
     @Column(name = "MAXIMO_DESCUBIERTO")
-    private Integer maximoDescubierto;
+    private BigDecimal maximoDescubierto;
 
     private Integer maxObrasEnEjecucion;
 
@@ -56,11 +57,18 @@ public class Cliente {
         this.id = id;
     }
 
+    
     public List<Obra> getObrasHabilitadas() {
-        return obrasClientes.stream()
-                .filter(obra -> obra.getEstado() == EstadoObra.HABILITADA)
-                .collect(Collectors.toList());
-    }
+        if(obrasClientes==null){
+            return Collections.emptyList();
+        }
+        else{
+            return obrasClientes.stream()
+            .filter(obra -> obra.getEstado() == EstadoObra.HABILITADA)
+            .collect(Collectors.toList());
+
+        }
+    } 
 
     @ManyToOne
     @JoinColumn(name = "id_usuario_habilitado") // Nombre de la columna FK en la tabla Cliente

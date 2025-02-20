@@ -41,7 +41,7 @@ public class ClienteControllerTest {
         cliente.setCorreoElectronico("test@cliente.com");
         cliente.setCuit("12998887776");
         cliente.setMaxObrasEnEjecucion(10000);
-        cliente.setMaximoDescubierto(3);
+        cliente.setMaximoDescubierto(BigDecimal.valueOf(3));
         cliente.setSaldo(new BigDecimal(1234));
     }
 

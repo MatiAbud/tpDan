@@ -80,7 +80,7 @@ public class ObraRepositoryTest {
         cliente.setCuit("123");
         cliente.setCorreoElectronico("asa@asfs.com");
         cliente.setMaxObrasEnEjecucion(3);
-        cliente.setMaximoDescubierto(10000);
+        cliente.setMaximoDescubierto(BigDecimal.valueOf(10000));
         cliente.setNombre("prueba");
         clienteRepository.save(cliente);
        
