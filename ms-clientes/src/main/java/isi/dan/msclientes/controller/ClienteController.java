@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +27,8 @@ import isi.dan.msclientes.exception.ErrorInfo;
 import isi.dan.msclientes.exception.InvalidEmailException;
 import isi.dan.msclientes.exception.UsuarioHabilitadoNotFoundException;
 import isi.dan.msclientes.model.Cliente;
+import isi.dan.msclientes.model.UsuarioHabilitado;
 import isi.dan.msclientes.servicios.ClienteService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -70,7 +68,6 @@ public class ClienteController {
     public BigDecimal getSaldo(@PathVariable Integer id) {
         return clienteService.getSaldo(id);
     }
-    
 
     @PostMapping
     @LogExecutionTime
@@ -119,4 +116,17 @@ public class ClienteController {
     public ResponseEntity<Boolean> verificarSaldo(@PathVariable Integer id, @PathVariable BigDecimal gasto) {
         return ResponseEntity.ok(clienteService.verificarSaldo(id, gasto));
     }
+
+    @PostMapping("/{clienteId}/usuarios-habilitados")
+    public ResponseEntity<Cliente> agregarUsuarioHabilitado(@PathVariable Integer clienteId,
+            @RequestBody UsuarioHabilitado usuario) {
+        Cliente clienteActualizado = clienteService.agregarUsuarioHabilitado(clienteId, usuario);
+        return ResponseEntity.ok(clienteActualizado);
+    }
+
+    @GetMapping("/{clienteId}/usuarios-habilitados")
+    public List<UsuarioHabilitado> obtenerUsuariosHabilitados(@PathVariable Integer clienteId) {
+        return clienteService.obtenerUsuariosHabilitados(clienteId);
+    }
+
 }

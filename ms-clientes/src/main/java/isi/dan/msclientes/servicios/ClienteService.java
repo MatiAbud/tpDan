@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import isi.dan.msclientes.config.ClienteConfig;
@@ -42,8 +41,8 @@ public class ClienteService {
     @Autowired
     private UsuarioHabilitadoRepository usuarioHabilitadoRepository;
 
-    //@Autowired
-    //private UsuariosHabilitados usuariosHabilitados;
+    @Autowired
+    private UsuariosHabilitados usuario;
 
     @Value("${cliente.maximo.descubierto.default:0}") // Valor por defecto 0 si no se encuentra en el properties
     private BigDecimal maximoDescubiertoDefault;
@@ -62,18 +61,26 @@ public class ClienteService {
         }
 
         // 2. Buscar UsuarioHabilitado (usando el ID que viene en el objeto Cliente)
-        /* 
-        Integer idUsuarioHabilitado = cliente.getUsuarioHabilitado().getId(); // Obtiene el ID del request
-        if (idUsuarioHabilitado == null) {
-            throw new IllegalArgumentException("Debe proporcionar el ID del usuario habilitado.");
+        /*
+         * Integer idUsuarioHabilitado = cliente.getUsuarioHabilitado().getId(); //
+         * Obtiene el ID del request
+         * if (idUsuarioHabilitado == null) {
+         * throw new
+         * IllegalArgumentException("Debe proporcionar el ID del usuario habilitado.");
+         * }
+         * 
+         * UsuarioHabilitado usuario =
+         * usuarioHabilitadoRepository.findById(idUsuarioHabilitado)
+         * .orElseThrow(() -> new
+         * UsuarioHabilitadoNotFoundException("Usuario habilitado no encontrado"));
+         * 
+         * // 3. Asignar UsuarioHabilitado al cliente
+         * cliente.setUsuarioHabilitado(usuario);
+         */
+        // Asignar Cliente a cada UsuarioHabilitado antes de guardar
+        if (cliente.getUsuariosHabilitados() != null) {
+            cliente.getUsuariosHabilitados().forEach(usuario -> usuario.setCliente(cliente));
         }
-
-        UsuarioHabilitado usuario = usuarioHabilitadoRepository.findById(idUsuarioHabilitado)
-                .orElseThrow(() -> new UsuarioHabilitadoNotFoundException("Usuario habilitado no encontrado"));
-
-        // 3. Asignar UsuarioHabilitado al cliente
-        cliente.setUsuarioHabilitado(usuario);
-*/
         // 4. Asignar valor por defecto a maximoDescubierto SI ES NULO ***
         if (cliente.getMaximoDescubierto() == null) {
             cliente.setMaximoDescubierto(maximoDescubiertoDefault);
@@ -136,12 +143,11 @@ public class ClienteService {
     }
 
     @Transactional
-    public Boolean verificarSaldo(Integer id, BigDecimal gasto){
+    public Boolean verificarSaldo(Integer id, BigDecimal gasto) {
         Cliente cliente = clienteRepository.findById(id).orElseThrow();
-        if(cliente.getSaldo().add(gasto).compareTo(cliente.getMaximoDescubierto())>0){
+        if (cliente.getSaldo().add(gasto).compareTo(cliente.getMaximoDescubierto()) > 0) {
             return false;
-        }
-        else{
+        } else {
             cliente.setSaldo(cliente.getSaldo().add(gasto));
             clienteRepository.save(cliente);
             return true;
@@ -149,5 +155,37 @@ public class ClienteService {
 
     }
 
-    
+    @Transactional
+    public Cliente agregarUsuarioHabilitado(Integer clienteId, UsuarioHabilitado usuarioHabilitado) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado"));
+
+        usuarioHabilitado.setCliente(cliente);
+        cliente.getUsuariosHabilitados().add(usuarioHabilitado);
+
+        usuarioHabilitadoRepository.save(usuarioHabilitado);
+        return clienteRepository.save(cliente);
+    }
+
+    @Transactional
+    public Cliente eliminarUsuarioHabilitado(Integer clienteId, Integer usuarioId) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado"));
+
+        UsuarioHabilitado usuario = usuarioHabilitadoRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioHabilitadoNotFoundException("Usuario habilitado no encontrado"));
+
+        cliente.getUsuariosHabilitados().remove(usuario);
+        usuarioHabilitadoRepository.delete(usuario);
+
+        return clienteRepository.save(cliente);
+    }
+
+    public List<UsuarioHabilitado> obtenerUsuariosHabilitados(Integer clienteId) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado"));
+        return cliente.getUsuariosHabilitados();
+    }
+
+
 }

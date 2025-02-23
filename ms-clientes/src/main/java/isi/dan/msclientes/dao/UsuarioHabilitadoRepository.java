@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import isi.dan.msclientes.model.UsuarioHabilitado;
 
 @Repository
-public interface UsuarioHabilitadoRepository extends JpaRepository<UsuarioHabilitado,Integer>{
+public interface UsuarioHabilitadoRepository extends JpaRepository<UsuarioHabilitado, Integer> {
 
-    
 }

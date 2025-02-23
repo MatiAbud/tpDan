@@ -5,16 +5,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -57,22 +55,20 @@ public class Cliente {
         this.id = id;
     }
 
-    
     public List<Obra> getObrasHabilitadas() {
-        if(obrasClientes==null){
+        if (obrasClientes == null) {
             return Collections.emptyList();
-        }
-        else{
+        } else {
             return obrasClientes.stream()
-            .filter(obra -> obra.getEstado() == EstadoObra.HABILITADA)
-            .collect(Collectors.toList());
+                    .filter(obra -> obra.getEstado() == EstadoObra.HABILITADA)
+                    .collect(Collectors.toList());
 
         }
-    } 
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario_habilitado") // Nombre de la columna FK en la tabla Cliente
-    private UsuarioHabilitado usuarioHabilitado;
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<UsuarioHabilitado> usuariosHabilitados;
 
     public boolean puedeAgregarObra() {
         if (maxObrasEnEjecucion == null) {
