@@ -41,9 +41,6 @@ public class ClienteService {
     @Autowired
     private UsuarioHabilitadoRepository usuarioHabilitadoRepository;
 
-    @Autowired
-    private UsuariosHabilitados usuario;
-
     @Value("${cliente.maximo.descubierto.default:0}") // Valor por defecto 0 si no se encuentra en el properties
     private BigDecimal maximoDescubiertoDefault;
 
@@ -79,7 +76,7 @@ public class ClienteService {
          */
         // Asignar Cliente a cada UsuarioHabilitado antes de guardar
         if (cliente.getUsuariosHabilitados() != null) {
-            cliente.getUsuariosHabilitados().forEach(usuario -> usuario.setCliente(cliente));
+            cliente.getUsuariosHabilitados().forEach(usuario -> usuario.setCliente(cliente.getId()));
         }
         // 4. Asignar valor por defecto a maximoDescubierto SI ES NULO ***
         if (cliente.getMaximoDescubierto() == null) {
@@ -160,7 +157,7 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado"));
 
-        usuarioHabilitado.setCliente(cliente);
+        usuarioHabilitado.setCliente(clienteId);
         cliente.getUsuariosHabilitados().add(usuarioHabilitado);
 
         usuarioHabilitadoRepository.save(usuarioHabilitado);

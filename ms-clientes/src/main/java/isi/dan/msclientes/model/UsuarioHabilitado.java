@@ -1,6 +1,9 @@
 package isi.dan.msclientes.model;
 
+import org.springframework.lang.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,10 +26,9 @@ public class UsuarioHabilitado {
     @Email
     private String correoElectronico;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
-    @JsonBackReference
-    private Cliente cliente;
+    @Nullable
+    @JsonProperty("cliente_id")
+    private Integer clienteId;
 
     // Getters and setters (optional)
     public int getId() {
@@ -69,8 +71,12 @@ public class UsuarioHabilitado {
         this.correoElectronico = correoElectronico;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setCliente(Integer id) {
+        this.clienteId = id;
+    }
+
+    public Integer getCliente() {
+        return this.clienteId;
     }
 
 }

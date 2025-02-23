@@ -24,12 +24,12 @@ import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/Usuarios")
+@RequestMapping("/api/usuarios")
 public class UsuarioHabilitadoController {
     @Autowired
     private UsuarioHabilitadoService usuarioService;
 
-    @GetMapping
+    @GetMapping("/todos")
     @LogExecutionTime
     public List<UsuarioHabilitado> getAll() {
         return usuarioService.findAll();
@@ -44,6 +44,9 @@ public class UsuarioHabilitadoController {
 
     @PostMapping
     public UsuarioHabilitado create(@Valid @RequestBody UsuarioHabilitado usuario) {
+        if (usuario.getCliente() == null) {
+            throw new IllegalArgumentException("El cliente_id no puede ser nulo");
+        }
         return usuarioService.save(usuario);
     }
 
