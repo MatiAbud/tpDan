@@ -18,12 +18,9 @@ import isi.dan.msclientes.exception.ClienteNotFoundException;
 import isi.dan.msclientes.exception.InvalidEmailException;
 import isi.dan.msclientes.exception.MaxObrasExceededException;
 import isi.dan.msclientes.exception.ObraNotFoundException;
-import isi.dan.msclientes.exception.UsuarioHabilitadoNotFoundException;
 import isi.dan.msclientes.model.Cliente;
 import isi.dan.msclientes.model.EstadoObra;
 import isi.dan.msclientes.model.Obra;
-import isi.dan.msclientes.model.UsuarioHabilitado;
-import isi.dan.msclientes.model.UsuariosHabilitados;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -152,37 +149,42 @@ public class ClienteService {
 
     }
 
-    @Transactional
-    public Cliente agregarUsuarioHabilitado(Integer clienteId, UsuarioHabilitado usuarioHabilitado) {
-        Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado"));
-
-        usuarioHabilitado.setCliente(clienteId);
-        cliente.getUsuariosHabilitados().add(usuarioHabilitado);
-
-        usuarioHabilitadoRepository.save(usuarioHabilitado);
-        return clienteRepository.save(cliente);
-    }
-
-    @Transactional
-    public Cliente eliminarUsuarioHabilitado(Integer clienteId, Integer usuarioId) {
-        Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado"));
-
-        UsuarioHabilitado usuario = usuarioHabilitadoRepository.findById(usuarioId)
-                .orElseThrow(() -> new UsuarioHabilitadoNotFoundException("Usuario habilitado no encontrado"));
-
-        cliente.getUsuariosHabilitados().remove(usuario);
-        usuarioHabilitadoRepository.delete(usuario);
-
-        return clienteRepository.save(cliente);
-    }
-
-    public List<UsuarioHabilitado> obtenerUsuariosHabilitados(Integer clienteId) {
-        Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado"));
-        return cliente.getUsuariosHabilitados();
-    }
-
+    /*
+     * @Transactional
+     * public Cliente agregarUsuarioHabilitado(Integer clienteId, UsuarioHabilitado
+     * usuarioHabilitado) {
+     * Cliente cliente = clienteRepository.findById(clienteId)
+     * .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado"));
+     * 
+     * usuarioHabilitado.setCliente(clienteId);
+     * cliente.getUsuariosHabilitados().add(usuarioHabilitado);
+     * 
+     * usuarioHabilitadoRepository.save(usuarioHabilitado);
+     * return clienteRepository.save(cliente);
+     * }
+     * 
+     * @Transactional
+     * public Cliente eliminarUsuarioHabilitado(Integer clienteId, Integer
+     * usuarioId) {
+     * Cliente cliente = clienteRepository.findById(clienteId)
+     * .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado"));
+     * 
+     * UsuarioHabilitado usuario = usuarioHabilitadoRepository.findById(usuarioId)
+     * .orElseThrow(() -> new
+     * UsuarioHabilitadoNotFoundException("Usuario habilitado no encontrado"));
+     * 
+     * cliente.getUsuariosHabilitados().remove(usuario);
+     * usuarioHabilitadoRepository.delete(usuario);
+     * 
+     * return clienteRepository.save(cliente);
+     * }
+     * 
+     * public List<UsuarioHabilitado> obtenerUsuariosHabilitados(Integer clienteId)
+     * {
+     * Cliente cliente = clienteRepository.findById(clienteId)
+     * .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado"));
+     * return cliente.getUsuariosHabilitados();
+     * }
+     */
 
 }
