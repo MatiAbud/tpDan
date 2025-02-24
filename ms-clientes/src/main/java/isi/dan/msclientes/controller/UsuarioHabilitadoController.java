@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import isi.dan.msclientes.aop.LogExecutionTime;
+import isi.dan.msclientes.model.Cliente;
 import isi.dan.msclientes.model.Obra;
 import isi.dan.msclientes.model.UsuarioHabilitado;
 import isi.dan.msclientes.servicios.UsuarioHabilitadoService;
@@ -40,6 +41,13 @@ public class UsuarioHabilitadoController {
     public ResponseEntity<UsuarioHabilitado> getById(@PathVariable Integer id) {
         Optional<UsuarioHabilitado> usuario = usuarioService.findById(id);
         return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/cliente/{idUsuario}")
+    @LogExecutionTime
+    public ResponseEntity<Cliente> getCliente(@PathVariable Integer idUsuario) {
+        Optional<Cliente> cliente = usuarioService.findClienteById(idUsuario);
+        return cliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping

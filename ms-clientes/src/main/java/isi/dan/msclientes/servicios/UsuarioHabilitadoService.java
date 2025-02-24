@@ -17,12 +17,19 @@ public class UsuarioHabilitadoService{
     @Autowired
     private UsuarioHabilitadoRepository usuarioHabilitadoRepository;
 
+    @Autowired ClienteRepository clienteRepository;
+
     public List<UsuarioHabilitado> findAll() {
         return usuarioHabilitadoRepository.findAll();
     }
 
     public Optional<UsuarioHabilitado> findById(Integer id) {
         return usuarioHabilitadoRepository.findById(id);
+    }
+
+    public Optional<Cliente> findClienteById(Integer idUsuario) {
+        Optional<UsuarioHabilitado> usuario = usuarioHabilitadoRepository.findById(idUsuario);
+        return clienteRepository.findById(usuario.get().getCliente());
     }
 
     public UsuarioHabilitado save(UsuarioHabilitado usuarioHabilitado) {
