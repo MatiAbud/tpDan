@@ -2,9 +2,11 @@ package isi.dan.ms.pedidos.servicio;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,11 +28,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import isi.dan.ms.pedidos.conf.RabbitMQConfig;
 import isi.dan.ms.pedidos.dao.PedidoRepository;
 import isi.dan.ms.pedidos.dto.StockUpdateDTO;
+import isi.dan.ms.pedidos.feignClients.ClienteClient;
 import isi.dan.ms.pedidos.feignClients.ProductoClient;
+import isi.dan.ms.pedidos.modelo.Cliente;
 import isi.dan.ms.pedidos.modelo.EstadoPedido;
 import isi.dan.ms.pedidos.modelo.OrdenCompraDetalle;
 import isi.dan.ms.pedidos.modelo.Pedido;
 //import isi.dan.ms_productos.modelo.Producto;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class PedidoService {
@@ -43,8 +49,26 @@ public class PedidoService {
     @Autowired
     private RestTemplate restTemplate;
 
+    private final AtomicInteger pedidoCounter = new AtomicInteger(0);
+
+    private final ClienteClient clienteClient;
+
     Logger log = LoggerFactory.getLogger(PedidoService.class);
 
+    public PedidoService(ClienteClient clienteClient){
+        this.clienteClient=clienteClient;
+    }
+
+    @PostConstruct
+    public void init() {
+        pedidoRepository.findTopByOrderByNumeroPedidoDesc()
+            .ifPresent(pedido -> pedidoCounter.set(pedido.getNumeroPedido()));
+    }
+
+    public int generarNumeroPedido() {
+        return pedidoCounter.incrementAndGet();
+    }
+    /*
     public Pedido savePedido(Pedido pedido) {
         ObjectMapper objectMapper = new ObjectMapper();
         for (OrdenCompraDetalle dp : pedido.getDetalle()) {
@@ -60,9 +84,23 @@ public class PedidoService {
         }
         return pedidoRepository.save(pedido);
     }
-
+ */
     public List<Pedido> getAllPedidos() {
         return pedidoRepository.findAll();
+    }
+
+    public List<Pedido> getPedidosCliente(Integer idCliente) {
+        return pedidoRepository.findByClienteId(idCliente);
+    }
+
+    public List<Pedido> getPedidosEstado(String estado) {
+        for (EstadoPedido est : EstadoPedido.values()) {
+            if (est.name().equalsIgnoreCase(estado)) {
+                return pedidoRepository.findByEstado(est);
+            }
+        }
+        List<Pedido> vacio = new ArrayList<Pedido>();
+        return vacio;
     }
 
     public Pedido getPedidoById(String id) {
@@ -77,16 +115,42 @@ public class PedidoService {
         pedidoRepository.deleteByNumeroPedido(num);
     }
 
-    public Pedido crearPedido(Pedido pedido) {
-        return pedidoRepository.save(pedido);
+    public ResponseEntity <Pedido> crearPedido(Pedido pedido) {
+        Cliente cliente = pedido.getCliente(); 
+        if (cliente == null) {
+            log.error("Cliente con ID {} no encontrado", pedido.getCliente().getId());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        pedido.setNumeroPedido(pedidoCounter.incrementAndGet());
+        pedido.setFecha(Instant.now());
+
+        if (!clienteClient.verificarSaldo(cliente.getId(), pedido.getTotal().abs()).getBody()) {
+            System.out.println("ENTRE AL IF !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            // Si el cliente no tiene saldo suficiente, se rechaza el pedido
+            pedido.setEstado(EstadoPedido.RECHAZADO);
+            Pedido pedidoRechazado = pedidoRepository.save(pedido);
+            log.info("Pedido rechazado por falta de saldo: {}", pedidoRechazado);
+
+            return ResponseEntity.ok(pedidoRechazado); // Retornar
+        }
+        boolean stockActualizado = verificarYActualizarStock(pedido.getDetalle());
+        if (!stockActualizado) {
+            // Si no se pudo actualizar el stock de todos los productos, el pedido queda en
+            // estado "ACEPTADO"
+            pedido.setEstado(EstadoPedido.ACEPTADO);
+        } else {
+            pedido.setEstado(EstadoPedido.EN_PREPARACION);
+        }
+        // Guardar el pedido en la base de datos
+        Pedido pedidoGuardado = pedidoRepository.save(pedido);
+
+        log.info("Nuevo pedido creado: {}", pedidoGuardado);
+
+        return ResponseEntity.ok(pedidoGuardado);
     }
 
     public Pedido getPedidoPorNumero(Integer id) throws Exception {
         return pedidoRepository.findByNumeroPedido(id);
-    }
-
-    public List<Pedido> obtenerPedidosPorCliente(String clienteId) {
-        return pedidoRepository.findByClienteId(clienteId);
     }
 
     public Pedido actualizarPedido(Pedido pedido) {
@@ -147,10 +211,6 @@ public class PedidoService {
         }
     }
  */
-    private int generarNumeroPedido() {
-        // Lógica para generar un número de pedido único
-        return (int) (Math.random() * 10000);
-    }
 
     // Método para obtener los pedidos que no están rechazados ni entregados
     public List<Pedido> obtenerPedidosEnCurso(Integer clienteId) {
@@ -171,8 +231,8 @@ public class PedidoService {
         for (OrdenCompraDetalle detalle : pedido.getDetalle()) {
             StockUpdateDTO stockUpdateDTO = new StockUpdateDTO(detalle.getProducto().getId(),detalle.getCantidad());
             // Send the message to RabbitMQ
-            rabbitTemplate.convertAndSend("devolverStockQueue", stockUpdateDTO);
-            log.info("Mensaje enviado a la cola devolverStockQueue: {}", stockUpdateDTO);
+            rabbitTemplate.convertAndSend("stock-update-queue", stockUpdateDTO);
+            log.info("Mensaje enviado a la cola stock-update-queue: {}", stockUpdateDTO);
         }
         pedidoRepository.save(pedido);
         return pedido;

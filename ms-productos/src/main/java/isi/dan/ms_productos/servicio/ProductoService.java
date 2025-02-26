@@ -31,7 +31,6 @@ public class ProductoService {
     Logger log = LoggerFactory.getLogger(ProductoService.class);
 
     @RabbitListener(queues = RabbitMQConfig.STOCK_UPDATE_QUEUE)
-
     public void handleStockUpdate(Message msg) {
         log.info("Recibido {}", msg);
         try {
@@ -40,7 +39,7 @@ public class ProductoService {
             LinkedHashMap<String, Object> messageData = mapper.readValue(msg.getBody(), LinkedHashMap.class);
 
             // Obtener ID de producto y cantidad
-            Long productId = (Long) messageData.get("idProducto");
+            Long productId = ((Number) messageData.get("idProducto")).longValue();
             Integer cantidad = (Integer) messageData.get("cantidad");
             BigDecimal precio = (BigDecimal) messageData.get("precio");
 
@@ -52,7 +51,7 @@ public class ProductoService {
                     .orElseThrow(() -> new ProductoNotFoundException(stockUpdate.getIdProducto()));
 
             // Actualizar el stock
-            producto.setStockActual(stockUpdate.getCantidad());
+            producto.setStockActual(producto.getStockActual()+ stockUpdate.getCantidad());
             productoRepository.save(producto);
             log.info("Stock actualizado para el producto ID: {} a {}", producto.getId(), producto.getStockActual());
 

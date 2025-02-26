@@ -40,61 +40,15 @@ import isi.dan.ms.pedidos.servicio.PedidoService;
 @RequestMapping("/api/pedidos")
 public class PedidoController {
 
-    private static final AtomicInteger pedidoCounter = new AtomicInteger(0);
-
     Logger log = LoggerFactory.getLogger(PedidoController.class);
 
     @Autowired
     private PedidoService pedidoService;
 
-    private final ClienteClient clienteClient;
-    private final ProductoClient productoClient;
-
-    public PedidoController(ClienteClient clienteClient, ProductoClient productoClient) {
-        this.clienteClient = clienteClient;
-        this.productoClient = productoClient;
-    }
-
     @PostMapping
     @LogExecutionTime
     public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido) {
-        // Paso 1: Crear un nuevo pedido con los datos proporcionados
-        Cliente cliente = pedido.getCliente();
-        if (cliente == null) {
-            log.error("Cliente con ID {} no encontrado", pedido.getCliente().getId());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-        pedido.setNumeroPedido(pedidoCounter.incrementAndGet());
-        pedido.setFecha(Instant.now());
-
-        if (!clienteClient.verificarSaldo(cliente.getId(), pedido.getTotal().abs()).getBody()) {
-            System.out.println("ENTRE AL IF !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            // Si el cliente no tiene saldo suficiente, se rechaza el pedido
-            pedido.setEstado(EstadoPedido.RECHAZADO);
-            Pedido pedidoRechazado = pedidoService.savePedido(pedido);
-            log.info("Pedido rechazado por falta de saldo: {}", pedidoRechazado);
-            
-            return ResponseEntity.ok(pedidoRechazado); // Retornar el pedido rechazado
-        }
-
-        System.out.println("SALDO VERIFICADO Y ACTUALIZADO");
-
-        boolean stockActualizado = pedidoService.verificarYActualizarStock(pedido.getDetalle());
-        if (!stockActualizado) {
-            // Si no se pudo actualizar el stock de todos los productos, el pedido queda en
-            // estado "ACEPTADO"
-            pedido.setEstado(EstadoPedido.ACEPTADO);
-        } else {
-            // Si el stock se actualizó correctamente para todos los productos, el pedido se
-            // guarda en estado "EN_PREPARACION"
-            pedido.setEstado(EstadoPedido.EN_PREPARACION);
-        }
-        // Guardar el pedido en la base de datos
-        Pedido pedidoGuardado = pedidoService.crearPedido(pedido);
-
-        log.info("Nuevo pedido creado: {}", pedidoGuardado);
-
-        return ResponseEntity.ok(pedidoGuardado);
+        return pedidoService.crearPedido(pedido);
     }
 
     @GetMapping("/todos")
@@ -108,6 +62,20 @@ public class PedidoController {
     public ResponseEntity<Pedido> getPedidoPorNumero(@PathVariable Integer id) throws Exception {
         Pedido pedido = pedidoService.getPedidoPorNumero(id);
         return ResponseEntity.ok(pedido);
+    }
+
+    @GetMapping("/cliente/{id}")
+    @LogExecutionTime
+    public List <Pedido> getPedidoPorCliente(@PathVariable Integer id) throws Exception {
+        List<Pedido> pedidos = pedidoService.getPedidosCliente(id);
+        return pedidos;
+    }
+
+    @GetMapping("/estado/{estado}")
+    @LogExecutionTime
+    public List<Pedido> getPedidosEstado(@PathVariable String estado) throws Exception {
+        List<Pedido> pedidos = pedidoService.getPedidosEstado(estado);
+        return pedidos;
     }
 
     @DeleteMapping("/{id}")
