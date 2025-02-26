@@ -124,20 +124,17 @@ public class PedidoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}/estado")
+    @PutMapping("/{id}/entregar")
     @LogExecutionTime
-    public ResponseEntity<Pedido> actualizarEstado(@PathVariable Integer id, @RequestBody EstadoPedido estado) throws Exception {
-        Pedido pedido = pedidoService.getPedidoPorNumero(id);
+    public ResponseEntity<Pedido> entregarPedido(@PathVariable String id) throws Exception {
+        Pedido pedidoActualizado = pedidoService.entregarPedido(id);
+        return ResponseEntity.ok(pedidoActualizado);
+    }
 
-        // If the state is being updated to "CANCELADO", send message to return stock
-        if (estado == EstadoPedido.CANCELADO) {
-            pedidoService.enviarMensajeDevolverStock(pedido);
-        }
-
-        // Update the order state and save it
-        pedido.setEstado(estado);
-        Pedido pedidoActualizado = pedidoService.actualizarPedido(pedido);
-
+    @PutMapping("/{id}/cancelar")
+    @LogExecutionTime
+    public ResponseEntity<Pedido> actualizarEstado(@PathVariable String id) throws Exception {
+        Pedido pedidoActualizado = pedidoService.enviarMensajeDevolverStock(id);
         return ResponseEntity.ok(pedidoActualizado);
     }
     /*

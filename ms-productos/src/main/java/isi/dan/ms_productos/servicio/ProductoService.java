@@ -80,6 +80,14 @@ public class ProductoService {
         }
     }
 
+    public Boolean reponerStock(StockUpdateDTO stock){
+        Producto producto = productoRepository.findById(stock.getIdProducto()).get();
+        producto.setPrecio(stock.getPrecio());
+        producto.setStockActual(producto.getStockActual()+stock.getCantidad());
+        productoRepository.save(producto);
+        return true;
+    }
+
     public List<Producto> getAllProductos() {
         return productoRepository.findAll();
     } 

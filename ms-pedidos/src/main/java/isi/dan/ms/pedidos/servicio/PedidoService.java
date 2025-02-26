@@ -95,7 +95,7 @@ public class PedidoService {
 
     public Boolean verificarYActualizarStock(List<OrdenCompraDetalle> detalles) {
         // URL del servicio de productos
-        String url = "http://ms-gateway-svc:8080/productos/api/productos/provision";
+        String url = "http://ms-gateway-svc:8080/productos/api/productos/consumo";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -158,12 +158,23 @@ public class PedidoService {
                 clienteId, Arrays.asList(EstadoPedido.ACEPTADO, EstadoPedido.EN_PREPARACION));
     }
 
-    public void enviarMensajeDevolverStock(Pedido pedido) {
+    public Pedido entregarPedido(String id){
+        Pedido pedido = pedidoRepository.findById(id).get();
+        pedido.setEstado(EstadoPedido.ENTREGADO);
+        pedidoRepository.save(pedido);
+        return pedido;
+    }
+
+    public Pedido enviarMensajeDevolverStock(String id) {
+        Pedido pedido = pedidoRepository.findById(id).get();
+        pedido.setEstado(EstadoPedido.CANCELADO);
         for (OrdenCompraDetalle detalle : pedido.getDetalle()) {
             StockUpdateDTO stockUpdateDTO = new StockUpdateDTO(detalle.getProducto().getId(),detalle.getCantidad());
             // Send the message to RabbitMQ
             rabbitTemplate.convertAndSend("devolverStockQueue", stockUpdateDTO);
             log.info("Mensaje enviado a la cola devolverStockQueue: {}", stockUpdateDTO);
         }
+        pedidoRepository.save(pedido);
+        return pedido;
     }
 }

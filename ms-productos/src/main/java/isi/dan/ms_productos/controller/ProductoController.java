@@ -104,7 +104,7 @@ public class ProductoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/provision")
+    @PutMapping("/consumo")
     @LogExecutionTime
     public ResponseEntity<Boolean> actualizarStock(@RequestBody @Validated StockUpdateDTO stockUpdateDto) throws Exception{    
         if(productoService.consumirStock(stockUpdateDto)){  
@@ -113,6 +113,13 @@ public class ProductoController {
         else{
             return ResponseEntity.ok(false);
         }
+    }
+
+    @PutMapping("/provision")
+    @LogExecutionTime
+    public ResponseEntity<Boolean> reponerStock(@RequestBody @Validated StockUpdateDTO stockUpdateDto) throws Exception{        
+        return ResponseEntity.ok(productoService.reponerStock(stockUpdateDto));
+
     }
 
     /*
