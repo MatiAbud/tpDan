@@ -11,6 +11,7 @@ import isi.dan.msclientes.dao.ClienteRepository;
 import isi.dan.msclientes.dao.ObraRepository;
 import isi.dan.msclientes.exception.MaxObrasExceededException;
 import isi.dan.msclientes.exception.ObraFinalizadaException;
+import isi.dan.msclientes.exception.ObraNotFoundException;
 import isi.dan.msclientes.model.Cliente;
 import isi.dan.msclientes.model.EstadoObra;
 import isi.dan.msclientes.model.Obra;
@@ -73,67 +74,22 @@ public class ObraService {
     public List<Obra> obtenerObrasDeCliente(Integer idCliente) throws Exception {
         List<Obra> obras = obraRepository.findByIdCliente(idCliente);
 
-        /*
-         * if (obras.isEmpty()) {
-         * throw new Exception("No se encontraron obras para el cliente con ID: " +
-         * idCliente);
-         * }
-         */
-
         return obras;
     }
 
-    // Otros métodos según necesidades
     public Obra cambiarEstadoObra(Integer idObra, EstadoObra nuevoEstado) throws Exception {
 
         Obra obra = obraRepository.findById(idObra)
                 .orElseThrow();
 
-        // Validamos nuevo estado
-        if (!EstadoObra.getValidEstados().contains(nuevoEstado)) {
-            try {
-                throw new Exception("Estado no válido: " + nuevoEstado);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Chequeamos si el estado finalizado cambia a otro estado
-        /*
-         * if (obra.getEstado().equals(EstadoObra.FINALIZADA) &&
-         * !nuevoEstado.equals(EstadoObra.FINALIZADA)) {
-         * try {
-         * throw new Exception("No se puede cambiar el estado de una obra FINALIZADA");
-         * } catch (Exception e) {
-         * e.printStackTrace();
-         * }
-         * }
-         */
         if (obra.getEstado().equals(EstadoObra.FINALIZADA)) {
             throw new Exception("No se puede cambiar el estado de una obra FINALIZADA");
         }
-
-        if (nuevoEstado.equals(EstadoObra.FINALIZADA)) {
-            // Verificar si hay obras pendientes para habilitar
-            Obra obraPendiente = obraRepository.findFirstByEstado(EstadoObra.PENDIENTE);
-            if (obraPendiente != null) {
-                obraPendiente.setEstado(EstadoObra.HABILITADA);
-                obraRepository.save(obraPendiente);
-            }
-        }
-        // No debe supera el maximo
-        
-         if (nuevoEstado.equals(EstadoObra.HABILITADA)) {
             Optional<Cliente> cliente = clienteRepository.findById(obra.getIdCliente());
-            List<Obra> obrasHabilitadasCliente = this.obtenerObrasDeCliente(cliente.get().getId());
-            System.out.println("------------------------------------------------");
-            System.out.println("------------------------------------------------");
-            System.out.println("OBRAS ANTES DE FILTRO:");
-            System.out.println(obrasHabilitadasCliente);
-            System.out.println("------------------------------------------------");
-            System.out.println("------------------------------------------------");
+            List<Obra> obrasCliente = this.obtenerObrasDeCliente(cliente.get().getId());
+         if (nuevoEstado.equals(EstadoObra.HABILITADA)) {    
             
-            List <Obra> aux= obrasHabilitadasCliente.stream()
+            List <Obra> aux= obrasCliente.stream()
             .filter(o -> o.getEstado().equals(EstadoObra.HABILITADA))
             .collect(Collectors.toList());
             System.out.println("------------------------------------------------");
@@ -158,17 +114,19 @@ public class ObraService {
         obra = obraRepository.save(obra);
 
         if (nuevoEstado == EstadoObra.FINALIZADA) {
-            habilitarObraPendiente();
+            habilitarObraPendiente(cliente.get().getId());
         }
 
         return obra;
     }
 
-    private void habilitarObraPendiente() {
-        Obra obraPendiente = obraRepository.findFirstByEstado(EstadoObra.PENDIENTE);
-        if (obraPendiente != null) {
-            obraPendiente.setEstado(EstadoObra.HABILITADA);
-            obraRepository.save(obraPendiente);
+    private void habilitarObraPendiente(Integer idCliente) throws Exception {
+        List<Obra> obras = obtenerObrasDeCliente(idCliente);
+        for (Obra obra: obras){
+            if(obra.getEstado() == EstadoObra.PENDIENTE){
+                marcarObraComoHabilitada(obra.getId());
+                return;
+            }
         }
     }
 

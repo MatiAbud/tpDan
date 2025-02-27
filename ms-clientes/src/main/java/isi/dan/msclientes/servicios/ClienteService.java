@@ -33,6 +33,9 @@ public class ClienteService {
     private ObraRepository obraRepository;
 
     @Autowired
+    private ObraService obraService;
+
+    @Autowired
     private ClienteConfig clienteConfig;
 
     @Autowired
@@ -135,7 +138,19 @@ public class ClienteService {
         obra.setEstado(nuevoEstado);
         obraRepository.save(obra);
     }
-
+/*
+    @Transactional
+    public Obra habilitarObrasPendientes(Integer id) throws Exception {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ObraNotFoundException("Cliente no encontrado"));
+        for (Obra obra: cliente.getObrasClientes()){
+            if(obra.getEstado() == EstadoObra.PENDIENTE){
+                obraService.marcarObraComoHabilitada(obra.getId());
+                return obra;
+            }
+        }
+    }
+ */
     @Transactional
     public Boolean verificarSaldo(Integer id, BigDecimal gasto) {
         Cliente cliente = clienteRepository.findById(id).orElseThrow();

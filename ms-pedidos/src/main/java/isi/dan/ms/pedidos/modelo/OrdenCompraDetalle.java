@@ -16,11 +16,23 @@ public class OrdenCompraDetalle {
     private BigDecimal descuento;
     private BigDecimal precioFinal;
 
-    public void calcularTotalLinea() {
-        BigDecimal precioSinDescuento = producto.getPrecio().multiply(new BigDecimal(cantidad));
-        BigDecimal descuentoCalculado = precioSinDescuento.multiply(descuento); // Asumiendo que descuento es un
-                                                                                // porcentaje
-        this.precioFinal = precioSinDescuento.subtract(descuentoCalculado);
+    public BigDecimal calcularTotalLinea() {
+        BigDecimal precioSinDescuento = producto.getPrecio().multiply(BigDecimal.valueOf(cantidad));
+        System.out.println("---------------------PRECIO SIN DESC ------------------------------------");
+        System.out.println(precioSinDescuento);
+        System.out.println("---------------------PRECIO SIN DESC ------------------------------------");
+  
+        BigDecimal descuentoCalculado = precioSinDescuento.multiply(descuento.divide(BigDecimal.valueOf(100))); 
+        System.out.println("---------------------DESCUENTO ------------------------------------");
+        System.out.println(descuentoCalculado);
+        System.out.println("---------------------DESCUENTO ------------------------------------");
+        
+        BigDecimal precioFinal = precioSinDescuento.subtract(descuentoCalculado);
+        System.out.println("---------------------PRECIO FINAL EN CALCULAR LINEA ------------------------------------");
+        System.out.println(precioFinal);
+        System.out.println("---------------------PRECIO FINAL EN CALCULAR LINEA ------------------------------------");
+        
+        return precioFinal; 
     }
 
 }

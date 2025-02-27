@@ -100,6 +100,14 @@ public class ClienteController {
         cliente.setId(id);
         return ResponseEntity.ok(clienteService.update(cliente));
     }
+/*
+    @PutMapping("/{id}/obrasPendientes")
+    @LogExecutionTim
+    public ResponseEntity<Obra> obrasPendientes(@PathVariable final Integer id)
+            throws ClienteNotFoundException {
+        return clienteService.habilitarObrasPendientes(id);
+    }
+ */
 
     @DeleteMapping("/{id}")
     @LogExecutionTime

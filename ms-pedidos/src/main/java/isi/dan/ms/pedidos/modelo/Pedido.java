@@ -40,10 +40,23 @@ public class Pedido {
     private List<HistorialEstado> historialEstado;
 
     // Método para calcular el total del pedido
-    public void calcularTotal() {
-        this.total = detalle.stream()
-                .map(OrdenCompraDetalle::getPrecioFinal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    public BigDecimal calcularTotal() {
+        BigDecimal totalFinal=BigDecimal.valueOf(0);    
+        for (OrdenCompraDetalle det: detalle){
+            System.out.println("---------------------CALCULAR LINEA ------------------------------------");
+            System.out.println(det.calcularTotalLinea());
+            System.out.println("---------------------CALCULAR LINEA ------------------------------------");
+      
+            totalFinal = totalFinal.add(det.calcularTotalLinea());
+            System.out.println("---------------------EL TOTAL PARCIAL ES ------------------------------------");
+            System.out.println(totalFinal);
+            System.out.println("---------------------EL TOTAL PARCIAL ES ------------------------------------");
+      
+        }
+       System.out.println("---------------------EL TOTAL FINAL ES ------------------------------------");
+       System.out.println(totalFinal);
+       System.out.println("---------------------EL TOTAL FINAL ES ------------------------------------");
+        return totalFinal;
     }
 
     public void addEstado(EstadoPedido estado, Instant fecha, String detalle, String user){

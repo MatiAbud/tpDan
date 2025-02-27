@@ -117,7 +117,11 @@ public class PedidoService {
     }
 
     public ResponseEntity <Pedido> crearPedido(Pedido pedido) {
-        Cliente cliente = pedido.getCliente(); 
+        Cliente cliente = pedido.getCliente();
+        pedido.setTotal(pedido.calcularTotal()); 
+        System.out.println("---------------------EL TOTAL FINAL ES ------------------------------------");
+        System.out.println(pedido.getTotal());
+        System.out.println("---------------------EL TOTAL FINAL ES ------------------------------------");
         if (cliente == null) {
             log.error("Cliente con ID {} no encontrado", pedido.getCliente().getId());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -126,7 +130,7 @@ public class PedidoService {
         pedido.setFecha(Instant.now());
         List<HistorialEstado> historial = new ArrayList<HistorialEstado>();
         pedido.setHistorialEstado(historial);
-        if (!clienteClient.verificarSaldo(cliente.getId(), pedido.getTotal().abs()).getBody()) {
+        if (!(clienteClient.verificarSaldo(cliente.getId(), pedido.getTotal())).getBody()) {
             pedido.setEstado(EstadoPedido.RECHAZADO);
             pedido.addEstado(EstadoPedido.RECHAZADO, Instant.now(),"Pedido rechazado por falta de saldo", "usuario");
             Pedido pedidoRechazado = pedidoRepository.save(pedido);
