@@ -32,6 +32,7 @@ import isi.dan.ms.pedidos.feignClients.ClienteClient;
 import isi.dan.ms.pedidos.feignClients.ProductoClient;
 import isi.dan.ms.pedidos.modelo.Cliente;
 import isi.dan.ms.pedidos.modelo.EstadoPedido;
+import isi.dan.ms.pedidos.modelo.HistorialEstado;
 import isi.dan.ms.pedidos.modelo.OrdenCompraDetalle;
 import isi.dan.ms.pedidos.modelo.Pedido;
 //import isi.dan.ms_productos.modelo.Producto;
@@ -123,22 +124,21 @@ public class PedidoService {
         }
         pedido.setNumeroPedido(pedidoCounter.incrementAndGet());
         pedido.setFecha(Instant.now());
-
+        List<HistorialEstado> historial = new ArrayList<HistorialEstado>();
+        pedido.setHistorialEstado(historial);
         if (!clienteClient.verificarSaldo(cliente.getId(), pedido.getTotal().abs()).getBody()) {
-            System.out.println("ENTRE AL IF !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            // Si el cliente no tiene saldo suficiente, se rechaza el pedido
             pedido.setEstado(EstadoPedido.RECHAZADO);
+            pedido.addEstado(EstadoPedido.RECHAZADO, Instant.now(),"Pedido rechazado por falta de saldo", "usuario");
             Pedido pedidoRechazado = pedidoRepository.save(pedido);
             log.info("Pedido rechazado por falta de saldo: {}", pedidoRechazado);
-
-            return ResponseEntity.ok(pedidoRechazado); // Retornar
+            return ResponseEntity.ok(pedidoRechazado);
         }
         boolean stockActualizado = verificarYActualizarStock(pedido.getDetalle());
         if (!stockActualizado) {
-            // Si no se pudo actualizar el stock de todos los productos, el pedido queda en
-            // estado "ACEPTADO"
             pedido.setEstado(EstadoPedido.ACEPTADO);
+            pedido.addEstado(EstadoPedido.ACEPTADO, Instant.now(),"Pedido aceptado, no hay stock suficiente", "usuario");
         } else {
+            pedido.addEstado(EstadoPedido.EN_PREPARACION, Instant.now(),"Pedido en preparación", "usuario");
             pedido.setEstado(EstadoPedido.EN_PREPARACION);
         }
         // Guardar el pedido en la base de datos
@@ -221,6 +221,7 @@ public class PedidoService {
     public Pedido entregarPedido(String id){
         Pedido pedido = pedidoRepository.findById(id).get();
         pedido.setEstado(EstadoPedido.ENTREGADO);
+        pedido.addEstado(EstadoPedido.ENTREGADO, Instant.now(),"Pedido entregado", "usuario");
         pedidoRepository.save(pedido);
         return pedido;
     }
@@ -228,6 +229,7 @@ public class PedidoService {
     public Pedido enviarMensajeDevolverStock(String id) {
         Pedido pedido = pedidoRepository.findById(id).get();
         pedido.setEstado(EstadoPedido.CANCELADO);
+        pedido.addEstado(EstadoPedido.CANCELADO, Instant.now(),"Pedido cancelado", "usuario");
         for (OrdenCompraDetalle detalle : pedido.getDetalle()) {
             StockUpdateDTO stockUpdateDTO = new StockUpdateDTO(detalle.getProducto().getId(),detalle.getCantidad());
             // Send the message to RabbitMQ

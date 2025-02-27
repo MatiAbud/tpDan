@@ -45,4 +45,9 @@ public class Pedido {
                 .map(OrdenCompraDetalle::getPrecioFinal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    public void addEstado(EstadoPedido estado, Instant fecha, String detalle, String user){
+        HistorialEstado historial = new HistorialEstado(estado, fecha, detalle, user);
+        historialEstado.add(historial);
+    }
 }

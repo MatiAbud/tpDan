@@ -1,17 +1,10 @@
 package isi.dan.ms.pedidos.controller;
 
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import org.bson.codecs.IntegerCodec;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,13 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import isi.dan.ms.pedidos.aop.LogExecutionTime;
-import isi.dan.ms.pedidos.feignClients.ClienteClient;
-import isi.dan.ms.pedidos.feignClients.ProductoClient;
-import isi.dan.ms.pedidos.modelo.Cliente;
-import isi.dan.ms.pedidos.modelo.EstadoPedido;
-import isi.dan.ms.pedidos.modelo.OrdenCompraDetalle;
 import isi.dan.ms.pedidos.modelo.Pedido;
-import isi.dan.ms.pedidos.modelo.Producto;
 import isi.dan.ms.pedidos.servicio.PedidoService;
 //import isi.dan.ms_productos.modelo.Producto;
 //import isi.dan.msclientes.servicios.ClienteService;
@@ -101,7 +88,7 @@ public class PedidoController {
 
     @PutMapping("/{id}/cancelar")
     @LogExecutionTime
-    public ResponseEntity<Pedido> actualizarEstado(@PathVariable String id) throws Exception {
+    public ResponseEntity<Pedido> cancelarPedido(@PathVariable String id) throws Exception {
         Pedido pedidoActualizado = pedidoService.enviarMensajeDevolverStock(id);
         return ResponseEntity.ok(pedidoActualizado);
     }
