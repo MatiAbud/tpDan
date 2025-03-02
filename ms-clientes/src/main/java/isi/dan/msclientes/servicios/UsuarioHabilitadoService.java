@@ -27,6 +27,10 @@ public class UsuarioHabilitadoService{
         return usuarioHabilitadoRepository.findById(id);
     }
 
+    public List<UsuarioHabilitado> findByClienteId(Integer id) {
+        return usuarioHabilitadoRepository.findByClienteId(id);
+    }
+
     public Optional<Cliente> findClienteById(Integer idUsuario) {
         Optional<UsuarioHabilitado> usuario = usuarioHabilitadoRepository.findById(idUsuario);
         return clienteRepository.findById(usuario.get().getCliente());

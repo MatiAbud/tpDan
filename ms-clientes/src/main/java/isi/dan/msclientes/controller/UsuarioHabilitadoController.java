@@ -36,6 +36,12 @@ public class UsuarioHabilitadoController {
         return usuarioService.findAll();
     }
 
+    @GetMapping("/clientes/{id}")
+    @LogExecutionTime
+    public List<UsuarioHabilitado> getByCliente(@PathVariable Integer id) {
+        return usuarioService.findByClienteId(id);
+    }
+
     @GetMapping("/{id}")
     @LogExecutionTime
     public ResponseEntity<UsuarioHabilitado> getById(@PathVariable Integer id) {
