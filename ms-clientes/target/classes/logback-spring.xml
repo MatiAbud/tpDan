@@ -2,7 +2,7 @@
 
     <property name="port" value="12201" />
     <property name="host" value="graylog" />
-    <springProperty name="instancia" source="dan.productos.instancia" />
+    <springProperty name="instancia" source="dan.clientes.instancia" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
       <encoder>
@@ -30,7 +30,7 @@
         <fullPatternLayout class="ch.qos.logback.classic.PatternLayout">
           <pattern>%m%n</pattern>
         </fullPatternLayout>
-        <staticField>app_name:ms-productos</staticField>
+        <staticField>app_name:ms-clientes</staticField>
       </encoder>
     </appender>
   
@@ -38,7 +38,7 @@
       <appender-ref ref="STDOUT" />
     </root>
   
-    <logger name="isi.dan.ms_productos" additivity="false">
+    <logger name="isi.dan.ms_clientes" additivity="false">
       <level value="DEBUG"/>
       <appender-ref ref="GELF" />
       <appender-ref ref="STDOUT"/>

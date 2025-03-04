@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,6 +38,9 @@ public class ProductoController {
     private ProductoService productoService;
 
     Logger log = LoggerFactory.getLogger(ProductoController.class);
+
+    @Value("${dan.productos.instancia}")
+    private String instancia;
 
     @Autowired
     EchoClientFeign echoSvc;
@@ -167,6 +171,7 @@ public class ProductoController {
     }
 
     @PutMapping("/{id}")
+    @LogExecutionTime
     public ResponseEntity<Producto> editar(@PathVariable final Long id, @RequestBody Producto producto) throws ProductoNotFoundException{
         producto.setId(id);
         return ResponseEntity.ok(productoService.saveProducto(producto));

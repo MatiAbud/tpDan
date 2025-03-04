@@ -34,9 +34,9 @@ scrape_configs:
     metrics_path: "/actuator/prometheus"
     static_configs:
       - targets: 
-        - "ms-clientes-svc-1:8080"
-        - "ms-clientes-svc-2:8080"
-        - "ms-clientes-svc-3:8080"
+        - "ms-clientes-svc-1:6080"
+        - "ms-clientes-svc-2:6081"
+        - "ms-clientes-svc-3:6082"
 
 
   - job_name: "ms-productos"
@@ -44,5 +44,5 @@ scrape_configs:
     scrape_interval: 5s
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["ms-productos-svc-1:8080"]
+      - targets: ["ms-productos-svc-1:6180"]
 
