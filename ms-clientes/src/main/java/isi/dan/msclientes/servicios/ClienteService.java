@@ -138,21 +138,25 @@ public class ClienteService {
         obra.setEstado(nuevoEstado);
         obraRepository.save(obra);
     }
-/*
-    @Transactional
-    public Obra habilitarObrasPendientes(Integer id) throws Exception {
-        Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new ObraNotFoundException("Cliente no encontrado"));
-        for (Obra obra: cliente.getObrasClientes()){
-            if(obra.getEstado() == EstadoObra.PENDIENTE){
-                obraService.marcarObraComoHabilitada(obra.getId());
-                return obra;
-            }
-        }
-    }
- */
+
+    /*
+     * @Transactional
+     * public Obra habilitarObrasPendientes(Integer id) throws Exception {
+     * Cliente cliente = clienteRepository.findById(id)
+     * .orElseThrow(() -> new ObraNotFoundException("Cliente no encontrado"));
+     * for (Obra obra: cliente.getObrasClientes()){
+     * if(obra.getEstado() == EstadoObra.PENDIENTE){
+     * obraService.marcarObraComoHabilitada(obra.getId());
+     * return obra;
+     * }
+     * }
+     * }
+     */
     @Transactional
     public Boolean verificarSaldo(Integer id, BigDecimal gasto) {
+        if (gasto.compareTo(BigDecimal.ZERO) < 0) {
+            return false; // Devuelve false si el gasto es negativo
+        }
         Cliente cliente = clienteRepository.findById(id).orElseThrow();
         if (cliente.getSaldo().add(gasto).compareTo(cliente.getMaximoDescubierto()) > 0) {
             return false;

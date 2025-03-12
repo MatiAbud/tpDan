@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import isi.dan.ms_productos.dto.DescuentoUpdateDTO;
 import isi.dan.ms_productos.dto.StockUpdateDTO;
 import isi.dan.ms_productos.modelo.Producto;
+import isi.dan.ms_productos.servicio.EchoClientFeign; // Agregado
 import isi.dan.ms_productos.servicio.ProductoService;
 
 @WebMvcTest(ProductoController.class)
@@ -30,6 +31,9 @@ public class ProductoControllerTest {
 
     @MockBean
     private ProductoService productoService;
+
+    @MockBean
+    private EchoClientFeign echoClientFeign; // Agregado
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -43,10 +47,12 @@ public class ProductoControllerTest {
         producto.setNombre("Producto Test");
         producto.setStockActual(10);
         producto.setPrecio(BigDecimal.valueOf(100));
+        producto.setDescuentoPromocional(0); // Aseguramos que el descuento inicial es 0
     }
-/*
+
     @Test
     void testCreateProducto() throws Exception {
+        producto.setStockActual(0);
         Mockito.when(productoService.saveProducto(Mockito.any(Producto.class))).thenReturn(producto);
 
         mockMvc.perform(post("/api/productos")
@@ -62,7 +68,7 @@ public class ProductoControllerTest {
     void testGetAllProductos() throws Exception {
         Mockito.when(productoService.getAllProductos()).thenReturn(Collections.singletonList(producto));
 
-        mockMvc.perform(get("/api/productos"))
+        mockMvc.perform(get("/api/productos/todos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nombre").value("Producto Test"))
                 .andExpect(jsonPath("$[0].precio").value(100));
@@ -72,7 +78,8 @@ public class ProductoControllerTest {
     void testGetProductoById() throws Exception {
         Mockito.when(productoService.getProductoById(1L)).thenReturn(producto);
 
-        mockMvc.perform(get("/api/productos/1"))
+        mockMvc.perform(get("/api/productos/id")
+                .param("id", "1")) // Usamos param para pasar el ID
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Producto Test"))
                 .andExpect(jsonPath("$.precio").value(100));
@@ -82,30 +89,41 @@ public class ProductoControllerTest {
     void testDeleteProducto() throws Exception {
         mockMvc.perform(delete("/api/productos/1"))
                 .andExpect(status().isNoContent());
+
+        Mockito.verify(productoService, Mockito.times(1)).deleteProducto(1L); // Verificamos la llamada al servicio
     }
 
     @Test
-    void testActualizarStock() throws Exception {
+    void testActualizarStock_Provision() throws Exception {
         StockUpdateDTO stockUpdateDTO = new StockUpdateDTO(1L, 5, BigDecimal.valueOf(120));
-        producto.setStockActual(15); // Después de actualizar el stock
-
-        Mockito.when(productoService.getProductoById(1L)).thenReturn(producto);
-        Mockito.when(productoService.saveProducto(Mockito.any(Producto.class))).thenReturn(producto);
+        Mockito.when(productoService.reponerStock(Mockito.any(StockUpdateDTO.class))).thenReturn(true);
 
         mockMvc.perform(put("/api/productos/provision")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(stockUpdateDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.stockActual").value(15)) // Verificar stock actualizado
-                .andExpect(jsonPath("$.precio").value(120)); // Verificar precio actualizado
+                .andExpect(content().string("true")); // Verificamos que se devuelve true
+    }
+
+    @Test
+    void testActualizarStock_Consumo() throws Exception {
+        StockUpdateDTO stockUpdateDTO = new StockUpdateDTO(1L, 5, BigDecimal.valueOf(120));
+        Mockito.when(productoService.consumirStock(Mockito.any(StockUpdateDTO.class))).thenReturn(true);
+
+        mockMvc.perform(put("/api/productos/consumo")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(stockUpdateDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true")); // Verificamos que se devuelve true
     }
 
     @Test
     void testActualizarDescuentoPromocional() throws Exception {
         DescuentoUpdateDTO descuentoUpdateDTO = new DescuentoUpdateDTO(1L, 10);
-        producto.setDescuentoPromocional(10); // Actualizamos el descuento promocional
+        producto.setDescuentoPromocional(10);
 
         Mockito.when(productoService.getProductoById(1L)).thenReturn(producto);
+        Mockito.when(productoService.saveProducto(Mockito.any(Producto.class))).thenReturn(producto);
 
         mockMvc.perform(put("/api/productos/descuento")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -114,26 +132,24 @@ public class ProductoControllerTest {
                 .andExpect(jsonPath("$.descuentoPromocional").value(10));
     }
 
-     */
-    /*
-     * @Test
-     * void testGetEcho() throws Exception {
-     * String mockEchoResponse = "Echo Response";
-     * Mockito.when(productoService.getEcho()).thenReturn(mockEchoResponse);
-     * 
-     * mockMvc.perform(get("/api/productos/test"))
-     * .andExpect(status().isOk())
-     * .andExpect(content().string(mockEchoResponse));
-     * }
-     * 
-     * @Test
-     * void testGetEcho2() throws Exception {
-     * String mockEchoResponse = "Echo Response from Gateway";
-     * Mockito.when(productoService.getEcho2()).thenReturn(mockEchoResponse);
-     * 
-     * mockMvc.perform(get("/api/productos/test2"))
-     * .andExpect(status().isOk())
-     * .andExpect(content().string(mockEchoResponse));
-     * }
-     */
+    @Test
+    void testEditarProducto() throws Exception {
+        Mockito.when(productoService.saveProducto(Mockito.any(Producto.class))).thenReturn(producto);
+
+        mockMvc.perform(put("/api/productos/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(producto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("Producto Test"))
+                .andExpect(jsonPath("$.precio").value(100));
+    }
+
+    @Test
+    void testGetEcho() throws Exception {
+        Mockito.when(echoClientFeign.echo()).thenReturn("Echo from Feign");
+
+        mockMvc.perform(get("/api/productos/test"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Echo from Feign"));
+    }
 }
